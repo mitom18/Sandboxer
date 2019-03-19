@@ -40,7 +40,7 @@ public class Player {
     private boolean onGround = false;
     private boolean left, right, up;
     private final int WIDTH = 15;
-    private final int HEIGHT = 15;
+    private final int HEIGHT = 30;
     private final Color color = Color.white;
     
     /**

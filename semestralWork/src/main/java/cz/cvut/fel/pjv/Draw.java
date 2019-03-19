@@ -97,7 +97,7 @@ public class Draw {
             g.fillRect(block.getX(), block.getY(), block.getWIDTH(), block.getHEIGHT());
         }
         g.setColor(Color.white);
-        g.fillRect(Instances.player.getX(), Instances.player.getY(), 15, 15);
+        g.fillRect(Instances.player.getX(), Instances.player.getY(), Instances.player.getWIDTH(), Instances.player.getHEIGHT());
     }
     
 }
