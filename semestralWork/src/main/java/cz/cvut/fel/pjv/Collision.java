@@ -39,6 +39,9 @@ public class Collision {
      */
     public static void preventCollision(Player player) {
         for (Block block : Instances.blocks) {
+            if (!(block.getX() > player.getX()-block.getWIDTH()*4 && block.getX2() < player.getX2()+block.getWIDTH()*4)) {
+                continue;
+            }
             if (collides(player, block)) {
                 int bottomCollision = block.getY2() - player.getY();
                 int topCollision = player.getY2() - block.getY();
@@ -47,7 +50,7 @@ public class Collision {
 
                 if(topCollision < bottomCollision && topCollision < leftCollision && topCollision < rightCollision) {
                     player.setY(block.getY()-player.getHEIGHT()); //top collision
-                    player.setVelocityY(0.0f); //seet player's velocity to 0
+                    player.setVelocityY(0.0f); //set player's velocity to 0
                     player.setOnGround(true); //player is standing on the ground
                 }
                 if(bottomCollision < topCollision && bottomCollision < leftCollision && bottomCollision < rightCollision)

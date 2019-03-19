@@ -39,16 +39,16 @@ public abstract class Instances {
     /**
      * Array of blocks in the world.
      */
-    public static Block[] blocks = generate(15);
+    public static Block[] blocks = generate(50);
  
     private static Block[] generate(int len) {
         Block[] array = new Block[len+1];
         int x = 0;
         for (int i = 0; i < len; i++) {
-            array[i] = new Block(x, 60);
+            array[i] = new Block(x, 350);
             x += array[i].getWIDTH();
         }
-        array[len] = new Block(60, 45);
+        array[len] = new Block(210, 335);
         return array;
     }
     
