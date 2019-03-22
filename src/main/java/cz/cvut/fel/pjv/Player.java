@@ -23,7 +23,8 @@
  */
 package cz.cvut.fel.pjv;
 
-import java.awt.Color;
+import javafx.scene.paint.Color;
+
 
 /**
  * Player class.
@@ -41,7 +42,7 @@ public class Player {
     private boolean left, right, up;
     private final int WIDTH = 15;
     private final int HEIGHT = 30;
-    private final Color color = Color.white;
+    private final Color color = Color.WHITE;
     
     /**
      * Update player's state.

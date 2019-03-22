@@ -23,7 +23,8 @@
  */
 package cz.cvut.fel.pjv;
 
-import java.awt.Color;
+import javafx.scene.paint.Color;
+
 
 /**
  * Block class. Block is basic part of the world.
@@ -36,7 +37,7 @@ public class Block {
     private final int x, y;
     private final int WIDTH = 15;
     private final int HEIGHT = 15;
-    private final Color color = Color.red;
+    private final Color color = Color.RED;
 
     /**
      * Create new block on given coordinates.
