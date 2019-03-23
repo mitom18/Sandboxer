@@ -35,11 +35,11 @@ import javafx.scene.paint.Color;
 public class Player {
     
     private int x, y;
-    private final float velocityX = 2.0f;
+    private float velocityX = 2.0f;
     private float velocityY = 0.0f;
     private final float GRAVITY = 0.3f;
     private boolean onGround = false;
-    private boolean left, right, up;
+    private boolean left, right, up, running;
     private final int WIDTH = 15;
     private final int HEIGHT = 30;
     private final Color color = Color.WHITE;
@@ -60,6 +60,7 @@ public class Player {
      * @since 1.0
      */
     public void move() {
+        if (running) { velocityX = 4.0f; } else { velocityX = 2.0f; }
         if (left) { x -= velocityX; }
         if (right) { x += velocityX; }
         if (up) { jump(); }
@@ -105,6 +106,40 @@ public class Player {
      */
     public void setUp(boolean up) {
         this.up = up;
+    }
+
+    /**
+     * Set if player is running.
+     *
+     * @param running
+     * @since 1.0
+     */
+    public void run(boolean running) {
+        this.running = running;
+    }
+    
+    /**
+     * @return true if player is moving left, false otherwise
+     * @since 1.0
+     */
+    public boolean movingLeft() {
+        return left;
+    }
+    
+    /**
+     * @return true if player is moving right, false otherwise
+     * @since 1.0
+     */
+    public boolean movingRight() {
+        return right;
+    }
+
+    /**
+     * @return player's X velocity
+     * @since 1.0
+     */
+    public float getVelocityX() {
+        return velocityX;
     }
 
     /**

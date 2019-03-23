@@ -43,7 +43,7 @@ public abstract class Instances {
  
     private static Block[] generate(int len) {
         Block[] array = new Block[len+1];
-        int x = 0;
+        int x = -30;
         for (int i = 0; i < len; i++) {
             array[i] = new Block(x, 350);
             x += array[i].getWIDTH();

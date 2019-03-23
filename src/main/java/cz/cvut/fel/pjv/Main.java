@@ -44,7 +44,6 @@ public class Main extends Application {
     
     private final int WIDTH = 640;
     private final int HEIGHT = 480;
-    boolean running;
     
     /**
      * @param args the command line arguments
@@ -72,7 +71,7 @@ public class Main extends Application {
                     case UP:    Instances.player.setUp(true); break;
                     case LEFT:  Instances.player.setLeft(true); break;
                     case RIGHT: Instances.player.setRight(true); break;
-                    case SHIFT: running = true; break;
+                    case SHIFT: Instances.player.run(true); break;
                 }
             }
         });
@@ -84,7 +83,7 @@ public class Main extends Application {
                     case UP:    Instances.player.setUp(false); break;
                     case LEFT:  Instances.player.setLeft(false); break;
                     case RIGHT: Instances.player.setRight(false); break;
-                    case SHIFT: running = false; break;
+                    case SHIFT: Instances.player.run(false); break;
                 }
             }
         });
@@ -96,10 +95,29 @@ public class Main extends Application {
             @Override
             public void handle(long now) {
                 Instances.player.update();
+                updateCamera();
                 render(gc);
             }
         };
         timer.start();
+    }
+    
+    private void updateCamera() {
+        int playerVelocity = (int) Instances.player.getVelocityX();
+       
+        if (Instances.player.getX() < 90 && Instances.player.movingLeft()) {
+            Instances.player.setX(Instances.player.getX() + playerVelocity);
+            for (Block block : Instances.blocks) {
+                block.setX(block.getX() + playerVelocity);
+            }
+        }
+        
+        if (Instances.player.getX() > 550 && Instances.player.movingRight()) {
+            Instances.player.setX(Instances.player.getX() - playerVelocity);
+            for (Block block : Instances.blocks) {
+                block.setX(block.getX() - playerVelocity);
+            }
+        }
     }
 
     /**

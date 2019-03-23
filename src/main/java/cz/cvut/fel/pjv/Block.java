@@ -34,7 +34,7 @@ import javafx.scene.paint.Color;
  */
 public class Block {
  
-    private final int x, y;
+    private int x, y;
     private final int WIDTH = 15;
     private final int HEIGHT = 15;
     private final Color color = Color.RED;
@@ -52,7 +52,7 @@ public class Block {
     }
 
     /**
-     * @return block's X position
+     * @return block's X position in pixels
      * @since 1.0
      */
     public int getX() {
@@ -60,7 +60,7 @@ public class Block {
     }
     
     /**
-     * @return block's X2 position
+     * @return block's X2 position in pixels
      * @since 1.0
      */
     public int getX2() {
@@ -68,7 +68,7 @@ public class Block {
     }
 
     /**
-     * @return block's Y position
+     * @return block's Y position in pixels
      * @since 1.0
      */
     public int getY() {
@@ -76,7 +76,7 @@ public class Block {
     }
     
     /**
-     * @return block's Y2 position
+     * @return block's Y2 position in pixels
      * @since 1.0
      */
     public int getY2() {
@@ -84,7 +84,7 @@ public class Block {
     }
 
     /**
-     * @return block's width
+     * @return block's width in pixels
      * @since 1.0
      */
     public int getWIDTH() {
@@ -92,7 +92,7 @@ public class Block {
     }
 
     /**
-     * @return block's height
+     * @return block's height in pixels
      * @since 1.0
      */
     public int getHEIGHT() {
@@ -105,6 +105,16 @@ public class Block {
      */
     public Color getColor() {
         return color;
+    }
+    
+    /**
+     * Set block's position in pixels.
+     * 
+     * @param x
+     * @since 1.0
+     */
+    public void setX(int x) {
+        this.x = x;
     }
     
 }
