@@ -23,35 +23,49 @@
  */
 package cz.cvut.fel.pjv;
 
-/**
- * Class containing all entities in the world.
- * 
- * @author Michal-jr
- * @version 1.0
- */
-public abstract class Instances {
- 
-    /**
-     * Instance of Player.
-     */
-    public static Player player = new Player();
+import javafx.scene.paint.Color;
 
-    /**
-     * Array of blocks in the world.
-     */
-    public static Block[] blocks = generate(50);
+/**
+ *
+ * @author tomanm10
+ */
+public class Item {
+    private int x, y;
+    private boolean picked;
+    private final Color color = Color.YELLOW;
+
+    public Item(int x, int y) {
+        this.x = x;
+        this.y = y;
+        picked = false;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public Color getColor() {
+        return color;
+    }
     
-    public static Item item = new Item(300, 335);
- 
-    private static Block[] generate(int len) {
-        Block[] array = new Block[len+1];
-        int x = -30;
-        for (int i = 0; i < len; i++) {
-            array[i] = new Block(x, 350);
-            x += array[i].getWIDTH();
-        }
-        array[len] = new Block(210, 335);
-        return array;
+    public boolean isPicked() {
+        return picked;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void setPicked(boolean picked) {
+        this.picked = picked;
     }
     
 }

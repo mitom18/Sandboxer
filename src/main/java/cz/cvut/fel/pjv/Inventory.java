@@ -24,34 +24,24 @@
 package cz.cvut.fel.pjv;
 
 /**
- * Class containing all entities in the world.
- * 
- * @author Michal-jr
- * @version 1.0
+ *
+ * @author tomanm10
  */
-public abstract class Instances {
- 
-    /**
-     * Instance of Player.
-     */
-    public static Player player = new Player();
-
-    /**
-     * Array of blocks in the world.
-     */
-    public static Block[] blocks = generate(50);
+public class Inventory {
+    Item[] inv = new Item [64];
     
-    public static Item item = new Item(300, 335);
- 
-    private static Block[] generate(int len) {
-        Block[] array = new Block[len+1];
-        int x = -30;
-        for (int i = 0; i < len; i++) {
-            array[i] = new Block(x, 350);
-            x += array[i].getWIDTH();
+    public void add(Item itemToAdd) {
+        for (Item item : inv) {
+            if (item == null) { item = itemToAdd; }
         }
-        array[len] = new Block(210, 335);
-        return array;
     }
-    
+
+    public Item[] getInv() {
+        return inv;
+    }
+
+    @Override
+    public String toString() {
+        return "Inventory{" + "inv=" + inv + '}';
+    }
 }

@@ -92,11 +92,15 @@ public class Main extends Application {
         stage.show();
 
         AnimationTimer timer = new AnimationTimer() {
+            private long lastUpdate = 0;
             @Override
             public void handle(long now) {
-                Instances.player.update();
-                updateCamera();
-                render(gc);
+                if (now - lastUpdate >= 5_000_000) {
+                    Instances.player.update();
+                    updateCamera();
+                    render(gc);
+                    lastUpdate = now;
+                }
             }
         };
         timer.start();
@@ -107,13 +111,19 @@ public class Main extends Application {
        
         if (Instances.player.getX() < 90 && Instances.player.movingLeft()) {
             Instances.player.setX(Instances.player.getX() + playerVelocity);
+            if (!Instances.item.isPicked()) {
+                Instances.item.setX(Instances.item.getX() + playerVelocity);
+            }
             for (Block block : Instances.blocks) {
                 block.setX(block.getX() + playerVelocity);
             }
         }
         
-        if (Instances.player.getX() > 550 && Instances.player.movingRight()) {
+        if (Instances.player.getX() > WIDTH-90 && Instances.player.movingRight()) {
             Instances.player.setX(Instances.player.getX() - playerVelocity);
+            if (!Instances.item.isPicked()) {
+                Instances.item.setX(Instances.item.getX() - playerVelocity);
+            }
             for (Block block : Instances.blocks) {
                 block.setX(block.getX() - playerVelocity);
             }
@@ -131,6 +141,10 @@ public class Main extends Application {
         for (Block block : Instances.blocks) {
             g.setFill(block.getColor());
             g.fillRect(block.getX(), block.getY(), block.getWIDTH(), block.getHEIGHT());
+        }
+        if (!Instances.item.isPicked()) {
+            g.setFill(Instances.item.getColor());
+            g.fillRect(Instances.item.getX()+2, Instances.item.getY()+2, 10, 10);
         }
         g.setFill(Instances.player.getColor());
         g.fillRect(Instances.player.getX(), Instances.player.getY(), Instances.player.getWIDTH(), Instances.player.getHEIGHT());

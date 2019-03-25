@@ -43,6 +43,7 @@ public class Player {
     private final int WIDTH = 15;
     private final int HEIGHT = 30;
     private final Color color = Color.WHITE;
+    private final Inventory inventory = new Inventory();
     
     /**
      * Update player's state.
@@ -52,6 +53,7 @@ public class Player {
     public void update() {
         move();
         Collision.preventCollision(this);
+        Collision.controlItems(this);
     }
     
     /**
@@ -196,6 +198,10 @@ public class Player {
      */
     public Color getColor() {
         return color;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
     }
 
     /**

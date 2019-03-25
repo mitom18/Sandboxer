@@ -29,7 +29,7 @@ package cz.cvut.fel.pjv;
  * @author Michal-jr
  * @version 1.0
  */
-public class Collision {
+public abstract class Collision {
     
     /**
      * Check if player is colliding with other entity. If it is colliding than edit player's coordinates.
@@ -65,6 +65,19 @@ public class Collision {
     
     private static boolean collides(Player player, Block block) {
         return player.getX() < block.getX2() && player.getX2() > block.getX() && player.getY() < block.getY2() && player.getY2() > block.getY();
+    }
+    
+    public static void controlItems(Player player) {
+        if (canPickItem(player, Instances.item)) {
+            player.getInventory().add(Instances.item);
+            Instances.item.setPicked(true);
+            System.out.println(player.getInventory());
+        }
+    }
+    
+    private static boolean canPickItem(Player player, Item item) {
+        if (item.isPicked()) { return false; }
+        return player.getX() < item.getX()+12 && player.getX2() > item.getX()+2 && player.getY() < item.getY()+12 && player.getY2() > item.getY()+2;
     }
     
 }
