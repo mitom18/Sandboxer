@@ -23,7 +23,7 @@
  */
 package cz.cvut.fel.pjv;
 
-import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
 
 
 /**
@@ -40,9 +40,12 @@ public class Player {
     private final float GRAVITY = 0.3f;
     private boolean onGround = false;
     private boolean left, right, up, running;
-    private final int WIDTH = 15;
-    private final int HEIGHT = 30;
-    private final Color color = Color.WHITE;
+    private final int WIDTH = 32;
+    private final int HEIGHT = 64;
+    private final double IMAGE_WIDTH = 64;
+    private final double IMAGE_HEIGHT = 64;
+    private double spriteX, spriteY, spriteFrame = 0;
+    private final Image image = new Image( "sprite_sheet.png" );
     private final Inventory inventory = new Inventory();
     
     /**
@@ -63,8 +66,26 @@ public class Player {
      */
     public void move() {
         if (running) { velocityX = 4.0f; } else { velocityX = 2.0f; }
-        if (left) { x -= velocityX; }
-        if (right) { x += velocityX; }
+        if (left) {
+            x -= velocityX;
+            spriteY = 9 * IMAGE_HEIGHT;
+            spriteFrame--;
+            if (spriteFrame < 0) { spriteFrame = 8; }
+            if (!onGround) { spriteFrame = 1; }
+            spriteX = spriteFrame * IMAGE_WIDTH;
+        }
+        if (right) {
+            x += velocityX;
+            spriteY = 11 * IMAGE_HEIGHT;
+            spriteFrame++;
+            if (spriteFrame > 8) { spriteFrame = 0; }
+            if (!onGround) { spriteFrame = 1; }
+            spriteX = spriteFrame * IMAGE_WIDTH;
+        }
+        if (!left && !right) {
+            spriteX = IMAGE_WIDTH;
+            spriteY = 10 * IMAGE_HEIGHT;
+        }
         if (up) { jump(); }
         fall();
     }
@@ -192,12 +213,24 @@ public class Player {
         return HEIGHT;
     }
 
-    /**
-     * @return player's color
-     * @since 1.0
-     */
-    public Color getColor() {
-        return color;
+    public double getIMAGE_WIDTH() {
+        return IMAGE_WIDTH-32;
+    }
+
+    public double getIMAGE_HEIGHT() {
+        return IMAGE_HEIGHT;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public double getSpriteX() {
+        return spriteX+16;
+    }
+
+    public double getSpriteY() {
+        return spriteY;
     }
 
     public Inventory getInventory() {

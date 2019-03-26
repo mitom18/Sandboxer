@@ -92,7 +92,7 @@ public class Main extends Application {
         stage.show();
 
         AnimationTimer timer = new AnimationTimer() {
-            private long lastUpdate = 0;
+            long lastUpdate = 0;
             @Override
             public void handle(long now) {
                 if (now - lastUpdate >= 5_000_000) {
@@ -146,8 +146,9 @@ public class Main extends Application {
             g.setFill(Instances.item.getColor());
             g.fillRect(Instances.item.getX()+2, Instances.item.getY()+2, 10, 10);
         }
-        g.setFill(Instances.player.getColor());
-        g.fillRect(Instances.player.getX(), Instances.player.getY(), Instances.player.getWIDTH(), Instances.player.getHEIGHT());
+        Player player = Instances.player;
+        g.drawImage(player.getImage(), player.getSpriteX(), player.getSpriteY(), player.getIMAGE_WIDTH(), player.getIMAGE_HEIGHT(), 
+                player.getX(), player.getY(), player.getWIDTH(), player.getHEIGHT());
     }
     
 }
