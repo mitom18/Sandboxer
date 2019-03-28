@@ -26,8 +26,10 @@ package cz.cvut.fel.pjv;
 import javafx.scene.paint.Color;
 
 /**
+ * Item class. Item lays in the world or is in the player's inventory.
  *
- * @author tomanm10
+ * @author Michal-jr
+ * @version 1.0
  */
 public class Item {
     private double x, y;

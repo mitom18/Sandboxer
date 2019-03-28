@@ -24,18 +24,30 @@
 package cz.cvut.fel.pjv;
 
 /**
+ * Player's inventory.
  *
- * @author tomanm10
+ * @author Michal-jr
+ * @version 1.0
  */
 public class Inventory {
     Item[] inv = new Item [64];
     
+    /**
+     * Add item to inventory.
+     *
+     * @param itemToAdd
+     * @since 1.0
+     */
     public void add(Item itemToAdd) {
         for (Item item : inv) {
             if (item == null) { item = itemToAdd; }
         }
     }
 
+    /**
+     * @return inventory item's
+     * @since 1.0
+     */
     public Item[] getInv() {
         return inv;
     }
