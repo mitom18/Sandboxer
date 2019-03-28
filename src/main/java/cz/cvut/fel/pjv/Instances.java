@@ -34,13 +34,16 @@ public abstract class Instances {
     /**
      * Instance of Player.
      */
-    public static Player player = new Player();
+    public static Player player = new Player(0, 300);
 
     /**
      * Array of blocks in the world.
      */
     public static Block[] blocks = generate(50);
     
+    /**
+     * Item to pick.
+     */
     public static Item item = new Item(300, 335);
  
     private static Block[] generate(int len) {
@@ -48,10 +51,10 @@ public abstract class Instances {
         int x = -30;
         for (int i = 0; i < len; i++) {
             array[i] = new Block(x, 350);
-            x += array[i].getWIDTH();
+            x += array[i].getWidth();
         }
         array[len] = new Block(210, 335);
         return array;
     }
-    
+        
 }

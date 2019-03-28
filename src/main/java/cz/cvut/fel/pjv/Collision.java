@@ -32,31 +32,32 @@ package cz.cvut.fel.pjv;
 public abstract class Collision {
     
     /**
-     * Check if player is colliding with other entity. If it is colliding than edit player's coordinates.
+     * Check if player is colliding with other entity.
+     * If it is colliding than edit player's coordinates.
      * 
      * @param player instance of player
      * @since 1.0
      */
     public static void preventCollision(Player player) {
         for (Block block : Instances.blocks) {
-            if (!(block.getX() > player.getX()-block.getWIDTH()*4 && block.getX2() < player.getX2()+block.getWIDTH()*4)) {
+            if (!(block.getX() > player.getX()-block.getWidth()*4 && block.getX2() < player.getX2()+block.getWidth()*4)) {
                 continue;
             }
             if (collides(player, block)) {
-                int bottomCollision = block.getY2() - player.getY();
-                int topCollision = player.getY2() - block.getY();
-                int leftCollision = player.getX2() - block.getX();
-                int rightCollision = block.getX2() - player.getX();
+                double bottomCollision = block.getY2() - player.getY();
+                double topCollision = player.getY2() - block.getY();
+                double leftCollision = player.getX2() - block.getX();
+                double rightCollision = block.getX2() - player.getX();
 
                 if(topCollision < bottomCollision && topCollision < leftCollision && topCollision < rightCollision) {
-                    player.setY(block.getY()-player.getHEIGHT()); //top collision
-                    player.setVelocityY(0.0f); //set player's velocity to 0
+                    player.setY(block.getY()-player.getHeight()); //top collision
+                    player.setVelocityY(0.0); //set player's velocity to 0
                     player.setOnGround(true); //player is standing on the ground
                 }
                 if(bottomCollision < topCollision && bottomCollision < leftCollision && bottomCollision < rightCollision)
                     player.setY(block.getY2()); //bottom collision
                 if(leftCollision < rightCollision && leftCollision < topCollision && leftCollision < bottomCollision)
-                    player.setX(block.getX()-player.getWIDTH()); //left collision
+                    player.setX(block.getX()-player.getWidth()); //left collision
                 if(rightCollision < leftCollision && rightCollision < topCollision && rightCollision < bottomCollision)
                     player.setX(block.getX2()); //right collision
             }
@@ -67,6 +68,13 @@ public abstract class Collision {
         return player.getX() < block.getX2() && player.getX2() > block.getX() && player.getY() < block.getY2() && player.getY2() > block.getY();
     }
     
+    /**
+     * Check if player can pick any of the items in the world.
+     * If he can, item is added to player's inventory.
+     *
+     * @param player instance of player
+     * @since 1.0
+     */
     public static void controlItems(Player player) {
         if (canPickItem(player, Instances.item)) {
             player.getInventory().add(Instances.item);

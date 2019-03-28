@@ -34,9 +34,9 @@ import javafx.scene.paint.Color;
  */
 public class Block {
  
-    private int x, y;
-    private final int WIDTH = 15;
-    private final int HEIGHT = 15;
+    private double x, y;
+    private double width = 15;
+    private double height = 15;
     private final Color color = Color.RED;
 
     /**
@@ -46,7 +46,7 @@ public class Block {
      * @param y
      * @since 1.0
      */
-    public Block(int x, int y) {
+    public Block(double x, double y) {
         this.x = x;
         this.y = y;
     }
@@ -55,7 +55,7 @@ public class Block {
      * @return block's X position in pixels
      * @since 1.0
      */
-    public int getX() {
+    public double getX() {
         return x;
     }
     
@@ -63,15 +63,15 @@ public class Block {
      * @return block's X2 position in pixels
      * @since 1.0
      */
-    public int getX2() {
-        return x+WIDTH;
+    public double getX2() {
+        return x+width;
     }
 
     /**
      * @return block's Y position in pixels
      * @since 1.0
      */
-    public int getY() {
+    public double getY() {
         return y;
     }
     
@@ -79,24 +79,24 @@ public class Block {
      * @return block's Y2 position in pixels
      * @since 1.0
      */
-    public int getY2() {
-        return y+HEIGHT;
+    public double getY2() {
+        return y+height;
     }
 
     /**
      * @return block's width in pixels
      * @since 1.0
      */
-    public int getWIDTH() {
-        return WIDTH;
+    public double getWidth() {
+        return width;
     }
 
     /**
      * @return block's height in pixels
      * @since 1.0
      */
-    public int getHEIGHT() {
-        return HEIGHT;
+    public double getHeight() {
+        return height;
     }
 
     /**
@@ -108,13 +108,42 @@ public class Block {
     }
     
     /**
-     * Set block's position in pixels.
+     * Set block's X position in pixels.
      * 
      * @param x
      * @since 1.0
      */
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
     
+    /**
+     * Set block's Y position in pixels.
+     * 
+     * @param y
+     * @since 1.0
+     */
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    /**
+     * Set block's width in pixels.
+     *
+     * @param width
+     * @since 1.0
+     */
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    /**
+     * Set block's height in pixels.
+     *
+     * @param height
+     * @since 1.0
+     */
+    public void setHeight(double height) {
+        this.height = height;
+    }
 }

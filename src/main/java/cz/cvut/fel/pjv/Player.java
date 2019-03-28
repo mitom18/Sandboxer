@@ -34,19 +34,32 @@ import javafx.scene.image.Image;
  */
 public class Player {
     
-    private int x, y;
-    private float velocityX = 2.0f;
-    private float velocityY = 0.0f;
-    private final float GRAVITY = 0.3f;
+    private double x, y;
+    private double velocityX = 2;
+    private double velocityY = 0;
+    private double velocityMultiplier = 1;
+    private final double GRAVITY = 0.3;
     private boolean onGround = false;
     private boolean left, right, up, running;
-    private final int WIDTH = 32;
-    private final int HEIGHT = 64;
+    private double width = 32;
+    private double height = 64;
     private final double IMAGE_WIDTH = 64;
     private final double IMAGE_HEIGHT = 64;
     private double spriteX, spriteY, spriteFrame = 0;
     private final Image image = new Image( "sprite_sheet.png" );
     private final Inventory inventory = new Inventory();
+
+    /**
+     * Create player on given coordinates.
+     *
+     * @param x
+     * @param y
+     * @since 1.0
+     */
+    public Player(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
     
     /**
      * Update player's state.
@@ -60,12 +73,12 @@ public class Player {
     }
     
     /**
-     * Update player's position in the world.
+     * Update player's position in the world and animate his movement.
      * 
      * @since 1.0
      */
     public void move() {
-        if (running) { velocityX = 4.0f; } else { velocityX = 2.0f; }
+        if (running) { velocityX = 4*velocityMultiplier; } else { velocityX = 2*velocityMultiplier; }
         if (left) {
             x -= velocityX;
             spriteY = 9 * IMAGE_HEIGHT;
@@ -91,12 +104,12 @@ public class Player {
     }
     
     private void fall() {
-        velocityY += GRAVITY;
+        velocityY += GRAVITY*velocityMultiplier;
         y += velocityY;
     }
     private void jump() {
         if (onGround) {
-            velocityY = -6.0f;
+            velocityY = -6.0*velocityMultiplier;
             onGround = false;
         }
     }
@@ -156,20 +169,36 @@ public class Player {
     public boolean movingRight() {
         return right;
     }
+    
+    /**
+     * @return true if player is in the air, false otherwise
+     * @since 1.0
+     */
+    public boolean jumping() {
+        return velocityY != 0;
+    }
 
     /**
      * @return player's X velocity
      * @since 1.0
      */
-    public float getVelocityX() {
+    public double getVelocityX() {
         return velocityX;
+    }
+    
+    /**
+     * @return player's X velocity
+     * @since 1.0
+     */
+    public double getVelocityY() {
+        return velocityY;
     }
 
     /**
      * @return player's X position in pixels
      * @since 1.0
      */
-    public int getX() {
+    public double getX() {
         return x;
     }
     
@@ -177,15 +206,15 @@ public class Player {
      * @return player's X2 position in pixels
      * @since 1.0
      */
-    public int getX2() {
-        return x+WIDTH;
+    public double getX2() {
+        return x+width;
     }
 
     /**
      * @return player's Y position in pixels
      * @since 1.0
      */
-    public int getY() {
+    public double getY() {
         return y;
     }
     
@@ -193,46 +222,70 @@ public class Player {
      * @return player's Y2 position in pixels
      * @since 1.0
      */
-    public int getY2() {
-        return y+HEIGHT;
+    public double getY2() {
+        return y+height;
     }
 
     /**
      * @return player's width in pixels
      * @since 1.0
      */
-    public int getWIDTH() {
-        return WIDTH;
+    public double getWidth() {
+        return width;
     }
 
     /**
      * @return player's height in pixels
      * @since 1.0
      */
-    public int getHEIGHT() {
-        return HEIGHT;
+    public double getHeight() {
+        return height;
     }
 
+    /**
+     * @return player actual animation frame width in pixels
+     * @since 1.0
+     */
     public double getIMAGE_WIDTH() {
         return IMAGE_WIDTH-32;
     }
 
+    /**
+     * @return player actual animation frame height in pixels
+     * @since 1.0
+     */
     public double getIMAGE_HEIGHT() {
         return IMAGE_HEIGHT;
     }
 
+    /**
+     * @return player's sprite sheet
+     * @since 1.0
+     */
     public Image getImage() {
         return image;
     }
 
+    /**
+     * @return X position of actual animation frame in sprite sheet
+     * @since 1.0
+     */
     public double getSpriteX() {
         return spriteX+16;
     }
 
+    /**
+     * @return Y position of actual animation frame in sprite sheet
+     * @since 1.0
+     */
     public double getSpriteY() {
         return spriteY;
     }
 
+    /**
+     * @return player's inventory
+     * @since 1.0
+     */
     public Inventory getInventory() {
         return inventory;
     }
@@ -243,7 +296,7 @@ public class Player {
      * @param x
      * @since 1.0
      */
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
@@ -253,8 +306,28 @@ public class Player {
      * @param y
      * @since 1.0
      */
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
+    }
+
+    /**
+     * Set player's width in pixels.
+     *
+     * @param width
+     * @since 1.0
+     */
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    /**
+     * Set player's height in pixels.
+     *
+     * @param height
+     * @since 1.0
+     */
+    public void setHeight(double height) {
+        this.height = height;
     }
 
     /**
@@ -263,8 +336,18 @@ public class Player {
      * @param velocityY
      * @since 1.0
      */
-    public void setVelocityY(float velocityY) {
+    public void setVelocityY(double velocityY) {
         this.velocityY = velocityY;
+    }
+
+    /**
+     * Set player's velocity multiplier.
+     *
+     * @param velocityMultiplier
+     * @since 1.0
+     */
+    public void setVelocityMultiplier(double velocityMultiplier) {
+        this.velocityMultiplier = velocityMultiplier;
     }
 
     /**

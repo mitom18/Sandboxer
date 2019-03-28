@@ -30,40 +30,119 @@ import javafx.scene.paint.Color;
  * @author tomanm10
  */
 public class Item {
-    private int x, y;
+    private double x, y;
+    private double width = 10;
+    private double height = 10;
     private boolean picked;
     private final Color color = Color.YELLOW;
 
-    public Item(int x, int y) {
-        this.x = x;
-        this.y = y;
+    /**
+     * Create new item on given coordinates.
+     *
+     * @param x
+     * @param y
+     * @since 1.0
+     */
+    public Item(double x, double y) {
+        this.x = x+2;
+        this.y = y+2;
         picked = false;
     }
 
-    public int getX() {
+    /**
+     * @return item's X position in pixels
+     * @since 1.0
+     */
+    public double getX() {
         return x;
     }
 
-    public int getY() {
+    /**
+     * @return item's Y position in pixels
+     * @since 1.0
+     */
+    public double getY() {
         return y;
     }
 
+    /**
+     * @return item's width in pixels
+     * @since 1.0
+     */
+    public double getWidth() {
+        return width;
+    }
+
+    /**
+     * @return item's height in pixels
+     * @since 1.0
+     */
+    public double getHeight() {
+        return height;
+    }
+
+    /**
+     * @return item's color
+     * @since 1.0
+     */
     public Color getColor() {
         return color;
     }
     
+    /**
+     * @return true if item was picked by player, false otherwise
+     * @since 1.0
+     */
     public boolean isPicked() {
         return picked;
     }
 
-    public void setX(int x) {
+    /**
+     * Set item's X position in pixels.
+     *
+     * @param x
+     * @since 1.0
+     */
+    public void setX(double x) {
         this.x = x;
     }
 
-    public void setY(int y) {
+    /**
+     * Set item's Y position in pixels.
+     *
+     * @param y
+     * @since 1.0
+     */
+    public void setY(double y) {
         this.y = y;
     }
 
+    /**
+     * Set item's width in pixels.
+     *
+     * @param width
+     * @since 1.0
+     */
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    /**
+     * Set item's height in pixels.
+     *
+     * @param height
+     * @since 1.0
+     */
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    /**
+     * Set if item was picked by player.
+     *
+     * @param picked
+     * @since 1.0
+     */
     public void setPicked(boolean picked) {
         this.picked = picked;
     }
