@@ -40,6 +40,7 @@ public abstract class Collision {
      */
     public static void preventCollision(Player player) {
         for (Block block : Instances.blocks) {
+            if (block.isDestroyed()) { continue; }
             if (!(block.getX() > player.getX()-block.getWidth()*4 && block.getX2() < player.getX2()+block.getWidth()*4)) {
                 continue;
             }
@@ -66,6 +67,10 @@ public abstract class Collision {
     
     private static boolean collides(Player player, Block block) {
         return player.getX() < block.getX2() && player.getX2() > block.getX() && player.getY() < block.getY2() && player.getY2() > block.getY();
+    }
+    
+    public static boolean collides(double clickX, double clickY, Block block) {
+        return clickX < block.getX2() && clickX > block.getX() && clickY < block.getY2() && clickY > block.getY();
     }
     
     /**

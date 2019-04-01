@@ -23,6 +23,9 @@
  */
 package cz.cvut.fel.pjv;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class containing all entities in the world.
  * 
@@ -34,27 +37,27 @@ public abstract class Instances {
     /**
      * Instance of Player.
      */
-    public static Player player = new Player(0, 300);
+    public static Player player = new Player(0, 250);
 
     /**
      * Array of blocks in the world.
      */
-    public static Block[] blocks = generate(50);
+    public static List<Block> blocks = generate(50);
     
     /**
      * Item to pick.
      */
-    public static Item item = new Item(300, 335);
+    public static Item item = new Item(300, 330);
  
-    private static Block[] generate(int len) {
-        Block[] array = new Block[len+1];
+    private static List<Block> generate(int len) {
+        List<Block> array = new ArrayList<>();
         int x = -30;
         for (int i = 0; i < len; i++) {
-            array[i] = new Block(x, 350);
-            x += array[i].getWidth();
+            array.add(new Block(x, 345));
+            x += Block.block_width;
         }
-        array[len] = new Block(210, 335);
+        array.add(new Block(210, 330));
         return array;
     }
-        
+    
 }

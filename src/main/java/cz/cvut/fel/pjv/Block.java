@@ -34,10 +34,14 @@ import javafx.scene.paint.Color;
  */
 public class Block {
  
+    public static double block_width = 15;
+    public static double block_height = 15;
+    
     private double x, y;
-    private double width = 15;
-    private double height = 15;
+    private double width = block_width;
+    private double height = block_height;
     private final Color color = Color.RED;
+    private boolean destroyed = false;
 
     /**
      * Create new block on given coordinates.
@@ -135,6 +139,7 @@ public class Block {
      */
     public void setWidth(double width) {
         this.width = width;
+        block_width = width;
     }
 
     /**
@@ -145,5 +150,14 @@ public class Block {
      */
     public void setHeight(double height) {
         this.height = height;
+        block_height = height;
+    }
+
+    public void destroy() {
+        this.destroyed = true;
+    }
+
+    public boolean isDestroyed() {
+        return destroyed;
     }
 }

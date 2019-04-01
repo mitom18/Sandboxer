@@ -30,6 +30,7 @@ import javafx.scene.*;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -93,6 +94,30 @@ public class Main extends Application {
             }
         });
         
+        scene.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                double clickX = event.getSceneX();
+                double clickY = event.getSceneY();
+                boolean destroying = false;
+                //destroy block
+                for (Block block : Instances.blocks) {
+                    if (block.isDestroyed()) { continue; }
+                    if (Collision.collides(clickX, clickY, block)) {
+                        //Instances.blocks.remove(block);
+                        block.destroy();
+                        destroying = true;
+                    }
+                }
+                //build block
+                if (!destroying) {
+                    double blockX = clickX - clickX % Block.block_width; //todo: better coords computing
+                    double blockY = clickY - clickY % Block.block_height;
+                    Instances.blocks.add(new Block(blockX, blockY));
+                }
+            }
+        });
+        
         scene.setOnScroll(new EventHandler<ScrollEvent>() {
             @Override
             public void handle(ScrollEvent event) {
@@ -139,6 +164,7 @@ public class Main extends Application {
                 Instances.item.setX(Instances.item.getX() + playerVelocityX);
             }
             for (Block block : Instances.blocks) {
+                if (block.isDestroyed()) { continue; }
                 block.setX(block.getX() + playerVelocityX);
             }
         }
@@ -149,26 +175,18 @@ public class Main extends Application {
                 Instances.item.setX(Instances.item.getX() - playerVelocityX);
             }
             for (Block block : Instances.blocks) {
+                if (block.isDestroyed()) { continue; }
                 block.setX(block.getX() - playerVelocityX);
             }
         }
         
-        if (Instances.player.getY() < 90 && Instances.player.jumping()) {
-            Instances.player.setY(Instances.player.getY() + playerVelocityY);
-            if (!Instances.item.isPicked()) {
-                Instances.item.setY(Instances.item.getY() + playerVelocityY);
-            }
-            for (Block block : Instances.blocks) {
-                block.setY(block.getY() + playerVelocityY);
-            }
-        }
-        
-        if (Instances.player.getY() > HEIGHT-90 && Instances.player.jumping()) {
+        if ((Instances.player.getY() < 90 && Instances.player.jumping()) || (Instances.player.getY() > HEIGHT-90 && Instances.player.jumping())) {
             Instances.player.setY(Instances.player.getY() - playerVelocityY);
             if (!Instances.item.isPicked()) {
                 Instances.item.setY(Instances.item.getY() - playerVelocityY);
             }
             for (Block block : Instances.blocks) {
+                if (block.isDestroyed()) { continue; }
                 block.setY(block.getY() - playerVelocityY);
             }
         }
@@ -207,6 +225,7 @@ public class Main extends Application {
                 Instances.item.setHeight(Instances.item.getHeight()*zoomScale);
             }
             for (Block block : Instances.blocks) {
+                if (block.isDestroyed()) { continue; }
                 block.setX(block.getX()*zoomScale - offsetX);
                 block.setY(block.getY()*zoomScale - offsetY);
                 block.setWidth(block.getWidth()*zoomScale);
@@ -230,6 +249,7 @@ public class Main extends Application {
         g.drawImage(player.getImage(), player.getSpriteX(), player.getSpriteY(), player.getIMAGE_WIDTH(), player.getIMAGE_HEIGHT(), 
                 player.getX(), player.getY(), player.getWidth(), player.getHeight());
         for (Block block : Instances.blocks) {
+            if (block.isDestroyed()) { continue; }
             g.setFill(block.getColor());
             g.fillRect(block.getX(), block.getY(), block.getWidth(), block.getHeight());
         }
