@@ -66,10 +66,10 @@ public class Player {
      * 
      * @since 1.0
      */
-    public void update() {
+    public void update(World world) {
         move();
-        Collision.preventCollision(this);
-        Collision.controlItems(this);
+        Collision.preventCollision(this, world);
+        Collision.controlItems(this, world);
     }
     
     /**

@@ -95,7 +95,7 @@ public class Map {
             double skyline = calculateSkyline(x);
 
             for (int j = 0; j < HEIGHT; j++) {
-                if (j <= skyline) {
+                if (j >= skyline) {
                     terrain.get(i).add(1);
                 } else {
                     terrain.get(i).add(0);

@@ -36,7 +36,7 @@ public class Game {
     /**
      * Instance of Player.
      */
-    private Player player = new Player(0, 250);
+    private Player player = new Player(0, 0);
     
     /*
      * Instance of Map.
@@ -47,4 +47,17 @@ public class Game {
      * Instance of World.
      */
     private World world = new World(map.getTerrain(), map.getWIDTH(), map.getHEIGHT());
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Map getMap() {
+        return map;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+    
 }

@@ -34,8 +34,8 @@ import javafx.scene.paint.Color;
  */
 public class Block {
  
-    public static double block_width = 15;
-    public static double block_height = 15;
+    public static double block_width = 32;
+    public static double block_height = 32;
     
     private double x, y;
     private double width = block_width;

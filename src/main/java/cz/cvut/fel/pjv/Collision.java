@@ -36,10 +36,11 @@ public abstract class Collision {
      * If it is colliding than edit player's coordinates.
      * 
      * @param player instance of player
+     * @param world instance of world where player exists
      * @since 1.0
      */
-    public static void preventCollision(Player player) {
-        for (Block block : Instances.blocks) {
+    public static void preventCollision(Player player, World world) {
+        for (Block block : world.getBlocks()) {
             if (block.isDestroyed()) { continue; }
             if (!(block.getX() > player.getX()-block.getWidth()*4 && block.getX2() < player.getX2()+block.getWidth()*4)) {
                 continue;
@@ -78,13 +79,16 @@ public abstract class Collision {
      * If he can, item is added to player's inventory.
      *
      * @param player instance of player
+     * @param world instance of world where player exists
      * @since 1.0
      */
-    public static void controlItems(Player player) {
-        if (canPickItem(player, Instances.item)) {
-            player.getInventory().add(Instances.item);
-            Instances.item.setPicked(true);
-            System.out.println(player.getInventory());
+    public static void controlItems(Player player, World world) {
+        for (Item item : world.getItems()) {
+            if (canPickItem(player, item)) {
+                player.getInventory().add(item);
+                item.setPicked(true);
+                System.out.println(player.getInventory());
+            }
         }
     }
     

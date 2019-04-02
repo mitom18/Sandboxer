@@ -53,6 +53,7 @@ public class World {
         this.map = map;
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
+        createWorld();
     }
     
     private void createWorld() {
@@ -65,5 +66,17 @@ public class World {
                 }
             }
         }
+        
+        items = new ArrayList<>();
+        items.add(new Item(0,0));
     }
+
+    public List<Block> getBlocks() {
+        return blocks;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+    
 }
