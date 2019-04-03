@@ -42,7 +42,7 @@ public class Player {
     private boolean onGround = false;
     private boolean left, right, up, running;
     private double width = 32;
-    private double height = 64;
+    private double height = 52;
     private final double IMAGE_WIDTH = 64;
     private final double IMAGE_HEIGHT = 64;
     private double spriteX, spriteY, spriteFrame = 0;
@@ -98,12 +98,17 @@ public class Player {
         if (!left && !right) {
             spriteX = IMAGE_WIDTH;
             spriteY = 10 * IMAGE_HEIGHT;
+            if (!onGround) {
+                spriteX = 6 * IMAGE_WIDTH;
+                spriteY = 2 * IMAGE_HEIGHT;
+            }
         }
         if (up) { jump(); }
         fall();
     }
     
     private void fall() {
+        onGround = false;
         velocityY += GRAVITY*velocityMultiplier;
         y += velocityY;
     }
@@ -171,11 +176,19 @@ public class Player {
     }
     
     /**
-     * @return true if player is in the air, false otherwise
+     * @return true if player is jumping, false otherwise
      * @since 1.0
      */
     public boolean jumping() {
-        return velocityY != 0;
+        return velocityY < 0;
+    }
+    
+    /**
+     * @return true if player is falling, false otherwise
+     * @since 1.0
+     */
+    public boolean falling() {
+        return velocityY > 0;
     }
 
     /**
@@ -255,7 +268,7 @@ public class Player {
      * @since 1.0
      */
     public double getIMAGE_HEIGHT() {
-        return IMAGE_HEIGHT;
+        return IMAGE_HEIGHT-12;
     }
 
     /**
@@ -279,7 +292,7 @@ public class Player {
      * @since 1.0
      */
     public double getSpriteY() {
-        return spriteY;
+        return spriteY+12;
     }
 
     /**

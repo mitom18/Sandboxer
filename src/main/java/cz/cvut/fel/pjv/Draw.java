@@ -39,6 +39,8 @@ public class Draw {
     private double oldZoomScale = 1;
     private final double MIN_ZOOM_SCALE = 0.5;
     private final double MAX_ZOOM_SCALE = 2;
+    private double cameraOffsetX = 0;
+    private double cameraOffsetY = 0;
 
     public Draw(double WIDTH, double HEIGHT) {
         this.WIDTH = WIDTH;
@@ -68,9 +70,11 @@ public class Draw {
                 if (block.isDestroyed()) { continue; }
                 block.setX(block.getX() + playerVelocityX);
             }
+            cameraOffsetX += playerVelocityX;
+            if (cameraOffsetX > Block.block_width) { cameraOffsetX %= Block.block_width; }
         }
         
-        if (player.getX() > WIDTH-90 && player.movingRight()) {
+        if (player.getX() > WIDTH-90-player.getWidth() && player.movingRight()) {
             player.setX(player.getX() - playerVelocityX);
             for (Item item : world.getItems()) {
                 if (!item.isPicked()) {
@@ -81,9 +85,11 @@ public class Draw {
                 if (block.isDestroyed()) { continue; }
                 block.setX(block.getX() - playerVelocityX);
             }
+            cameraOffsetX += Block.block_width - playerVelocityX;
+            if (cameraOffsetX > Block.block_width) { cameraOffsetX %= Block.block_width; }
         }
         
-        if ((player.getY() < 90 && player.jumping()) || (player.getY() > HEIGHT-90 && player.jumping())) {
+        if ((player.getY() < 90 && player.jumping()) || (player.getY() > HEIGHT-90-player.getHeight() && player.falling())) {
             player.setY(player.getY() - playerVelocityY);
             for (Item item : world.getItems()) {
                 if (!item.isPicked()) {
@@ -94,6 +100,12 @@ public class Draw {
                 if (block.isDestroyed()) { continue; }
                 block.setY(block.getY() - playerVelocityY);
             }
+            if (playerVelocityY < 0) {
+                cameraOffsetY += playerVelocityY;
+            } else {
+                cameraOffsetY += Block.block_height - playerVelocityY;
+            }
+            if (cameraOffsetY > Block.block_height) { cameraOffsetY %= Block.block_height; }
         }
     }
     
@@ -138,6 +150,12 @@ public class Draw {
                 block.setWidth(block.getWidth()*zoomScale);
                 block.setHeight(block.getHeight()*zoomScale);
             }
+            cameraOffsetX *= zoomScale;
+            cameraOffsetY *= zoomScale;
+            cameraOffsetX -= offsetX;
+            cameraOffsetY -= offsetY;
+            if (cameraOffsetX > Block.block_width) { cameraOffsetX %= Block.block_width; }
+            if (cameraOffsetY > Block.block_height) { cameraOffsetY %= Block.block_height; }
         }
         oldZoomScale = this.zoomScale; //store for zoom reset
     }
@@ -191,6 +209,14 @@ public class Draw {
 
     public double getMAX_ZOOM_SCALE() {
         return MAX_ZOOM_SCALE;
+    }
+
+    public double getCameraOffsetX() {
+        return cameraOffsetX;
+    }
+
+    public double getCameraOffsetY() {
+        return cameraOffsetY;
     }
     
 }

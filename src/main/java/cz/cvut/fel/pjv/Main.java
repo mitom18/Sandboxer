@@ -44,8 +44,8 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
     
-    private final double WIDTH = 640;
-    private final double HEIGHT = 480;
+    private final double WIDTH = 1280;
+    private final double HEIGHT = 640;
     
     /**
      * @param args the command line arguments
@@ -112,8 +112,8 @@ public class Main extends Application {
                 }
                 //build block
                 if (!destroying) {
-                    double blockX = clickX - clickX % Block.block_width; //todo: better coords computing
-                    double blockY = clickY - clickY % Block.block_height;
+                    double blockX = clickX - (clickX - draw.getCameraOffsetX()) % Block.block_width;
+                    double blockY = clickY - (clickY - draw.getCameraOffsetY()) % Block.block_height;
                     world.getBlocks().add(new Block(blockX, blockY));
                 }
             }
