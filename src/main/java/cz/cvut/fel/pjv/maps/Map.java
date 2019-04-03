@@ -44,7 +44,7 @@ public class Map {
 
     public Map() {
         WIDTH = 1024;
-        HEIGHT = 32;
+        HEIGHT = 64;
         generateTerrain();
     }
 
