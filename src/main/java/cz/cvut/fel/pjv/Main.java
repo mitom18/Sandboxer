@@ -66,11 +66,11 @@ public class Main extends Application {
         
         final GraphicsContext gc = canvas.getGraphicsContext2D();
         
-        final Draw draw = new Draw(WIDTH, HEIGHT);
-        
-        final Game game = new Game();
+        final Game game = new Game(WIDTH);
         final World world = game.getWorld();
         final Player player = game.getPlayer();
+        
+        final Draw draw = new Draw(WIDTH, HEIGHT, world.getWIDTH());
 
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -80,6 +80,7 @@ public class Main extends Application {
                     case LEFT:  player.setLeft(true); break;
                     case RIGHT: player.setRight(true); break;
                     case SHIFT: player.run(true); break;
+                    case C: draw.zoom(game); break;
                 }
             }
         });
@@ -114,6 +115,8 @@ public class Main extends Application {
                 if (!destroying) {
                     double blockX = clickX - (clickX - draw.getCameraOffsetX()) % Block.block_width;
                     double blockY = clickY - (clickY - draw.getCameraOffsetY()) % Block.block_height;
+                    if (clickX < draw.getCameraOffsetX()) { blockX = draw.getCameraOffsetX() - Block.block_width; }
+                    if (clickY < draw.getCameraOffsetY()) { blockY = draw.getCameraOffsetY() - Block.block_height; }
                     world.getBlocks().add(new Block(blockX, blockY));
                 }
             }

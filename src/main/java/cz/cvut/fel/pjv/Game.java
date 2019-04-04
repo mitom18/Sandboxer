@@ -36,17 +36,23 @@ public class Game {
     /**
      * Instance of Player.
      */
-    private Player player = new Player(0, 0);
+    private Player player;
     
     /*
      * Instance of Map.
      */
-    private Map map = new Map();
+    private Map map;
     
     /*
      * Instance of World.
      */
-    private World world = new World(map.getTerrain(), map.getWIDTH(), map.getHEIGHT());
+    private World world;
+
+    public Game(double SCREEN_WIDTH) {
+        player = new Player((int) SCREEN_WIDTH/2, 0);
+        map = new Map();
+        world = new World(map.getTerrain(), map.getWIDTH(), map.getHEIGHT());
+    }
 
     public Player getPlayer() {
         return player;

@@ -35,6 +35,7 @@ public class Draw {
     
     private final double WIDTH;
     private final double HEIGHT;
+    private final int MAP_WIDTH;
     private double zoomScale = 1;
     private double oldZoomScale = 1;
     private final double MIN_ZOOM_SCALE = 0.5;
@@ -42,15 +43,17 @@ public class Draw {
     private double cameraOffsetX = 0;
     private double cameraOffsetY = 0;
 
-    public Draw(double WIDTH, double HEIGHT) {
+    public Draw(double WIDTH, double HEIGHT, int MAP_WIDTH) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
+        this.MAP_WIDTH = MAP_WIDTH;
     }
     
     /**
      * If player is moving outside from canvas, move whole world,
      * so player stays in the canvas.
      * 
+     * @param game instance of the game
      * @since 1.0
      */
     public void shiftCamera(Game game) {
@@ -64,11 +67,19 @@ public class Draw {
             for (Item item : world.getItems()) {
                 if (!item.isPicked()) {
                     item.setX(item.getX() + playerVelocityX);
+                    if (item.getX() > ((int) MAP_WIDTH/2) * Block.block_width) {
+                        //make loop world, take items in one column of world from the right and move them to the left side of the world
+                        item.setX(item.getX() - MAP_WIDTH * Block.block_width);
+                    }
                 }
             }
             for (Block block : world.getBlocks()) {
                 if (block.isDestroyed()) { continue; }
                 block.setX(block.getX() + playerVelocityX);
+                if (block.getX() > ((int) MAP_WIDTH/2) * Block.block_width) {
+                    //make loop world, take blocks in one column of world from the right and move them to the left side of the world
+                    block.setX(block.getX() - MAP_WIDTH * Block.block_width);
+                }
             }
             cameraOffsetX += playerVelocityX;
             if (cameraOffsetX > Block.block_width) { cameraOffsetX %= Block.block_width; }
@@ -79,11 +90,19 @@ public class Draw {
             for (Item item : world.getItems()) {
                 if (!item.isPicked()) {
                     item.setX(item.getX() - playerVelocityX);
+                    if (item.getX() < ((int) -MAP_WIDTH/2) * Block.block_width) {
+                        //make loop world, take items in one column of world from the right and move them to the left side of the world
+                        item.setX(item.getX() + MAP_WIDTH * Block.block_width);
+                    }
                 }
             }
             for (Block block : world.getBlocks()) {
                 if (block.isDestroyed()) { continue; }
                 block.setX(block.getX() - playerVelocityX);
+                if (block.getX() < ((int) -MAP_WIDTH/2) * Block.block_width) {
+                    //make loop world, take blocks in one column of world from the left and move them to the right side of the world
+                    block.setX(block.getX() + MAP_WIDTH * Block.block_width);
+                }
             }
             cameraOffsetX += Block.block_width - playerVelocityX;
             if (cameraOffsetX > Block.block_width) { cameraOffsetX %= Block.block_width; }
@@ -101,7 +120,7 @@ public class Draw {
                 block.setY(block.getY() - playerVelocityY);
             }
             if (playerVelocityY < 0) {
-                cameraOffsetY += playerVelocityY;
+                cameraOffsetY -= playerVelocityY;
             } else {
                 cameraOffsetY += Block.block_height - playerVelocityY;
             }
@@ -113,6 +132,7 @@ public class Draw {
      * Change the size of entities in the world and move the whole world
      * (x and y coords of all entities), so player is in the middle of the canvas.
      * 
+     * @param game instance of the game
      * @since 1.0
      */
     public void zoom(Game game) {
@@ -164,6 +184,7 @@ public class Draw {
      * Draw the world and entities in it.
      * 
      * @param g a canvas 2D rendering context
+     * @param game instance of the game
      * @since 1.0
      */
     public void render(GraphicsContext g, Game game) {
