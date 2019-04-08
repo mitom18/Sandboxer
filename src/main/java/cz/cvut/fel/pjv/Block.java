@@ -34,7 +34,14 @@ import javafx.scene.paint.Color;
  */
 public class Block {
  
+    /**
+     * Actual width of the block in pixels.
+     */
     public static double block_width = 32;
+
+    /**
+     * Actual height of the block in pixels.
+     */
     public static double block_height = 32;
     
     private double x, y;
@@ -153,10 +160,19 @@ public class Block {
         block_height = height;
     }
 
+    /**
+     * Destroy block.
+     * 
+     * @since 1.0
+     */
     public void destroy() {
         this.destroyed = true;
     }
 
+    /**
+     * @return true if block is destroyed, false otherwise
+     * @since 1.0
+     */
     public boolean isDestroyed() {
         return destroyed;
     }

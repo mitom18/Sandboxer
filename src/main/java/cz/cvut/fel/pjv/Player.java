@@ -64,6 +64,7 @@ public class Player {
     /**
      * Update player's state.
      * 
+     * @param world instance of the world
      * @since 1.0
      */
     public void update(World world) {

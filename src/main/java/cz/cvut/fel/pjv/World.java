@@ -49,6 +49,14 @@ public class World {
      */
     private List<Item> items;
 
+    /**
+     * Create new world.
+     *
+     * @param map list of 1 and 0 representing terrain
+     * @param WIDTH width of the world in blocks
+     * @param HEIGHT height of the world in blocks
+     * @since 1.0
+     */
     public World(List<List<Integer>> map, int WIDTH, int HEIGHT) {
         this.map = map;
         this.WIDTH = WIDTH;
@@ -71,14 +79,26 @@ public class World {
         items.add(new Item(0,0));
     }
 
+    /**
+     * @return list of all blocks in the world
+     * @since 1.0
+     */
     public List<Block> getBlocks() {
         return blocks;
     }
 
+    /**
+     * @return list of all items in the world
+     * @since 1.0
+     */
     public List<Item> getItems() {
         return items;
     }
 
+    /**
+     * @return width of the world in blocks
+     * @since 1.0
+     */
     public int getWIDTH() {
         return WIDTH;
     }

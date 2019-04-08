@@ -42,30 +42,58 @@ public class Map {
     private List<List<Integer>> terrain;
     private List<List<BlockType>> map;
 
+    /**
+     * Create new map with default size.
+     * 
+     * @since 1.0
+     */
     public Map() {
         WIDTH = 1024;
         HEIGHT = 64;
         generateTerrain();
     }
 
+    /**
+     * Create new map with given size.
+     *
+     * @param WIDTH width of the map in blocks
+     * @param HEIGHT height of the map in blocks
+     * @since 1.0
+     */
     public Map(int WIDTH, int HEIGHT) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
         generateTerrain();
     }
 
+    /**
+     * @return width of the map in blocks
+     * @since 1.0
+     */
     public int getWIDTH() {
         return WIDTH;
     }
 
+    /**
+     * @return height of the map in blocks
+     * @since 1.0
+     */
     public int getHEIGHT() {
         return HEIGHT;
     }
 
+    /**
+     * @return list of 1 and 0 (1 for block, 0 for empty space)
+     * @since 1.0
+     */
     public List<List<Integer>> getTerrain() {
         return terrain;
     }
 
+    /**
+     * @return list of block types
+     * @since 1.0
+     */
     public List<List<BlockType>> getMap() {
         return map;
     }
@@ -75,6 +103,7 @@ public class Map {
      * 
      * @param x the variable x
      * @return the functional value
+     * @since 1.0
      */
     private double calculateSkyline(double x) {
         double y = 8 * Math.sin((1.0 / 8.0) * x) + 16;
@@ -84,6 +113,8 @@ public class Map {
     /**
      * Fills the 2D ArrayList terrain with values that represent terrain (1)
      * and void (0) using a mathematical function.
+     * 
+     * @since 1.0
      */
     private void generateTerrain() {
         terrain = new ArrayList<>(WIDTH);

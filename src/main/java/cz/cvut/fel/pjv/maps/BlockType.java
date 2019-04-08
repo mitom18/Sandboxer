@@ -32,9 +32,24 @@ package cz.cvut.fel.pjv.maps;
  */
 public enum BlockType {
     
+    /**
+     * Type of dirt block.
+     */
     DIRT(1),
+
+    /**
+     * Type of stone block.
+     */
     STONE(2),
+
+    /**
+     * Type of water block.
+     */
     WATER(3),
+
+    /**
+     * Type of diamond ore block.
+     */
     DIAMOND_ORE(4);
 
     private final int id;

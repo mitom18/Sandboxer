@@ -48,20 +48,38 @@ public class Game {
      */
     private World world;
 
+    /**
+     * Create new game.
+     *
+     * @param SCREEN_WIDTH width of the canvas in pixels
+     * @since 1.0
+     */
     public Game(double SCREEN_WIDTH) {
         player = new Player((int) SCREEN_WIDTH/2, 0);
         map = new Map();
         world = new World(map.getTerrain(), map.getWIDTH(), map.getHEIGHT());
     }
 
+    /**
+     * @return instance of the player
+     * @since 1.0
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * @return instance of the map
+     * @since 1.0
+     */
     public Map getMap() {
         return map;
     }
 
+    /**
+     * @return instance of the world
+     * @since 1.0
+     */
     public World getWorld() {
         return world;
     }

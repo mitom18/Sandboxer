@@ -70,6 +70,15 @@ public abstract class Collision {
         return player.getX() < block.getX2() && player.getX2() > block.getX() && player.getY() < block.getY2() && player.getY2() > block.getY();
     }
     
+    /**
+     * Check if user clicked on block.
+     *
+     * @param clickX
+     * @param clickY
+     * @param block
+     * @return true if user clicked on block, false otherwise
+     * @since 1.0
+     */
     public static boolean collides(double clickX, double clickY, Block block) {
         return clickX < block.getX2() && clickX > block.getX() && clickY < block.getY2() && clickY > block.getY();
     }

@@ -54,6 +54,13 @@ public class Main extends Application {
         launch(args);
     }
     
+    /**
+     * Starts the application.
+     *
+     * @param stage
+     * @throws Exception
+     * @since 1.0
+     */
     @Override
     public void start(Stage stage) throws Exception {
         Group root = new Group();

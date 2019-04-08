@@ -43,6 +43,14 @@ public class Draw {
     private double cameraOffsetX = 0;
     private double cameraOffsetY = 0;
 
+    /**
+     * Set width and height parameters for drawing.
+     *
+     * @param WIDTH width of the canvas in pixels
+     * @param HEIGHT height of the canvas in pixels
+     * @param MAP_WIDTH width of the world in blocks
+     * @since 1.0
+     */
     public Draw(double WIDTH, double HEIGHT, int MAP_WIDTH) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
@@ -208,34 +216,70 @@ public class Draw {
         }
     }
 
+    /**
+     * @return actual zoom scale of the world
+     * @since 1.0
+     */
     public double getZoomScale() {
         return zoomScale;
     }
 
+    /**
+     * Set new zoom scale of the world.
+     *
+     * @param zoomScale
+     * @since 1.0
+     */
     public void setZoomScale(double zoomScale) {
         this.zoomScale = zoomScale;
     }
 
+    /**
+     * @return old zoom scale of the world
+     * @since 1.0
+     */
     public double getOldZoomScale() {
         return oldZoomScale;
     }
 
+    /**
+     * Rewrite old zoom scale of the world.
+     *
+     * @param oldZoomScale
+     * @since 1.0
+     */
     public void setOldZoomScale(double oldZoomScale) {
         this.oldZoomScale = oldZoomScale;
     }
 
+    /**
+     * @return minimal zoom scale
+     * @since 1.0
+     */
     public double getMIN_ZOOM_SCALE() {
         return MIN_ZOOM_SCALE;
     }
 
+    /**
+     * @return maximal zoom scale
+     * @since 1.0
+     */
     public double getMAX_ZOOM_SCALE() {
         return MAX_ZOOM_SCALE;
     }
 
+    /**
+     * @return camera offset on x axis
+     * @since 1.0
+     */
     public double getCameraOffsetX() {
         return cameraOffsetX;
     }
 
+    /**
+     * @return camera offset on y axis
+     * @since 1.0
+     */
     public double getCameraOffsetY() {
         return cameraOffsetY;
     }
