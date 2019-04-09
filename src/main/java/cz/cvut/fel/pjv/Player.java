@@ -46,7 +46,7 @@ public class Player {
     private final double IMAGE_WIDTH = 64;
     private final double IMAGE_HEIGHT = 64;
     private double spriteX, spriteY, spriteFrame = 0;
-    private final Image image = new Image( "sprite_sheet.png" );
+    private final Image image = new Image( "spritesheet_hero.png" );
     private final Inventory inventory = new Inventory();
 
     /**

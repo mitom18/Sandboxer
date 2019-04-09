@@ -23,7 +23,7 @@
  */
 package cz.cvut.fel.pjv;
 
-import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
 
 /**
  * Item class. Item lays in the world or is in the player's inventory.
@@ -33,10 +33,14 @@ import javafx.scene.paint.Color;
  */
 public class Item {
     private double x, y;
-    private double width = 10;
-    private double height = 10;
+    private double width = 24;
+    private double height = 24;
     private boolean picked;
-    private final Color color = Color.YELLOW;
+    private static final Image image = new Image( "spritesheet_items.png" );
+    private final double IMAGE_X;
+    private final double IMAGE_Y;
+    private final double IMAGE_WIDTH = 128;
+    private final double IMAGE_HEIGHT = 128;
 
     /**
      * Create new item on given coordinates.
@@ -48,6 +52,8 @@ public class Item {
     public Item(double x, double y) {
         this.x = x+2;
         this.y = y+2;
+        IMAGE_X = 0;
+        IMAGE_Y = 1170;
         picked = false;
     }
 
@@ -81,14 +87,6 @@ public class Item {
      */
     public double getHeight() {
         return height;
-    }
-
-    /**
-     * @return item's color
-     * @since 1.0
-     */
-    public Color getColor() {
-        return color;
     }
     
     /**
@@ -147,6 +145,26 @@ public class Item {
      */
     public void setPicked(boolean picked) {
         this.picked = picked;
+    }
+
+    public static Image getImage() {
+        return image;
+    }
+
+    public double getIMAGE_X() {
+        return IMAGE_X;
+    }
+
+    public double getIMAGE_Y() {
+        return IMAGE_Y;
+    }
+
+    public double getIMAGE_WIDTH() {
+        return IMAGE_WIDTH;
+    }
+
+    public double getIMAGE_HEIGHT() {
+        return IMAGE_HEIGHT;
     }
     
 }

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cz.cvut.fel.pjv.maps;
+package cz.cvut.fel.pjv;
 
 /**
  * Enumeration class to represent different types of block, that can appear in a
@@ -35,26 +35,40 @@ public enum BlockType {
     /**
      * Type of dirt block.
      */
-    DIRT(1),
+    DIRT(1, 650, 130),
 
     /**
      * Type of stone block.
      */
-    STONE(2),
+    STONE(2, 260, 650),
 
     /**
      * Type of water block.
      */
-    WATER(3),
+    WATER(3, 0, 910),
 
     /**
      * Type of diamond ore block.
      */
-    DIAMOND_ORE(4);
+    DIAMOND_ORE(4, 260, 0);
 
     private final int id;
+    private final double spritesheetX;
+    private final double spritesheetY;
 
-    private BlockType(int id) {
+
+    private BlockType(int id, double spritesheetX, double spritesheetY) {
         this.id = id;
+        this.spritesheetX = spritesheetX;
+        this.spritesheetY = spritesheetY;
     }
+
+    public double getSpritesheetX() {
+        return spritesheetX;
+    }
+
+    public double getSpritesheetY() {
+        return spritesheetY;
+    }
+    
 }

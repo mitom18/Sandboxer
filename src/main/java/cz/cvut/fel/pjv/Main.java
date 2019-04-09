@@ -126,7 +126,7 @@ public class Main extends Application {
                     double blockY = clickY - (clickY - draw.getCameraOffsetY()) % Block.block_height;
                     if (clickX < draw.getCameraOffsetX()) { blockX = draw.getCameraOffsetX() - Block.block_width; }
                     if (clickY < draw.getCameraOffsetY()) { blockY = draw.getCameraOffsetY() - Block.block_height; }
-                    world.getBlocks().add(new Block(blockX, blockY));
+                    world.getBlocks().add(new Block(blockX, blockY, BlockType.DIRT));
                 }
             }
         });

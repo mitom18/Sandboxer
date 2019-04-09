@@ -70,7 +70,7 @@ public class World {
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
                 if (map.get(i).get(j) == 1) {
-                    blocks.add(new Block((i - (int) WIDTH/2) * Block.block_width, j * Block.block_height));
+                    blocks.add(new Block((i - (int) WIDTH/2) * Block.block_width, j * Block.block_height, BlockType.DIRT));
                 }
             }
         }

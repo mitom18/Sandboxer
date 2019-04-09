@@ -23,6 +23,7 @@
  */
 package cz.cvut.fel.pjv.maps;
 
+import cz.cvut.fel.pjv.BlockType;
 import java.util.ArrayList;
 import java.util.List;
 

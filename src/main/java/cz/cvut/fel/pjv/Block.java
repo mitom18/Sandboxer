@@ -23,7 +23,7 @@
  */
 package cz.cvut.fel.pjv;
 
-import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
 
 
 /**
@@ -47,7 +47,11 @@ public class Block {
     private double x, y;
     private double width = block_width;
     private double height = block_height;
-    private final Color color = Color.BROWN;
+    private static final Image image = new Image( "spritesheet_tiles.png" );
+    private final double IMAGE_X;
+    private final double IMAGE_Y;
+    private final double IMAGE_WIDTH = 128;
+    private final double IMAGE_HEIGHT = 128;
     private boolean destroyed = false;
 
     /**
@@ -57,9 +61,11 @@ public class Block {
      * @param y
      * @since 1.0
      */
-    public Block(double x, double y) {
+    public Block(double x, double y, BlockType type) {
         this.x = x;
         this.y = y;
+        this.IMAGE_X = type.getSpritesheetX();
+        this.IMAGE_Y = type.getSpritesheetY();
     }
 
     /**
@@ -108,14 +114,6 @@ public class Block {
      */
     public double getHeight() {
         return height;
-    }
-
-    /**
-     * @return block's color
-     * @since 1.0
-     */
-    public Color getColor() {
-        return color;
     }
     
     /**
@@ -176,4 +174,25 @@ public class Block {
     public boolean isDestroyed() {
         return destroyed;
     }
+
+    public static Image getImage() {
+        return image;
+    }
+
+    public double getIMAGE_X() {
+        return IMAGE_X;
+    }
+
+    public double getIMAGE_Y() {
+        return IMAGE_Y;
+    }
+
+    public double getIMAGE_WIDTH() {
+        return IMAGE_WIDTH;
+    }
+
+    public double getIMAGE_HEIGHT() {
+        return IMAGE_HEIGHT;
+    }
+
 }

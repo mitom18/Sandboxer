@@ -190,32 +190,35 @@ public class Draw {
     }
     
     private void drawInventory(GraphicsContext g, Inventory inv) {
-        final double INV_WIDTH = 500;
-        final double INV_HEIGHT = 50;
+        final double INV_HOTBAR_ITEMS_COUNT = 10;
+        final double INV_HEIGHT = 50; //size of one hotbar cell in pixels
         final double STROKE_WIDTH = 5;
+        final double ITEM_SIZE = 40; //hotbar item size in pixels
+        final double INV_START_X = 0+STROKE_WIDTH;
+        final double INV_START_Y = 0+STROKE_WIDTH;
         
         double x = 0;
         Item[] items = inv.getHotbarItems();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < INV_HOTBAR_ITEMS_COUNT; i++) {
             //draw the background
-            g.setFill(Color.GREY);
+            g.setFill(Color.WHITE);
             g.setStroke(Color.RED);
             g.setLineWidth(STROKE_WIDTH);
-            g.fillRect(WIDTH/2-INV_WIDTH/2+x, HEIGHT-INV_HEIGHT-STROKE_WIDTH, INV_HEIGHT, INV_HEIGHT);
-            g.strokeRect(WIDTH/2-INV_WIDTH/2+x, HEIGHT-INV_HEIGHT-STROKE_WIDTH, INV_HEIGHT, INV_HEIGHT);
+            g.fillRect(INV_START_X+x, INV_START_Y, INV_HEIGHT, INV_HEIGHT);
+            g.strokeRect(INV_START_X+x, INV_START_Y, INV_HEIGHT, INV_HEIGHT);
             //draw the item
             if (items[i] != null) {
                 Item item = items[i];
-                g.setFill(item.getColor());
-                g.fillRect(WIDTH/2-INV_WIDTH/2+x+INV_HEIGHT/2-item.getWidth()/2, 
-                        HEIGHT-INV_HEIGHT-STROKE_WIDTH+INV_HEIGHT/2-item.getHeight()/2, 
-                        item.getWidth(), item.getHeight());
+                g.drawImage(Item.getImage(), item.getIMAGE_X(), item.getIMAGE_Y(), item.getIMAGE_WIDTH(), item.getIMAGE_HEIGHT(), 
+                        INV_START_X+x+INV_HEIGHT/2-ITEM_SIZE/2, 
+                        INV_START_Y+INV_HEIGHT/2-ITEM_SIZE/2, 
+                        ITEM_SIZE, ITEM_SIZE);
             }
             x += INV_HEIGHT;
         }
         //highlight active item
         g.setStroke(Color.GOLD);
-        g.strokeRect(WIDTH/2-INV_WIDTH/2+INV_HEIGHT*inv.getActiveItemIndex(), HEIGHT-INV_HEIGHT-STROKE_WIDTH, INV_HEIGHT, INV_HEIGHT);
+        g.strokeRect(INV_START_X+INV_HEIGHT*inv.getActiveItemIndex(), INV_START_Y, INV_HEIGHT, INV_HEIGHT);
     }
 
     /**
@@ -235,13 +238,13 @@ public class Draw {
                 player.getX(), player.getY(), player.getWidth(), player.getHeight());
         for (Block block : world.getBlocks()) {
             if (block.isDestroyed()) { continue; }
-            g.setFill(block.getColor());
-            g.fillRect(block.getX(), block.getY(), block.getWidth(), block.getHeight());
+            g.drawImage(Block.getImage(), block.getIMAGE_X(), block.getIMAGE_Y(), block.getIMAGE_WIDTH(), block.getIMAGE_HEIGHT(), 
+                    block.getX(), block.getY(), block.getWidth(), block.getHeight());
         }
         for (Item item : world.getItems()) {
             if (!item.isPicked()) {
-                g.setFill(item.getColor());
-                g.fillRect(item.getX(), item.getY(), item.getWidth(), item.getHeight());
+                g.drawImage(Item.getImage(), item.getIMAGE_X(), item.getIMAGE_Y(), item.getIMAGE_WIDTH(), item.getIMAGE_HEIGHT(), 
+                        item.getX(), item.getY(), item.getWidth(), item.getHeight());
             }
         }
         drawInventory(g, player.getInventory());
