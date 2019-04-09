@@ -83,10 +83,12 @@ public class Main extends Application {
             @Override
             public void handle(KeyEvent event) {
                 switch (event.getCode()) {
-                    case UP:    player.setUp(true); break;
-                    case LEFT:  player.setLeft(true); break;
-                    case RIGHT: player.setRight(true); break;
+                    case W:    player.setUp(true); break;
+                    case A:  player.setLeft(true); break;
+                    case D: player.setRight(true); break;
                     case SHIFT: player.run(true); break;
+                    case Q: player.changeActiveItem(-1); break;
+                    case E: player.changeActiveItem(1); break;
                     case C: draw.zoom(game); break;
                 }
             }
@@ -96,9 +98,9 @@ public class Main extends Application {
             @Override
             public void handle(KeyEvent event) {
                 switch (event.getCode()) {
-                    case UP:    player.setUp(false); break;
-                    case LEFT:  player.setLeft(false); break;
-                    case RIGHT: player.setRight(false); break;
+                    case W:    player.setUp(false); break;
+                    case A:  player.setLeft(false); break;
+                    case D: player.setRight(false); break;
                     case SHIFT: player.run(false); break;
                 }
             }

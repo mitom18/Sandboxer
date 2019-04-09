@@ -160,6 +160,12 @@ public class Player {
         this.running = running;
     }
     
+    public void changeActiveItem(int moveBy) {
+        int moveTo = (inventory.getActiveItemIndex() + moveBy) % 10;
+        if (moveTo < 0) { moveTo = 9; }
+        inventory.setActiveItemIndex(moveTo);
+    }
+    
     /**
      * @return true if player is moving left, false otherwise
      * @since 1.0

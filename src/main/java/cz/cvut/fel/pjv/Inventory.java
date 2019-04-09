@@ -23,6 +23,8 @@
  */
 package cz.cvut.fel.pjv;
 
+import java.util.Arrays;
+
 /**
  * Player's inventory.
  *
@@ -31,6 +33,11 @@ package cz.cvut.fel.pjv;
  */
 public class Inventory {
     Item[] inv = new Item [64];
+    int activeItemIndex = 0;
+
+    public Inventory() {
+        add(new Item(0,0));
+    }
     
     /**
      * Add item to inventory.
@@ -39,21 +46,36 @@ public class Inventory {
      * @since 1.0
      */
     public void add(Item itemToAdd) {
-        for (Item item : inv) {
-            if (item == null) { item = itemToAdd; }
+        for (int i = 0; i < inv.length; i++) {
+            if (inv[i] == null) {
+                inv[i] = itemToAdd;
+                break;
+            }
         }
     }
 
     /**
-     * @return inventory item's
+     * @return inventory items
      * @since 1.0
      */
     public Item[] getInv() {
         return inv;
     }
-
-    @Override
-    public String toString() {
-        return "Inventory{" + "inv=" + inv + '}';
+    
+    public Item[] getHotbarItems() {
+        return Arrays.copyOfRange(inv, 0, 10);
     }
+
+    /**
+     * @return index of active item
+     * @since 1.0
+     */
+    public int getActiveItemIndex() {
+        return activeItemIndex;
+    }
+
+    public void setActiveItemIndex(int activeItemIndex) {
+        this.activeItemIndex = activeItemIndex;
+    }
+    
 }

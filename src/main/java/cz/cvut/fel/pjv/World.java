@@ -76,7 +76,7 @@ public class World {
         }
         
         items = new ArrayList<>();
-        items.add(new Item(0,0));
+        items.add(new Item(0,500));
     }
 
     /**

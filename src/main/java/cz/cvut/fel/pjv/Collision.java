@@ -96,7 +96,6 @@ public abstract class Collision {
             if (canPickItem(player, item)) {
                 player.getInventory().add(item);
                 item.setPicked(true);
-                System.out.println(player.getInventory());
             }
         }
     }

@@ -24,6 +24,7 @@
 package cz.cvut.fel.pjv;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /**
  * Class for drawing and transforming the world.
@@ -185,7 +186,36 @@ public class Draw {
             if (cameraOffsetX > Block.block_width) { cameraOffsetX %= Block.block_width; }
             if (cameraOffsetY > Block.block_height) { cameraOffsetY %= Block.block_height; }
         }
-        oldZoomScale = this.zoomScale; //store for zoom reset
+        oldZoomScale = this.zoomScale; //store zoom for zoom reset
+    }
+    
+    private void drawInventory(GraphicsContext g, Inventory inv) {
+        final double INV_WIDTH = 500;
+        final double INV_HEIGHT = 50;
+        final double STROKE_WIDTH = 5;
+        
+        double x = 0;
+        Item[] items = inv.getHotbarItems();
+        for (int i = 0; i < 10; i++) {
+            //draw the background
+            g.setFill(Color.GREY);
+            g.setStroke(Color.RED);
+            g.setLineWidth(STROKE_WIDTH);
+            g.fillRect(WIDTH/2-INV_WIDTH/2+x, HEIGHT-INV_HEIGHT-STROKE_WIDTH, INV_HEIGHT, INV_HEIGHT);
+            g.strokeRect(WIDTH/2-INV_WIDTH/2+x, HEIGHT-INV_HEIGHT-STROKE_WIDTH, INV_HEIGHT, INV_HEIGHT);
+            //draw the item
+            if (items[i] != null) {
+                Item item = items[i];
+                g.setFill(item.getColor());
+                g.fillRect(WIDTH/2-INV_WIDTH/2+x+INV_HEIGHT/2-item.getWidth()/2, 
+                        HEIGHT-INV_HEIGHT-STROKE_WIDTH+INV_HEIGHT/2-item.getHeight()/2, 
+                        item.getWidth(), item.getHeight());
+            }
+            x += INV_HEIGHT;
+        }
+        //highlight active item
+        g.setStroke(Color.GOLD);
+        g.strokeRect(WIDTH/2-INV_WIDTH/2+INV_HEIGHT*inv.getActiveItemIndex(), HEIGHT-INV_HEIGHT-STROKE_WIDTH, INV_HEIGHT, INV_HEIGHT);
     }
 
     /**
@@ -214,6 +244,7 @@ public class Draw {
                 g.fillRect(item.getX(), item.getY(), item.getWidth(), item.getHeight());
             }
         }
+        drawInventory(g, player.getInventory());
     }
 
     /**

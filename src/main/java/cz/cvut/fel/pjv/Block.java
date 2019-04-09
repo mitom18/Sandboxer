@@ -47,7 +47,7 @@ public class Block {
     private double x, y;
     private double width = block_width;
     private double height = block_height;
-    private final Color color = Color.RED;
+    private final Color color = Color.BROWN;
     private boolean destroyed = false;
 
     /**
