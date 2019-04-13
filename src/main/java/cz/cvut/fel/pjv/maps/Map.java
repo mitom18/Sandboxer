@@ -34,16 +34,25 @@ import java.util.Random;
  * if no arguments are given width and height are set to default values.
  *
  * @author Zdenek
- * @version 1.0
+ * @version 1.1
  */
 public class Map {
 
     private final int WIDTH;
     private final int HEIGHT;
+    
+    private final double AMPLITUDE_COEFFICIENT_MULTIPLICATOR = 8;
+    private final double PERIOD_COEFFICIENT_MULTIPLICATOR = 12;
+    
+    private final double AMP_MIN = 0.5;
+    private final double AMP_MAX = 1.5;
+    private final double PER_MIN = 0.5;
+    private final double PER_MAX = 1.5;
 
     private List<List<Integer>> terrain;
     private List<List<BlockType>> map;
     
+    private final long seed;
     private Random r;
 
     /**
@@ -54,7 +63,14 @@ public class Map {
     public Map() {
         WIDTH = 1024;
         HEIGHT = 64;
+        
+        r = new Random();
+        seed = r.nextLong();
+        r.setSeed(seed);
+        System.out.println(seed);
+        
         generateTerrain();
+        generateMap();
     }
 
     /**
@@ -67,9 +83,24 @@ public class Map {
     public Map(int WIDTH, int HEIGHT) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
+        
+        r = new Random();
+        seed = r.nextLong();
+        r.setSeed(seed);
+        System.out.println(seed);
+        
         generateTerrain();
+        generateMap();
     }
-
+    
+    /**
+     * @return randomly generated seed for this instance of Map
+     * @since 1.1
+     */
+    public long getSeed() {
+        return seed;
+    }
+    
     /**
      * @return width of the map in blocks
      * @since 1.0
@@ -102,17 +133,16 @@ public class Map {
         return map;
     }
     
-    private double generateRandomDoubleInRange(double min, double max) {
-        r = new Random();
+    /**
+     * Generates a random double in a given range.
+     * 
+     * @param min smallest possible generated number
+     * @param max largest possible generated number
+     * @return random double in the given range
+     * @since 1.1
+     */
+    private double randomDoubleInRange(double min, double max) {
         return min + (max - min) * r.nextDouble();
-    }
-    
-    private double newAmplitudeCoefficient() {
-        return generateRandomDoubleInRange(0.5, 1.5) * 8;
-    }
-    
-    private double newPeriodCoefficient() {
-        return 1 / (generateRandomDoubleInRange(0.5, 1.5) * 12);
     }
     
     /**
@@ -122,7 +152,7 @@ public class Map {
      * @return the functional value
      * @since 1.0
      */
-    private double calculateSkyline(double x, double amplitudeCoefficient, double periodCoefficient, int previousY) {
+    private double calculateSkyline(double x, double amplitudeCoefficient, double periodCoefficient, double previousY) {
         double y = amplitudeCoefficient * Math.sin((periodCoefficient) * x) + previousY;
         return y;
     }
@@ -130,33 +160,35 @@ public class Map {
     /**
      * Fills the 2D ArrayList terrain with values that represent terrain (1)
      * and void (0) using a mathematical function.
+     * Uses random numbers to calculate the amplitude and period of a sine function.
+     * The function is calculated again with new values after each period.
      * 
      * @since 1.0
      */
     private void generateTerrain() {
         terrain = new ArrayList<>(WIDTH);
-        double skyline;
         
-        double amplitudeCoefficient = newAmplitudeCoefficient();
-        double periodCoefficient = newPeriodCoefficient();
+        double amplitudeCoefficient = randomDoubleInRange(AMP_MIN, AMP_MAX) * AMPLITUDE_COEFFICIENT_MULTIPLICATOR;
+        double periodCoefficient = 1 / (randomDoubleInRange(PER_MIN, PER_MAX) * PERIOD_COEFFICIENT_MULTIPLICATOR);
         
         double period = (2 * Math.PI) / (periodCoefficient);
-        int previousY = 32;
+        double previousY = 32;
         
         int counter = 1;
 
         for (int i = 0; i < WIDTH; i++) {
             terrain.add(new ArrayList<Integer>(HEIGHT));
             
-            double x = i;
-            skyline = calculateSkyline(x, amplitudeCoefficient, periodCoefficient, previousY);
+            double skyline = calculateSkyline((double) i, amplitudeCoefficient, periodCoefficient, previousY);
             
             if ((int)period == counter) {
-                amplitudeCoefficient = newAmplitudeCoefficient();
-                periodCoefficient = newPeriodCoefficient();
+                amplitudeCoefficient = randomDoubleInRange(AMP_MIN, AMP_MAX) * AMPLITUDE_COEFFICIENT_MULTIPLICATOR;
+                periodCoefficient = 1 / (randomDoubleInRange(PER_MIN, PER_MAX) * PERIOD_COEFFICIENT_MULTIPLICATOR);
+                
                 period = (2 * Math.PI) / (periodCoefficient);
-                double nextSkyline = calculateSkyline(x + 1, amplitudeCoefficient, periodCoefficient, previousY);
-                previousY += (int) (skyline - nextSkyline);
+                double nextSkyline = calculateSkyline((double) i + 1, amplitudeCoefficient, periodCoefficient, previousY);
+                previousY += skyline - nextSkyline;
+                
                 counter = 1;
             }
 
@@ -173,5 +205,9 @@ public class Map {
             
             counter++;
         }
+    }
+    
+    private void generateMap(){
+        
     }
 }
