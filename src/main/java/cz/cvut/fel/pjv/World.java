@@ -33,7 +33,7 @@ import java.util.List;
  * Contains all entities in the world.
  * Takes the world map (2D ArrayList) as argument.
  * 
- * @author Zdeněk
+ * @author Zdenek
  * @version 1.0
  */
 public class World {

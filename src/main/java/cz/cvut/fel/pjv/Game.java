@@ -28,7 +28,7 @@ import cz.cvut.fel.pjv.maps.Map;
 /**
  * Contains all entities in the game.
  *
- * @author Zdeněk
+ * @author Zdenek
  * @version 1.0
  */
 public class Game {

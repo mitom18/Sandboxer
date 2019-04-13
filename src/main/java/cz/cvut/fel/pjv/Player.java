@@ -113,6 +113,7 @@ public class Player {
         velocityY += GRAVITY*velocityMultiplier;
         y += velocityY;
     }
+    
     private void jump() {
         if (onGround) {
             velocityY = -6.0*velocityMultiplier;

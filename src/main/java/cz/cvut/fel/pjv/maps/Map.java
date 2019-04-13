@@ -26,13 +26,14 @@ package cz.cvut.fel.pjv.maps;
 import cz.cvut.fel.pjv.BlockType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Class Map generates a map. The map defines how a game world is going to look.
  * The constructor takes 2 integer arguments (width and height of the map) or
  * if no arguments are given width and height are set to default values.
  *
- * @author Zdeněk
+ * @author Zdenek
  * @version 1.0
  */
 public class Map {
@@ -42,6 +43,8 @@ public class Map {
 
     private List<List<Integer>> terrain;
     private List<List<BlockType>> map;
+    
+    private Random r;
 
     /**
      * Create new map with default size.
@@ -84,7 +87,7 @@ public class Map {
     }
 
     /**
-     * @return list of 1 and 0 (1 for block, 0 for empty space)
+     * @return list of 1 and 0 (1 for any block, 0 for empty space)
      * @since 1.0
      */
     public List<List<Integer>> getTerrain() {
@@ -99,6 +102,19 @@ public class Map {
         return map;
     }
     
+    private double generateRandomDoubleInRange(double min, double max) {
+        r = new Random();
+        return min + (max - min) * r.nextDouble();
+    }
+    
+    private double newAmplitudeCoefficient() {
+        return generateRandomDoubleInRange(0.5, 1.5) * 8;
+    }
+    
+    private double newPeriodCoefficient() {
+        return 1 / (generateRandomDoubleInRange(0.5, 1.5) * 12);
+    }
+    
     /**
      * Contains a periodical mathematical function.
      * 
@@ -106,8 +122,8 @@ public class Map {
      * @return the functional value
      * @since 1.0
      */
-    private double calculateSkyline(double x) {
-        double y = 8 * Math.sin((1.0 / 8.0) * x) + 16;
+    private double calculateSkyline(double x, double amplitudeCoefficient, double periodCoefficient, int previousY) {
+        double y = amplitudeCoefficient * Math.sin((periodCoefficient) * x) + previousY;
         return y;
     }
     
@@ -119,20 +135,43 @@ public class Map {
      */
     private void generateTerrain() {
         terrain = new ArrayList<>(WIDTH);
+        double skyline;
+        
+        double amplitudeCoefficient = newAmplitudeCoefficient();
+        double periodCoefficient = newPeriodCoefficient();
+        
+        double period = (2 * Math.PI) / (periodCoefficient);
+        int previousY = 32;
+        
+        int counter = 1;
 
         for (int i = 0; i < WIDTH; i++) {
             terrain.add(new ArrayList<Integer>(HEIGHT));
-
+            
             double x = i;
-            double skyline = calculateSkyline(x);
+            skyline = calculateSkyline(x, amplitudeCoefficient, periodCoefficient, previousY);
+            
+            if ((int)period == counter) {
+                amplitudeCoefficient = newAmplitudeCoefficient();
+                periodCoefficient = newPeriodCoefficient();
+                period = (2 * Math.PI) / (periodCoefficient);
+                double nextSkyline = calculateSkyline(x + 1, amplitudeCoefficient, periodCoefficient, previousY);
+                previousY += (int) (skyline - nextSkyline);
+                counter = 1;
+            }
 
-            for (int j = 0; j < HEIGHT; j++) {
-                if (j >= skyline) {
+            for (int j = HEIGHT - 1; j >= 0; j--) {
+                
+                if ((j == 0) || (j == HEIGHT - 1)) {
+                    terrain.get(i).add(1);
+                } else if (j <= skyline) {
                     terrain.get(i).add(1);
                 } else {
                     terrain.get(i).add(0);
                 }
             }
+            
+            counter++;
         }
     }
 }
