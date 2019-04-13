@@ -23,6 +23,10 @@
  */
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.items.Item;
+import cz.cvut.fel.pjv.items.StoredBlock;
+import cz.cvut.fel.pjv.items.ItemType;
+import cz.cvut.fel.pjv.items.Tool;
 import java.util.Arrays;
 
 /**
@@ -35,8 +39,15 @@ public class Inventory {
     Item[] inv = new Item [64];
     int activeItemIndex = 0;
 
+    /**
+     * Create player's inventory and add a pickaxe to it.
+     * 
+     * @since 1.0
+     */
     public Inventory() {
-        add(new Item(0,0));
+        Item item = new Tool(0,0, ItemType.PICKAXE);
+        item.setPicked(true);
+        add(item);
     }
     
     /**
@@ -46,10 +57,54 @@ public class Inventory {
      * @since 1.0
      */
     public void add(Item itemToAdd) {
+        if (itemToAdd instanceof StoredBlock) {
+            StoredBlock storedBlockToAdd = (StoredBlock) itemToAdd;
+            for (Item item : inv) {
+                if (item instanceof StoredBlock) {
+                    StoredBlock storedBlockInInv = (StoredBlock) item;
+                    if (storedBlockToAdd.equals(storedBlockInInv)) {
+                        storedBlockInInv.raiseQuantity();
+                        if (storedBlockInInv.getQuantity() > 64) {
+                            storedBlockInInv.decreaseQuantity();
+                            continue;
+                        }
+                        return;
+                    }
+                }
+            }
+        }
         for (int i = 0; i < inv.length; i++) {
             if (inv[i] == null) {
                 inv[i] = itemToAdd;
-                break;
+                return;
+            }
+        }
+    }
+    
+    /**
+     * Remove item from inventory.
+     *
+     * @param itemToRemove
+     * @since 1.0
+     */
+    public void remove(Item itemToRemove) {
+        if (itemToRemove instanceof StoredBlock) {
+            StoredBlock storedBlockToAdd = (StoredBlock) itemToRemove;
+            for (Item item : inv) {
+                if (item instanceof StoredBlock) {
+                    StoredBlock storedBlockInInv = (StoredBlock) item;
+                    if (storedBlockToAdd.equals(storedBlockInInv)) {
+                        storedBlockInInv.decreaseQuantity();
+                        if (storedBlockInInv.getQuantity() < 1) { break; }
+                        return;
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < inv.length; i++) {
+            if (inv[i].equals(itemToRemove)) {
+                inv[i] = null;
+                return;
             }
         }
     }
@@ -62,6 +117,10 @@ public class Inventory {
         return inv;
     }
     
+    /**
+     * @return items from inventory which are supposed to be in hotbar
+     * @since 1.0
+     */
     public Item[] getHotbarItems() {
         return Arrays.copyOfRange(inv, 0, 10);
     }
@@ -73,7 +132,21 @@ public class Inventory {
     public int getActiveItemIndex() {
         return activeItemIndex;
     }
+    
+    /**
+     * @return active item
+     * @since 1.0
+     */
+    public Item getActiveItem() {
+        return inv[activeItemIndex];
+    }
 
+    /**
+     * Set new index for active item.
+     *
+     * @param activeItemIndex
+     * @since 1.0
+     */
     public void setActiveItemIndex(int activeItemIndex) {
         this.activeItemIndex = activeItemIndex;
     }

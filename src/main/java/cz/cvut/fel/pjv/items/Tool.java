@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Zdeněk.
+ * Copyright 2019 Michal-jr.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,61 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cz.cvut.fel.pjv;
+package cz.cvut.fel.pjv.items;
+
+import javafx.scene.image.Image;
 
 /**
- * Enumeration class representing all types of block that can appear in the map.
+ * Class for tools, extends item class.
  *
- * @author Zdeněk
+ * @author Michal-jr
  * @version 1.0
  */
-public enum BlockType {
+public class Tool extends Item {
     
-    /**
-     * Type of dirt block.
-     */
-    DIRT(1, 650, 130),
+    private static final Image IMAGE = new Image( "spritesheet_items.png" );
+    private final ItemType toolType;
 
     /**
-     * Type of stone block.
+     * Create new item on given coordinates.
+     *
+     * @param x
+     * @param y
+     * @param type
+     * @since 1.0
      */
-    STONE(2, 260, 650),
-
-    /**
-     * Type of water block.
-     */
-    WATER(3, 0, 910),
-
-    /**
-     * Type of diamond ore block.
-     */
-    DIAMOND_ORE(4, 260, 0);
-
-    private final int id;
-    private final double spritesheetX;
-    private final double spritesheetY;
-
-
-    private BlockType(int id, double spritesheetX, double spritesheetY) {
-        this.id = id;
-        this.spritesheetX = spritesheetX;
-        this.spritesheetY = spritesheetY;
+    public Tool(double x, double y, ItemType type) {
+        super(x, y, type, IMAGE);
+        toolType = type;
     }
 
     /**
-     * @return X position of block sprite in the spritesheet in pixels
+     * @return true if item is pickaxe, false otherwise
      * @since 1.0
      */
-    public double getSpritesheetX() {
-        return spritesheetX;
-    }
-
-    /**
-     * @return Y position of block sprite in the spritesheet in pixels
-     * @since 1.0
-     */
-    public double getSpritesheetY() {
-        return spritesheetY;
+    public boolean isPickaxe() {
+        return toolType.equals(ItemType.PICKAXE);
     }
     
 }

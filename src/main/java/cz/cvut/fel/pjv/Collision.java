@@ -23,6 +23,8 @@
  */
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.items.Item;
+
 /**
  * Collision management.
  * 
@@ -80,6 +82,7 @@ public abstract class Collision {
      * @since 1.0
      */
     public static boolean collides(double clickX, double clickY, Block block) {
+        if (block.isDestroyed()) { return false; }
         return clickX < block.getX2() && clickX > block.getX() && clickY < block.getY2() && clickY > block.getY();
     }
     

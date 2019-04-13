@@ -23,6 +23,9 @@
  */
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.items.StoredBlock;
+import cz.cvut.fel.pjv.items.ItemType;
+import cz.cvut.fel.pjv.items.Tool;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -83,13 +86,13 @@ public class Main extends Application {
             @Override
             public void handle(KeyEvent event) {
                 switch (event.getCode()) {
-                    case W:    player.setUp(true); break;
-                    case A:  player.setLeft(true); break;
-                    case D: player.setRight(true); break;
+                    case W:     player.setUp(true); break;
+                    case A:     player.setLeft(true); break;
+                    case D:     player.setRight(true); break;
                     case SHIFT: player.run(true); break;
-                    case Q: player.changeActiveItem(-1); break;
-                    case E: player.changeActiveItem(1); break;
-                    case C: draw.zoom(game); break;
+                    case Q:     player.changeActiveItem(-1); break;
+                    case E:     player.changeActiveItem(1); break;
+                    case C:     draw.zoom(game); break;
                 }
             }
         });
@@ -98,9 +101,9 @@ public class Main extends Application {
             @Override
             public void handle(KeyEvent event) {
                 switch (event.getCode()) {
-                    case W:    player.setUp(false); break;
-                    case A:  player.setLeft(false); break;
-                    case D: player.setRight(false); break;
+                    case W:     player.setUp(false); break;
+                    case A:     player.setLeft(false); break;
+                    case D:     player.setRight(false); break;
                     case SHIFT: player.run(false); break;
                 }
             }
@@ -111,22 +114,42 @@ public class Main extends Application {
             public void handle(MouseEvent event) {
                 double clickX = event.getSceneX();
                 double clickY = event.getSceneY();
-                boolean destroying = false;
-                //destroy block
-                for (Block block : world.getBlocks()) {
-                    if (block.isDestroyed()) { continue; }
-                    if (Collision.collides(clickX, clickY, block)) {
-                        block.destroy();
-                        destroying = true;
+                if (clickX > player.getX()-Block.block_width*4 && clickX < player.getX2()+Block.block_width*4
+                    && clickY > player.getY()-Block.block_height*4 && clickY < player.getY2()+Block.block_height*4
+                    && (clickX < player.getX() || clickX > player.getX2() || clickY < player.getY()-12 || clickY > player.getY2())
+                ) {
+                    boolean destroying = false;
+                    //destroy block
+                    if (player.getInventory().getActiveItem() instanceof Tool) {
+                        Tool tool = (Tool) player.getInventory().getActiveItem();
+                        if (tool.isPickaxe()) {
+                            for (Block block : world.getBlocks()) {
+                                if (block.isDestroyed()) { continue; }
+                                if (Collision.collides(clickX, clickY, block)) {
+                                    block.destroy();
+                                    ItemType blockType = ItemType.valueOf(block.getBlockType().name());
+                                    player.getInventory().add(new StoredBlock(0, 0, blockType));
+                                    destroying = true;
+                                }
+                            }
+                        }
                     }
-                }
-                //build block
-                if (!destroying) {
-                    double blockX = clickX - (clickX - draw.getCameraOffsetX()) % Block.block_width;
-                    double blockY = clickY - (clickY - draw.getCameraOffsetY()) % Block.block_height;
-                    if (clickX < draw.getCameraOffsetX()) { blockX = draw.getCameraOffsetX() - Block.block_width; }
-                    if (clickY < draw.getCameraOffsetY()) { blockY = draw.getCameraOffsetY() - Block.block_height; }
-                    world.getBlocks().add(new Block(blockX, blockY, BlockType.DIRT));
+                    //build block
+                    if (!destroying && player.getInventory().getActiveItem() instanceof StoredBlock) {
+                        boolean canBuild = true;
+                        for (Block block : world.getBlocks()) {
+                            if (Collision.collides(clickX, clickY, block)) { canBuild = false; }
+                        }
+                        if (canBuild) {
+                            StoredBlock item = (StoredBlock) player.getInventory().getActiveItem();
+                            double blockX = clickX - (clickX - draw.getCameraOffsetX()) % Block.block_width;
+                            double blockY = clickY - (clickY - draw.getCameraOffsetY()) % Block.block_height;
+                            if (clickX < draw.getCameraOffsetX()) { blockX = draw.getCameraOffsetX() - Block.block_width; }
+                            if (clickY < draw.getCameraOffsetY()) { blockY = draw.getCameraOffsetY() - Block.block_height; }
+                            world.getBlocks().add(item.place(blockX, blockY));
+                            player.getInventory().remove(item);
+                        }
+                    }
                 }
             }
         });

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cz.cvut.fel.pjv;
+package cz.cvut.fel.pjv.items;
 
 import javafx.scene.image.Image;
 
@@ -31,12 +31,12 @@ import javafx.scene.image.Image;
  * @author Michal-jr
  * @version 1.0
  */
-public class Item {
+public abstract class Item {
     private double x, y;
     private double width = 24;
     private double height = 24;
     private boolean picked;
-    private static final Image image = new Image( "spritesheet_items.png" );
+    private final Image IMAGE;
     private final double IMAGE_X;
     private final double IMAGE_Y;
     private final double IMAGE_WIDTH = 128;
@@ -47,13 +47,16 @@ public class Item {
      *
      * @param x
      * @param y
+     * @param type
+     * @param image spritesheet of items
      * @since 1.0
      */
-    public Item(double x, double y) {
+    public Item(double x, double y, ItemType type, Image image) {
         this.x = x+2;
         this.y = y+2;
-        IMAGE_X = 0;
-        IMAGE_Y = 1170;
+        this.IMAGE = image;
+        IMAGE_X = type.getSpritesheetX();
+        IMAGE_Y = type.getSpritesheetY();
         picked = false;
     }
 
@@ -147,22 +150,42 @@ public class Item {
         this.picked = picked;
     }
 
-    public static Image getImage() {
-        return image;
+    /**
+     * @return spritesheet for items
+     * @since 1.0
+     */
+    public Image getImage() {
+        return IMAGE;
     }
 
+    /**
+     * @return X position of item sprite in the spritesheet in pixels
+     * @since 1.0
+     */
     public double getIMAGE_X() {
         return IMAGE_X;
     }
 
+    /**
+     * @return Y position of item sprite in the spritesheet in pixels
+     * @since 1.0
+     */
     public double getIMAGE_Y() {
         return IMAGE_Y;
     }
 
+    /**
+     * @return width of item sprite in the spritesheet in pixels
+     * @since 1.0
+     */
     public double getIMAGE_WIDTH() {
         return IMAGE_WIDTH;
     }
 
+    /**
+     * @return height of item sprite in the spritesheet in pixels
+     * @since 1.0
+     */
     public double getIMAGE_HEIGHT() {
         return IMAGE_HEIGHT;
     }

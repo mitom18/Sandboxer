@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Zdeněk.
+ * Copyright 2019 Michal-jr.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,33 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cz.cvut.fel.pjv;
+package cz.cvut.fel.pjv.items;
 
 /**
- * Enumeration class representing all types of block that can appear in the map.
- *
- * @author Zdeněk
+ * Enumeration class representing all types of items that can appear in the game.
+ * 
+ * @author Michal-jr
  * @version 1.0
  */
-public enum BlockType {
+public enum ItemType {
     
     /**
-     * Type of dirt block.
+     * Type of pickaxe.
+     */
+    PICKAXE(0, 0, 1170),
+     
+    /**
+     * Type of stored dirt block.
      */
     DIRT(1, 650, 130),
 
     /**
-     * Type of stone block.
+     * Type of stored stone block.
      */
     STONE(2, 260, 650),
 
     /**
-     * Type of water block.
-     */
-    WATER(3, 0, 910),
-
-    /**
-     * Type of diamond ore block.
+     * Type of stored diamond ore block.
      */
     DIAMOND_ORE(4, 260, 0);
 
@@ -56,14 +56,14 @@ public enum BlockType {
     private final double spritesheetY;
 
 
-    private BlockType(int id, double spritesheetX, double spritesheetY) {
+    private ItemType(int id, double spritesheetX, double spritesheetY) {
         this.id = id;
         this.spritesheetX = spritesheetX;
         this.spritesheetY = spritesheetY;
     }
 
     /**
-     * @return X position of block sprite in the spritesheet in pixels
+     * @return X position of item sprite in the spritesheet in pixels
      * @since 1.0
      */
     public double getSpritesheetX() {
@@ -71,7 +71,7 @@ public enum BlockType {
     }
 
     /**
-     * @return Y position of block sprite in the spritesheet in pixels
+     * @return Y position of item sprite in the spritesheet in pixels
      * @since 1.0
      */
     public double getSpritesheetY() {

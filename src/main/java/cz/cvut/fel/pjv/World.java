@@ -23,6 +23,9 @@
  */
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.items.Item;
+import cz.cvut.fel.pjv.items.StoredBlock;
+import cz.cvut.fel.pjv.items.ItemType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +79,7 @@ public class World {
         }
         
         items = new ArrayList<>();
-        items.add(new Item(0,500));
+        items.add(new StoredBlock(0,650, ItemType.DIAMOND_ORE));
     }
 
     /**

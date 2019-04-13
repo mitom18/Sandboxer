@@ -52,6 +52,7 @@ public class Block {
     private final double IMAGE_Y;
     private final double IMAGE_WIDTH = 128;
     private final double IMAGE_HEIGHT = 128;
+    private final BlockType blockType;
     private boolean destroyed = false;
 
     /**
@@ -59,6 +60,7 @@ public class Block {
      *
      * @param x
      * @param y
+     * @param type
      * @since 1.0
      */
     public Block(double x, double y, BlockType type) {
@@ -66,6 +68,7 @@ public class Block {
         this.y = y;
         this.IMAGE_X = type.getSpritesheetX();
         this.IMAGE_Y = type.getSpritesheetY();
+        blockType = type;
     }
 
     /**
@@ -175,22 +178,50 @@ public class Block {
         return destroyed;
     }
 
+    /**
+     * @return type of the block
+     * @since 1.0
+     */
+    public BlockType getBlockType() {
+        return blockType;
+    }
+
+    /**
+     * @return spritesheet for blocks
+     * @since 1.0
+     */
     public static Image getImage() {
         return image;
     }
 
+    /**
+     * @return X position of block sprite in the spritesheet in pixels
+     * @since 1.0
+     */
     public double getIMAGE_X() {
         return IMAGE_X;
     }
 
+    /**
+     * @return Y position of block sprite in the spritesheet in pixels
+     * @since 1.0
+     */
     public double getIMAGE_Y() {
         return IMAGE_Y;
     }
 
+    /**
+     * @return width of block sprite in the spritesheet in pixels
+     * @since 1.0
+     */
     public double getIMAGE_WIDTH() {
         return IMAGE_WIDTH;
     }
 
+    /**
+     * @return height of block sprite in the spritesheet in pixels
+     * @since 1.0
+     */
     public double getIMAGE_HEIGHT() {
         return IMAGE_HEIGHT;
     }

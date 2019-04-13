@@ -160,6 +160,12 @@ public class Player {
         this.running = running;
     }
     
+    /**
+     * Scroll through inventory items in hotbar.
+     *
+     * @param moveBy
+     * @since 1.0
+     */
     public void changeActiveItem(int moveBy) {
         int moveTo = (inventory.getActiveItemIndex() + moveBy) % 10;
         if (moveTo < 0) { moveTo = 9; }

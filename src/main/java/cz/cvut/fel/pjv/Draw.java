@@ -23,6 +23,8 @@
  */
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.items.Item;
+import cz.cvut.fel.pjv.items.StoredBlock;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -209,10 +211,17 @@ public class Draw {
             //draw the item
             if (items[i] != null) {
                 Item item = items[i];
-                g.drawImage(Item.getImage(), item.getIMAGE_X(), item.getIMAGE_Y(), item.getIMAGE_WIDTH(), item.getIMAGE_HEIGHT(), 
+                g.drawImage(item.getImage(), item.getIMAGE_X(), item.getIMAGE_Y(), item.getIMAGE_WIDTH(), item.getIMAGE_HEIGHT(), 
                         INV_START_X+x+INV_HEIGHT/2-ITEM_SIZE/2, 
                         INV_START_Y+INV_HEIGHT/2-ITEM_SIZE/2, 
                         ITEM_SIZE, ITEM_SIZE);
+                if (item instanceof StoredBlock) {
+                    StoredBlock storedBlock = (StoredBlock) item;
+                    if (storedBlock.getQuantity() > 1) {
+                        g.setFill(Color.BLACK);
+                        g.fillText(storedBlock.getQuantity().toString(), x+15, INV_HEIGHT-5);
+                    }
+                }
             }
             x += INV_HEIGHT;
         }
@@ -243,7 +252,7 @@ public class Draw {
         }
         for (Item item : world.getItems()) {
             if (!item.isPicked()) {
-                g.drawImage(Item.getImage(), item.getIMAGE_X(), item.getIMAGE_Y(), item.getIMAGE_WIDTH(), item.getIMAGE_HEIGHT(), 
+                g.drawImage(item.getImage(), item.getIMAGE_X(), item.getIMAGE_Y(), item.getIMAGE_WIDTH(), item.getIMAGE_HEIGHT(), 
                         item.getX(), item.getY(), item.getWidth(), item.getHeight());
             }
         }
