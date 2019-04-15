@@ -156,10 +156,15 @@ public class Main extends Application {
                             for (Block block : world.getBlocks()) {
                                 if (block.isDestroyed()) { continue; }
                                 if (Collision.collides(clickX, clickY, block)) {
-                                    block.destroy();
-                                    ItemType blockType = ItemType.valueOf(block.getBlockType().name());
-                                    player.getInventory().add(new StoredBlock(0, 0, blockType));
-                                    destroying = true;
+                                    // Bedrock is indestructible.
+                                    if (block.getBlockType().equals(BlockType.BEDROCK)) {
+                                        System.out.println("Nope.");
+                                    } else {
+                                        block.destroy();
+                                        ItemType blockType = ItemType.valueOf(block.getBlockType().name());
+                                        player.getInventory().add(new StoredBlock(0, 0, blockType));
+                                        destroying = true;
+                                    }
                                 }
                             }
                         }

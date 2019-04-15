@@ -48,6 +48,13 @@ public class Map {
     private final double AMP_MAX = 1.5;
     private final double PER_MIN = 0.5;
     private final double PER_MAX = 1.5;
+    
+    /**
+     * Represents the probability in percent that DIAMOND_ORE will spawn at any 
+     * given place under height 10 in the terrain.
+     * Allowed values: 0 - 100
+     */
+    private final int DIAMOND_PROBABILITY = 2;
 
     private List<List<Integer>> terrain;
     private List<List<BlockType>> map;
@@ -68,7 +75,7 @@ public class Map {
         
         r = new Random();
         seed = r.nextLong();
-        r.setSeed(seed);
+        r.setSeed(7451260251423394044L); // This is a nice seed.
         System.out.println(seed);
         
         generateTerrain();
@@ -146,6 +153,14 @@ public class Map {
         return min + (max - min) * r.nextDouble();
     }
     
+    /**
+     * Generates a random integer in a given range.
+     * 
+     * @param min smallest possible generated number
+     * @param max largest possible generated number
+     * @return random int in the given range
+     * @since 1.1
+     */
     private int randomIntInRange(int min, int max) {
         return min + r.nextInt((max - min) + 1);
     }
@@ -214,10 +229,22 @@ public class Map {
         }
     }
     
+    /**
+     * Fills the 2D ArrayList map with values that represent the actual block, 
+     * that will be generated in the World.
+     * Uses random numbers and probability to decide the specific blocks that 
+     * make up the terrain.
+     * 
+     * @since 1.1
+     */
     private void generateMap(){
         map = new ArrayList<>(WIDTH);
         
+        /**
+         * Used to define the border between STONE and DIRT.
+         */
         int skylineModifier = 0;
+        
         int dirtStoneBorder;
         
         for (int i = 0; i < WIDTH; i++) {
@@ -235,15 +262,21 @@ public class Map {
             
             for (int j = HEIGHT - 1; j >= 0; j--) {
                 
+                int isDiamond = randomIntInRange(1, 100 / DIAMOND_PROBABILITY);
+                
                 if (terrain.get(i).get(j) == 1) {
                     
                     if ((j == 0) || (j == HEIGHT - 1)) {
-                        map.get(i).add(BlockType.STONE);
+                        map.get(i).add(BlockType.BEDROCK);
                     } else if (j >= dirtStoneBorder) {
                         map.get(i).add(BlockType.DIRT);
+                    } else if ((j <= 10) && (isDiamond == 1)) {
+                        map.get(i).add(BlockType.DIAMOND_ORE);
                     } else {
                         map.get(i).add(BlockType.STONE);
                     }
+                } else if (j <= 24) {
+                    map.get(i).add(BlockType.WATER);
                 } else {
                     map.get(i).add(null);
                 }

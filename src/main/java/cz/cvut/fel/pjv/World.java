@@ -60,9 +60,6 @@ public class World {
     /**
      * Create new world.
      *
-     * @param map list of 1 and 0 representing terrain
-     * @param WIDTH width of the world in blocks
-     * @param HEIGHT height of the world in blocks
      * @since 1.0
      */
     public World() {

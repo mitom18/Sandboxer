@@ -49,7 +49,12 @@ public enum BlockType {
     /**
      * Type of diamond ore block.
      */
-    DIAMOND_ORE(4, 260, 0);
+    DIAMOND_ORE(4, 260, 0),
+    
+    /**
+     * Type of bedrock block.
+     */
+    BEDROCK(5, 390, 1690);
 
     private final int id;
     private final double spritesheetX;
