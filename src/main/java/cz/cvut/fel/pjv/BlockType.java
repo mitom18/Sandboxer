@@ -54,7 +54,12 @@ public enum BlockType {
     /**
      * Type of bedrock block.
      */
-    BEDROCK(5, 390, 1690);
+    BEDROCK(5, 390, 1690),
+    
+    /**
+     * Type of dirt block with grass on top.
+     */
+    DIRT_WITH_GRASS(6, 650, 0);
 
     private final int id;
     private final double spritesheetX;

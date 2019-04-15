@@ -250,6 +250,8 @@ public class Map {
         for (int i = 0; i < WIDTH; i++) {
             map.add(new ArrayList<BlockType>(HEIGHT));
             
+            boolean isUnderWater = false;
+            
             if (skylineModifier < - 2) {
                 skylineModifier += randomIntInRange(0, 2);
             } else if (skylineModifier > 6) {
@@ -269,7 +271,11 @@ public class Map {
                     if ((j == 0) || (j == HEIGHT - 1)) {
                         map.get(i).add(BlockType.BEDROCK);
                     } else if (j >= dirtStoneBorder) {
-                        map.get(i).add(BlockType.DIRT);
+                        if ((j == completeSkyline.get(i)) && (!isUnderWater)) {
+                            map.get(i).add(BlockType.DIRT_WITH_GRASS);
+                        } else {
+                            map.get(i).add(BlockType.DIRT);
+                        }
                     } else if ((j <= 10) && (isDiamond == 1)) {
                         map.get(i).add(BlockType.DIAMOND_ORE);
                     } else {
@@ -277,6 +283,8 @@ public class Map {
                     }
                 } else if (j <= 24) {
                     map.get(i).add(BlockType.WATER);
+                    System.out.println(map.get(i).get(j + 1));
+                    isUnderWater = true;
                 } else {
                     map.get(i).add(null);
                 }
