@@ -218,23 +218,28 @@ public class Map {
         map = new ArrayList<>(WIDTH);
         
         int skylineModifier = 0;
+        int dirtStoneBorder;
         
         for (int i = 0; i < WIDTH; i++) {
             map.add(new ArrayList<BlockType>(HEIGHT));
             
-            if (skylineModifier < - 3) {
+            if (skylineModifier < - 2) {
                 skylineModifier += randomIntInRange(0, 2);
             } else if (skylineModifier > 6) {
-                skylineModifier += randomIntInRange(-2, 0);
+                skylineModifier += randomIntInRange(-2, 1);
             } else {
                 skylineModifier += randomIntInRange(-1, 1);
             }
+            
+            dirtStoneBorder = completeSkyline.get(i) - skylineModifier - 1;
             
             for (int j = HEIGHT - 1; j >= 0; j--) {
                 
                 if (terrain.get(i).get(j) == 1) {
                     
-                    if (j >= completeSkyline.get(i) - skylineModifier - 1) {
+                    if ((j == 0) || (j == HEIGHT - 1)) {
+                        map.get(i).add(BlockType.STONE);
+                    } else if (j >= dirtStoneBorder) {
                         map.get(i).add(BlockType.DIRT);
                     } else {
                         map.get(i).add(BlockType.STONE);
