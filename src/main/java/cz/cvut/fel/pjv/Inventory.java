@@ -102,7 +102,7 @@ public class Inventory {
             }
         }
         for (int i = 0; i < inv.length; i++) {
-            if (inv[i].equals(itemToRemove)) {
+            if (itemToRemove.equals(inv[i])) {
                 inv[i] = null;
                 return;
             }

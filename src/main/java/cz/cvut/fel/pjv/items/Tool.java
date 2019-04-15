@@ -23,6 +23,7 @@
  */
 package cz.cvut.fel.pjv.items;
 
+import java.util.Objects;
 import javafx.scene.image.Image;
 
 /**
@@ -55,6 +56,31 @@ public class Tool extends Item {
      */
     public boolean isPickaxe() {
         return toolType.equals(ItemType.PICKAXE);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 79 * hash + Objects.hashCode(this.toolType);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Tool other = (Tool) obj;
+        if (this.toolType != other.toolType) {
+            return false;
+        }
+        return true;
     }
     
 }
