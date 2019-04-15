@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Zdeněk.
+ * Copyright 2019 Zdenek.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ package cz.cvut.fel.pjv;
 /**
  * Enumeration class representing all types of block that can appear in the map.
  *
- * @author Zdeněk
+ * @author Zdenek
  * @version 1.0
  */
 public enum BlockType {

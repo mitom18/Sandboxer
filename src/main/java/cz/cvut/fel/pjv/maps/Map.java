@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Zdeněk.
+ * Copyright 2019 Zdenek.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -52,8 +52,10 @@ public class Map {
     private List<List<Integer>> terrain;
     private List<List<BlockType>> map;
     
+    private List<Integer> completeSkyline;
+    
     private final long seed;
-    private Random r;
+    private final Random r;
 
     /**
      * Create new map with default size.
@@ -68,7 +70,8 @@ public class Map {
         seed = r.nextLong();
         r.setSeed(seed);
         System.out.println(seed);
-        terrain = generateTerrain(0);
+        
+        generateTerrain();
         generateMap();
     }
 
@@ -143,6 +146,10 @@ public class Map {
         return min + (max - min) * r.nextDouble();
     }
     
+    private int randomIntInRange(int min, int max) {
+        return min + r.nextInt((max - min) + 1);
+    }
+    
     /**
      * Contains a periodical mathematical function.
      * 
@@ -150,8 +157,8 @@ public class Map {
      * @return the functional value
      * @since 1.0
      */
-    private double calculateSkyline(double x, double amplitudeCoefficient, double periodCoefficient, double previousY, int amp) {
-        double y = amplitudeCoefficient * Math.sin((periodCoefficient) * x) + previousY + amp;
+    private double calculateSkyline(double x, double amplitudeCoefficient, double periodCoefficient, double previousY) {
+        double y = amplitudeCoefficient * Math.sin((periodCoefficient) * x) + previousY;
         return y;
     }
     
@@ -163,8 +170,9 @@ public class Map {
      * 
      * @since 1.0
      */
-    private List<List<Integer>> generateTerrain(int amp) {
-        List<List<Integer>> terrain = new ArrayList<>(WIDTH);
+    private void generateTerrain() {
+        terrain = new ArrayList<>(WIDTH);
+        completeSkyline = new ArrayList<>(WIDTH);
         
         double amplitudeCoefficient = randomDoubleInRange(AMP_MIN, AMP_MAX) * AMPLITUDE_COEFFICIENT_MULTIPLICATOR;
         double periodCoefficient = 1 / (randomDoubleInRange(PER_MIN, PER_MAX) * PERIOD_COEFFICIENT_MULTIPLICATOR);
@@ -177,20 +185,21 @@ public class Map {
         for (int i = 0; i < WIDTH; i++) {
             terrain.add(new ArrayList<Integer>(HEIGHT));
             
-            double skyline = calculateSkyline((double) i, amplitudeCoefficient, periodCoefficient, previousY, amp);
+            double skyline = calculateSkyline((double) i, amplitudeCoefficient, periodCoefficient, previousY);
+            completeSkyline.add((int) skyline);
             
             if ((int)period == counter) {
                 amplitudeCoefficient = randomDoubleInRange(AMP_MIN, AMP_MAX) * AMPLITUDE_COEFFICIENT_MULTIPLICATOR;
                 periodCoefficient = 1 / (randomDoubleInRange(PER_MIN, PER_MAX) * PERIOD_COEFFICIENT_MULTIPLICATOR);
                 
                 period = (2 * Math.PI) / (periodCoefficient);
-                double nextSkyline = calculateSkyline((double) i + 1, amplitudeCoefficient, periodCoefficient, previousY, amp);
+                double nextSkyline = calculateSkyline((double) i + 1, amplitudeCoefficient, periodCoefficient, previousY);
                 previousY += skyline - nextSkyline;
                 
                 counter = 1;
             }
 
-            for (int j = HEIGHT - 1; j >= 0; j--) {
+            for (int j = 0; j < HEIGHT; j++) {
                 
                 if ((j == 0) || (j == HEIGHT - 1)) {
                     terrain.get(i).add(1);
@@ -203,23 +212,23 @@ public class Map {
             
             counter++;
         }
-        
-        return terrain;
     }
     
     private void generateMap(){
-        List<List<Integer>> terrain1 = generateTerrain(0);
-        List<List<Integer>> terrain2 = generateTerrain(-3);
         map = new ArrayList<>(WIDTH);
         
         for (int i = 0; i < WIDTH; i++) {
             map.add(new ArrayList<BlockType>(HEIGHT));
             
-            for (int j = 0; j < HEIGHT; j++) {
-                if ((terrain1.get(i).get(j) == 1) && (terrain2.get(i).get(j) == 1)) {
-                    map.get(i).add(BlockType.STONE);
-                } else if (terrain1.get(i).get(j) == 1) {
-                    map.get(i).add(BlockType.DIRT);
+            for (int j = HEIGHT - 1; j >= 0; j--) {
+                
+                if (terrain.get(i).get(j) == 1) {
+                    
+                    if (j >= completeSkyline.get(i) - randomIntInRange(0, 10) - 1) {
+                        map.get(i).add(BlockType.DIRT);
+                    } else {
+                        map.get(i).add(BlockType.STONE);
+                    }
                 } else {
                     map.get(i).add(null);
                 }
