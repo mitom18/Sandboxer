@@ -68,8 +68,7 @@ public class Map {
         seed = r.nextLong();
         r.setSeed(seed);
         System.out.println(seed);
-        
-        generateTerrain();
+        terrain = generateTerrain(0);
         generateMap();
     }
 
@@ -89,7 +88,6 @@ public class Map {
         r.setSeed(seed);
         System.out.println(seed);
         
-        generateTerrain();
         generateMap();
     }
     
@@ -152,8 +150,8 @@ public class Map {
      * @return the functional value
      * @since 1.0
      */
-    private double calculateSkyline(double x, double amplitudeCoefficient, double periodCoefficient, double previousY) {
-        double y = amplitudeCoefficient * Math.sin((periodCoefficient) * x) + previousY;
+    private double calculateSkyline(double x, double amplitudeCoefficient, double periodCoefficient, double previousY, int amp) {
+        double y = amplitudeCoefficient * Math.sin((periodCoefficient) * x) + previousY + amp;
         return y;
     }
     
@@ -165,8 +163,8 @@ public class Map {
      * 
      * @since 1.0
      */
-    private void generateTerrain() {
-        terrain = new ArrayList<>(WIDTH);
+    private List<List<Integer>> generateTerrain(int amp) {
+        List<List<Integer>> terrain = new ArrayList<>(WIDTH);
         
         double amplitudeCoefficient = randomDoubleInRange(AMP_MIN, AMP_MAX) * AMPLITUDE_COEFFICIENT_MULTIPLICATOR;
         double periodCoefficient = 1 / (randomDoubleInRange(PER_MIN, PER_MAX) * PERIOD_COEFFICIENT_MULTIPLICATOR);
@@ -179,14 +177,14 @@ public class Map {
         for (int i = 0; i < WIDTH; i++) {
             terrain.add(new ArrayList<Integer>(HEIGHT));
             
-            double skyline = calculateSkyline((double) i, amplitudeCoefficient, periodCoefficient, previousY);
+            double skyline = calculateSkyline((double) i, amplitudeCoefficient, periodCoefficient, previousY, amp);
             
             if ((int)period == counter) {
                 amplitudeCoefficient = randomDoubleInRange(AMP_MIN, AMP_MAX) * AMPLITUDE_COEFFICIENT_MULTIPLICATOR;
                 periodCoefficient = 1 / (randomDoubleInRange(PER_MIN, PER_MAX) * PERIOD_COEFFICIENT_MULTIPLICATOR);
                 
                 period = (2 * Math.PI) / (periodCoefficient);
-                double nextSkyline = calculateSkyline((double) i + 1, amplitudeCoefficient, periodCoefficient, previousY);
+                double nextSkyline = calculateSkyline((double) i + 1, amplitudeCoefficient, periodCoefficient, previousY, amp);
                 previousY += skyline - nextSkyline;
                 
                 counter = 1;
@@ -205,9 +203,27 @@ public class Map {
             
             counter++;
         }
+        
+        return terrain;
     }
     
     private void generateMap(){
+        List<List<Integer>> terrain1 = generateTerrain(0);
+        List<List<Integer>> terrain2 = generateTerrain(-3);
+        map = new ArrayList<>(WIDTH);
         
+        for (int i = 0; i < WIDTH; i++) {
+            map.add(new ArrayList<BlockType>(HEIGHT));
+            
+            for (int j = 0; j < HEIGHT; j++) {
+                if ((terrain1.get(i).get(j) == 1) && (terrain2.get(i).get(j) == 1)) {
+                    map.get(i).add(BlockType.STONE);
+                } else if (terrain1.get(i).get(j) == 1) {
+                    map.get(i).add(BlockType.DIRT);
+                } else {
+                    map.get(i).add(null);
+                }
+            }
+        }
     }
 }

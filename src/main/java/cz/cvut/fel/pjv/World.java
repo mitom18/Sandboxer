@@ -26,6 +26,7 @@ package cz.cvut.fel.pjv;
 import cz.cvut.fel.pjv.items.Item;
 import cz.cvut.fel.pjv.items.StoredBlock;
 import cz.cvut.fel.pjv.items.ItemType;
+import cz.cvut.fel.pjv.maps.Map;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,6 @@ import java.util.List;
  */
 public class World {
     
-    private List<List<Integer>> map;
     private final int WIDTH;
     private final int HEIGHT;
     
@@ -51,7 +51,12 @@ public class World {
      * Array of instances of items in the world.
      */
     private List<Item> items;
-
+    
+    /*
+     * Instance of Map.
+     */
+    private Map map;
+    
     /**
      * Create new world.
      *
@@ -60,10 +65,10 @@ public class World {
      * @param HEIGHT height of the world in blocks
      * @since 1.0
      */
-    public World(List<List<Integer>> map, int WIDTH, int HEIGHT) {
-        this.map = map;
-        this.WIDTH = WIDTH;
-        this.HEIGHT = HEIGHT;
+    public World() {
+        map = new Map();
+        WIDTH = map.getWIDTH();
+        HEIGHT = map.getHEIGHT();
         createWorld();
     }
     
@@ -72,8 +77,8 @@ public class World {
         
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
-                if (map.get(i).get(j) == 1) {
-                    blocks.add(new Block((i - (int) WIDTH/2) * Block.block_width, j * Block.block_height, BlockType.DIRT));
+                if (map.getMap().get(i).get(j) != null) {
+                    blocks.add(new Block((i - (int) WIDTH/2) * Block.block_width, j * Block.block_height, map.getMap().get(i).get(j)));
                 }
             }
         }
@@ -97,7 +102,15 @@ public class World {
     public List<Item> getItems() {
         return items;
     }
-
+    
+    /**
+     * @return instance of the map
+     * @since 1.0
+     */
+    public Map getMap() {
+        return map;
+    }
+    
     /**
      * @return width of the world in blocks
      * @since 1.0

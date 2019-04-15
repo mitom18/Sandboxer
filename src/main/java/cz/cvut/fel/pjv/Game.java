@@ -23,8 +23,6 @@
  */
 package cz.cvut.fel.pjv;
 
-import cz.cvut.fel.pjv.maps.Map;
-
 /**
  * Contains all entities in the game.
  *
@@ -39,11 +37,6 @@ public class Game {
     private Player player;
     
     /*
-     * Instance of Map.
-     */
-    private Map map;
-    
-    /*
      * Instance of World.
      */
     private World world;
@@ -56,8 +49,7 @@ public class Game {
      */
     public Game(double SCREEN_WIDTH) {
         player = new Player((int) SCREEN_WIDTH/2, 0);
-        map = new Map();
-        world = new World(map.getTerrain(), map.getWIDTH(), map.getHEIGHT());
+        world = new World();
     }
 
     /**
@@ -66,14 +58,6 @@ public class Game {
      */
     public Player getPlayer() {
         return player;
-    }
-
-    /**
-     * @return instance of the map
-     * @since 1.0
-     */
-    public Map getMap() {
-        return map;
     }
 
     /**
