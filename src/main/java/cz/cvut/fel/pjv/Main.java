@@ -28,10 +28,12 @@ import cz.cvut.fel.pjv.items.ItemType;
 import cz.cvut.fel.pjv.items.Tool;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.*;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -49,6 +51,7 @@ public class Main extends Application {
     
     private final double WIDTH = 1280;
     private final double HEIGHT = 640;
+    Scene gameMenu, gameScreen;
     
     /**
      * @param args the command line arguments
@@ -58,31 +61,58 @@ public class Main extends Application {
     }
     
     /**
-     * Starts the application.
+     * Starts the application in start menu.
      *
-     * @param stage
+     * @param primaryStage
      * @throws Exception
      * @since 1.0
      */
     @Override
-    public void start(Stage stage) throws Exception {
-        Group root = new Group();
-        Scene scene = new Scene(root, Color.BLACK);
-        stage.setScene(scene);
+    public void start(Stage primaryStage) throws Exception {
+        final Stage stage = primaryStage;
         stage.setTitle("Basic Game");
-
+        
+        //gameMenu scene
+        Group rootGameMenu = new Group();
+        Button button1= new Button("Start game");
+        button1.setPrefSize(WIDTH/10, HEIGHT/10);
+        button1.setLayoutX(WIDTH/2 - WIDTH/20);
+        button1.setLayoutY(HEIGHT/2 - HEIGHT/20);
+        button1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                startGame(stage);
+            }
+        });
+        rootGameMenu.getChildren().add(button1);
+        gameMenu = new Scene(rootGameMenu, WIDTH, HEIGHT, Color.BLACK);
+        
+        //gameScreen scene
+        Group rootGameScreen = new Group();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
-        root.getChildren().add(canvas);
-        
-        final GraphicsContext gc = canvas.getGraphicsContext2D();
-        
+        rootGameScreen.getChildren().add(canvas);
+        gameScreen = new Scene(rootGameScreen, Color.BLACK);
+
+        stage.setScene(gameMenu);
+        stage.show();
+    }
+    
+    /**
+     * Starts the game.
+     *
+     * @param stage
+     * @since 1.0
+     */
+    private void startGame(Stage stage) {
         final Game game = new Game(WIDTH);
         final World world = game.getWorld();
         final Player player = game.getPlayer();
         
         final Draw draw = new Draw(WIDTH, HEIGHT, world.getWIDTH());
+        Canvas gameCanvas = (Canvas) gameScreen.getRoot().getChildrenUnmodifiable().get(0);
+        final GraphicsContext gc = gameCanvas.getGraphicsContext2D();
 
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+        gameScreen.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 switch (event.getCode()) {
@@ -97,7 +127,7 @@ public class Main extends Application {
             }
         });
 
-        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+        gameScreen.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 switch (event.getCode()) {
@@ -109,7 +139,7 @@ public class Main extends Application {
             }
         });
         
-        scene.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        gameScreen.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 double clickX = event.getSceneX();
@@ -154,7 +184,7 @@ public class Main extends Application {
             }
         });
         
-        scene.setOnScroll(new EventHandler<ScrollEvent>() {
+        gameScreen.setOnScroll(new EventHandler<ScrollEvent>() {
             @Override
             public void handle(ScrollEvent event) {
                 if (event.getEventType() == ScrollEvent.SCROLL) {
@@ -165,10 +195,9 @@ public class Main extends Application {
                 }
             }
         });
-
-        stage.setScene(scene);
-        stage.show();
-
+        
+        stage.setScene(gameScreen);
+        
         AnimationTimer timer = new AnimationTimer() {
             long lastUpdate = 0;
             @Override
