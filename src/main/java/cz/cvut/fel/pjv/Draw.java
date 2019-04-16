@@ -23,6 +23,8 @@
  */
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.blocks.LiquidBlock;
+import cz.cvut.fel.pjv.blocks.Block;
 import cz.cvut.fel.pjv.items.Item;
 import cz.cvut.fel.pjv.items.StoredBlock;
 import javafx.scene.canvas.GraphicsContext;
@@ -247,6 +249,7 @@ public class Draw {
                 player.getX(), player.getY(), player.getWidth(), player.getHeight());
         for (Block block : world.getBlocks()) {
             if (block.isDestroyed()) { continue; }
+            if (block instanceof LiquidBlock) { g.setGlobalAlpha(0.5); } else { g.setGlobalAlpha(1); }
             g.drawImage(Block.getImage(), block.getIMAGE_X(), block.getIMAGE_Y(), block.getIMAGE_WIDTH(), block.getIMAGE_HEIGHT(), 
                     block.getX(), block.getY(), block.getWidth(), block.getHeight());
         }

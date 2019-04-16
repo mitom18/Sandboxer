@@ -23,6 +23,10 @@
  */
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.blocks.LiquidBlock;
+import cz.cvut.fel.pjv.blocks.SolidBlock;
+import cz.cvut.fel.pjv.blocks.BlockType;
+import cz.cvut.fel.pjv.blocks.Block;
 import cz.cvut.fel.pjv.items.Item;
 import cz.cvut.fel.pjv.items.StoredBlock;
 import cz.cvut.fel.pjv.items.ItemType;
@@ -75,7 +79,11 @@ public class World {
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
                 if (map.getMap().get(i).get(j) != null) {
-                    blocks.add(new Block((i - (int) WIDTH/2) * Block.block_width, j * Block.block_height, map.getMap().get(i).get(j)));
+                    if (map.getMap().get(i).get(j) == BlockType.WATER) {
+                        blocks.add(new LiquidBlock((i - (int) WIDTH/2) * Block.block_width, j * Block.block_height, map.getMap().get(i).get(j)));
+                    } else {
+                        blocks.add(new SolidBlock((i - (int) WIDTH/2) * Block.block_width, j * Block.block_height, map.getMap().get(i).get(j)));
+                    }
                 }
             }
         }

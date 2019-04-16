@@ -23,8 +23,9 @@
  */
 package cz.cvut.fel.pjv.items;
 
-import cz.cvut.fel.pjv.Block;
-import cz.cvut.fel.pjv.BlockType;
+import cz.cvut.fel.pjv.blocks.Block;
+import cz.cvut.fel.pjv.blocks.BlockType;
+import cz.cvut.fel.pjv.blocks.SolidBlock;
 import java.util.Objects;
 import javafx.scene.image.Image;
 
@@ -81,7 +82,7 @@ public class StoredBlock extends Item implements Placeable {
 
     @Override
     public Block place(double x, double y) {
-        return new Block(x, y, blockType);
+        return new SolidBlock(x, y, blockType);
     }
 
     @Override

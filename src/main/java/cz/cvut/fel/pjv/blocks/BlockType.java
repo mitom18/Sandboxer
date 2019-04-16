@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cz.cvut.fel.pjv;
+package cz.cvut.fel.pjv.blocks;
 
 /**
  * Enumeration class representing all types of block that can appear in the map.

@@ -23,6 +23,8 @@
  */
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.blocks.BlockType;
+import cz.cvut.fel.pjv.blocks.Block;
 import cz.cvut.fel.pjv.items.StoredBlock;
 import cz.cvut.fel.pjv.items.ItemType;
 import cz.cvut.fel.pjv.items.Tool;
@@ -118,6 +120,7 @@ public class Main extends Application {
                 switch (event.getCode()) {
                     case W:     player.setUp(true); break;
                     case A:     player.setLeft(true); break;
+                    case S:     player.setDown(true); break;
                     case D:     player.setRight(true); break;
                     case SHIFT: player.run(true); break;
                     case Q:     player.changeActiveItem(-1); break;
@@ -133,6 +136,7 @@ public class Main extends Application {
                 switch (event.getCode()) {
                     case W:     player.setUp(false); break;
                     case A:     player.setLeft(false); break;
+                    case S:     player.setDown(false); break;
                     case D:     player.setRight(false); break;
                     case SHIFT: player.run(false); break;
                 }
@@ -157,9 +161,7 @@ public class Main extends Application {
                                 if (block.isDestroyed()) { continue; }
                                 if (Collision.collides(clickX, clickY, block)) {
                                     // Bedrock is indestructible.
-                                    if (block.getBlockType().equals(BlockType.BEDROCK)) {
-                                        System.out.println("Nope.");
-                                    } else {
+                                    if (block.getBlockType() != BlockType.BEDROCK) {
                                         block.destroy();
                                         ItemType blockType = ItemType.valueOf(block.getBlockType().name());
                                         player.getInventory().add(new StoredBlock(0, 0, blockType));

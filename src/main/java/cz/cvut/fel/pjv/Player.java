@@ -40,7 +40,7 @@ public class Player {
     private double velocityMultiplier = 1;
     private final double GRAVITY = 0.3;
     private boolean onGround = false;
-    private boolean left, right, up, running;
+    private boolean left, right, up, down, running, swimming;
     private double width = 32;
     private double height = 52;
     private final double IMAGE_WIDTH = 64;
@@ -68,6 +68,7 @@ public class Player {
      * @since 1.0
      */
     public void update(World world) {
+        Collision.playerIsInLiquid(this, world);
         move();
         Collision.preventCollision(this, world);
         Collision.controlItems(this, world);
@@ -80,6 +81,7 @@ public class Player {
      */
     public void move() {
         if (running) { velocityX = 4*velocityMultiplier; } else { velocityX = 2*velocityMultiplier; }
+        if (swimming) { velocityX = 1*velocityMultiplier; }
         if (left) {
             x -= velocityX;
             spriteY = 9 * IMAGE_HEIGHT;
@@ -104,8 +106,12 @@ public class Player {
                 spriteY = 2 * IMAGE_HEIGHT;
             }
         }
-        if (up) { jump(); }
-        fall();
+        if (!swimming) {
+            if (up) { jump(); }
+            fall();
+        } else {
+            swim();
+        }
     }
     
     private void fall() {
@@ -120,9 +126,16 @@ public class Player {
             onGround = false;
         }
     }
+    
+    private void swim() {
+        if (up) { y -= velocityX; }
+        if (down) { y += velocityX; }
+        if (!up && !down) { y += GRAVITY/1.5; }
+        onGround = false;
+    }
 
     /**
-     * Set if player is moving to the left.
+     * Set if player is moving left.
      * 
      * @param left
      * @since 1.0
@@ -132,7 +145,7 @@ public class Player {
     }
 
     /**
-     * Set if player is moving to the right.
+     * Set if player is moving right.
      * 
      * @param right
      * @since 1.0
@@ -142,13 +155,23 @@ public class Player {
     }
 
     /**
-     * Set if player is jumping.
+     * Set if player is moving up.
      * 
      * @param up
      * @since 1.0
      */
     public void setUp(boolean up) {
         this.up = up;
+    }
+    
+    /**
+     * Set if player is moving down.
+     * 
+     * @param down
+     * @since 1.0
+     */
+    public void setDown(boolean down) {
+        this.down = down;
     }
 
     /**
@@ -159,6 +182,16 @@ public class Player {
      */
     public void run(boolean running) {
         this.running = running;
+    }
+    
+    /**
+     * Set if player is swimming.
+     *
+     * @param swimming
+     * @since 1.0
+     */
+    public void setSwimming(boolean swimming) {
+        this.swimming = swimming;
     }
     
     /**

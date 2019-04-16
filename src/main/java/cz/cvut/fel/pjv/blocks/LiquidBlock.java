@@ -21,23 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cz.cvut.fel.pjv.items;
-
-import cz.cvut.fel.pjv.blocks.Block;
+package cz.cvut.fel.pjv.blocks;
 
 /**
- * Interface for items that can be placed in the world.
  *
  * @author Michal-jr
- * @version 1.0
  */
-public interface Placeable {
+public class LiquidBlock extends Block {
 
-    /**
-     * @param x
-     * @param y
-     * @return instance of new block with given coordinates
-     * @since 1.0
-     */
-    Block place(double x, double y);
+    public LiquidBlock(double x, double y, BlockType type) {
+        super(x, y, type);
+    }
+    
 }

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cz.cvut.fel.pjv;
+package cz.cvut.fel.pjv.blocks;
 
 import javafx.scene.image.Image;
 
@@ -32,7 +32,7 @@ import javafx.scene.image.Image;
  * @author Michal-jr
  * @version 1.0
  */
-public class Block {
+public abstract class Block {
  
     /**
      * Actual width of the block in pixels.

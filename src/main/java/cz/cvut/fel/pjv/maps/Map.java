@@ -23,7 +23,7 @@
  */
 package cz.cvut.fel.pjv.maps;
 
-import cz.cvut.fel.pjv.BlockType;
+import cz.cvut.fel.pjv.blocks.BlockType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -75,7 +75,7 @@ public class Map {
         
         r = new Random();
         seed = r.nextLong();
-        r.setSeed(7451260251423394044L); // This is a nice seed.
+        r.setSeed(seed); // This is a nice seed.  7451260251423394044L
         System.out.println(seed);
         
         generateTerrain();
@@ -283,7 +283,6 @@ public class Map {
                     }
                 } else if (j <= 24) {
                     map.get(i).add(BlockType.WATER);
-                    System.out.println(map.get(i).get(j + 1));
                     isUnderWater = true;
                 } else {
                     map.get(i).add(null);

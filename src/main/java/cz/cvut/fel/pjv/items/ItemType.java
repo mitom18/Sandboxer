@@ -40,6 +40,11 @@ public enum ItemType {
      * Type of stored dirt block.
      */
     DIRT(1, 650, 130),
+    
+    /**
+     * Type of stored dirt block with grass on top.
+     */
+    DIRT_WITH_GRASS(6, 650, 0),
 
     /**
      * Type of stored stone block.

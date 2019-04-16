@@ -23,6 +23,8 @@
  */
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.blocks.LiquidBlock;
+import cz.cvut.fel.pjv.blocks.Block;
 import cz.cvut.fel.pjv.items.Item;
 
 /**
@@ -43,7 +45,7 @@ public abstract class Collision {
      */
     public static void preventCollision(Player player, World world) {
         for (Block block : world.getBlocks()) {
-            if (block.isDestroyed()) { continue; }
+            if (block.isDestroyed() || block instanceof LiquidBlock) { continue; }
             if (!(block.getX() > player.getX()-block.getWidth()*4 && block.getX2() < player.getX2()+block.getWidth()*4)) {
                 continue;
             }
@@ -72,6 +74,25 @@ public abstract class Collision {
         return player.getX() < block.getX2() && player.getX2() > block.getX() && player.getY() < block.getY2() && player.getY2() > block.getY();
     }
     
+    public static void playerIsInLiquid(Player player, World world) {
+        boolean collidesWithBlock = false;
+        for (Block block : world.getBlocks()) {
+            if (block.isDestroyed()) { continue; }
+            if (!(block.getX() > player.getX()-block.getWidth()*4 && block.getX2() < player.getX2()+block.getWidth()*4)) {
+                continue;
+            }
+            if (collides(player, block)) {
+                collidesWithBlock = true;
+                if (block instanceof LiquidBlock) {
+                    player.setSwimming(true);
+                } else {
+                    player.setSwimming(false);
+                }
+            }
+        }
+        if (!collidesWithBlock) { player.setSwimming(false); }
+    }
+    
     /**
      * Check if user clicked on block.
      *
@@ -82,7 +103,7 @@ public abstract class Collision {
      * @since 1.0
      */
     public static boolean collides(double clickX, double clickY, Block block) {
-        if (block.isDestroyed()) { return false; }
+        if (block.isDestroyed() || block instanceof LiquidBlock) { return false; }
         return clickX < block.getX2() && clickX > block.getX() && clickY < block.getY2() && clickY > block.getY();
     }
     
