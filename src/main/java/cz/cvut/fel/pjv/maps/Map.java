@@ -49,6 +49,8 @@ public class Map {
     private final double PER_MIN = 0.5;
     private final double PER_MAX = 1.5;
     
+    private final int FLAT_LAND_PROBABILITY = 10;
+    
     /**
      * Represents the probability in percent that DIAMOND_ORE will spawn at any 
      * given place under height 10 in the terrain.
@@ -204,7 +206,19 @@ public class Map {
             completeSkyline.add((int) skyline);
             
             if ((int)period == counter) {
-                amplitudeCoefficient = randomDoubleInRange(AMP_MIN, AMP_MAX) * AMPLITUDE_COEFFICIENT_MULTIPLICATOR;
+                
+                int isFlat = 0;
+                
+                if (FLAT_LAND_PROBABILITY != 0) {
+                    isFlat = randomIntInRange(1, 100 / FLAT_LAND_PROBABILITY);
+                }
+                
+                if (isFlat == 1) {
+                    amplitudeCoefficient = randomDoubleInRange(AMP_MIN, AMP_MAX) * 1;
+                } else {
+                    amplitudeCoefficient = randomDoubleInRange(AMP_MIN, AMP_MAX) * AMPLITUDE_COEFFICIENT_MULTIPLICATOR;
+                }
+                
                 periodCoefficient = 1 / (randomDoubleInRange(PER_MIN, PER_MAX) * PERIOD_COEFFICIENT_MULTIPLICATOR);
                 
                 period = (2 * Math.PI) / (periodCoefficient);
