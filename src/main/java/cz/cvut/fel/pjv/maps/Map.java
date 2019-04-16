@@ -41,22 +41,22 @@ public class Map {
     private final int WIDTH;
     private final int HEIGHT;
     
-    private final double AMPLITUDE_COEFFICIENT_MULTIPLICATOR = 8;
-    private final double PERIOD_COEFFICIENT_MULTIPLICATOR = 12;
+    private final double AMPLITUDE_COEFFICIENT_MULTIPLICATOR;
+    private final double PERIOD_COEFFICIENT_MULTIPLICATOR;
     
-    private final double AMP_MIN = 0.5;
-    private final double AMP_MAX = 1.5;
-    private final double PER_MIN = 0.5;
-    private final double PER_MAX = 1.5;
+    private final double AMP_MIN;
+    private final double AMP_MAX;
+    private final double PER_MIN;
+    private final double PER_MAX;
     
-    private final int FLAT_LAND_PROBABILITY = 10;
+    private final int FLAT_LAND_PROBABILITY;
     
     /**
      * Represents the probability in percent that DIAMOND_ORE will spawn at any 
      * given place under height 10 in the terrain.
      * Allowed values: 0 - 100
      */
-    private final int DIAMOND_PROBABILITY = 2;
+    private final int DIAMOND_PROBABILITY;
 
     private List<List<Integer>> terrain;
     private List<List<BlockType>> map;
@@ -73,11 +73,22 @@ public class Map {
      */
     public Map() {
         WIDTH = 1024;
-        HEIGHT = 64;
+        HEIGHT = 128;
+        
+        AMPLITUDE_COEFFICIENT_MULTIPLICATOR = 8;
+        PERIOD_COEFFICIENT_MULTIPLICATOR = 12;
+
+        AMP_MIN = 0.5;
+        AMP_MAX = 1.5;
+        PER_MIN = 0.5;
+        PER_MAX = 1.5;
+
+        FLAT_LAND_PROBABILITY = 10;
+        DIAMOND_PROBABILITY = 1;
         
         r = new Random();
         seed = r.nextLong();
-        r.setSeed(seed); // This is a nice seed.  7451260251423394044L
+        r.setSeed(seed); // These are nice seeds: 7451260251423394044L -7780041021634934149L
         System.out.println(seed);
         
         generateTerrain();
@@ -95,11 +106,23 @@ public class Map {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
         
+        AMPLITUDE_COEFFICIENT_MULTIPLICATOR = 8;
+        PERIOD_COEFFICIENT_MULTIPLICATOR = 12;
+
+        AMP_MIN = 0.5;
+        AMP_MAX = 1.5;
+        PER_MIN = 0.5;
+        PER_MAX = 1.5;
+
+        FLAT_LAND_PROBABILITY = 10;
+        DIAMOND_PROBABILITY = 1;
+        
         r = new Random();
         seed = r.nextLong();
         r.setSeed(seed);
         System.out.println(seed);
         
+        generateTerrain();
         generateMap();
     }
     
@@ -195,7 +218,7 @@ public class Map {
         double periodCoefficient = 1 / (randomDoubleInRange(PER_MIN, PER_MAX) * PERIOD_COEFFICIENT_MULTIPLICATOR);
         
         double period = (2 * Math.PI) / (periodCoefficient);
-        double previousY = 32;
+        double previousY = HEIGHT / 2;
         
         int counter = 1;
 
@@ -290,12 +313,12 @@ public class Map {
                         } else {
                             map.get(i).add(BlockType.DIRT);
                         }
-                    } else if ((j <= 10) && (isDiamond == 1)) {
+                    } else if ((j <= HEIGHT / 8) && (isDiamond == 1)) {
                         map.get(i).add(BlockType.DIAMOND_ORE);
                     } else {
                         map.get(i).add(BlockType.STONE);
                     }
-                } else if (j <= 24) {
+                } else if (j <= HEIGHT / 2 - HEIGHT / 16) {
                     map.get(i).add(BlockType.WATER);
                     isUnderWater = true;
                 } else {
