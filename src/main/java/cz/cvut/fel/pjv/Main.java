@@ -26,6 +26,7 @@ package cz.cvut.fel.pjv;
 import cz.cvut.fel.pjv.creatures.Player;
 import cz.cvut.fel.pjv.blocks.BlockType;
 import cz.cvut.fel.pjv.blocks.Block;
+import cz.cvut.fel.pjv.blocks.LiquidBlock;
 import cz.cvut.fel.pjv.items.StoredBlock;
 import cz.cvut.fel.pjv.items.ItemType;
 import cz.cvut.fel.pjv.items.Tool;
@@ -162,7 +163,7 @@ public class Main extends Application {
                                 if (block.isDestroyed()) { continue; }
                                 if (Collision.collides(clickX, clickY, block)) {
                                     // Bedrock is indestructible.
-                                    if (block.getBlockType() != BlockType.BEDROCK) {
+                                    if (block.getBlockType() != BlockType.BEDROCK && block.getBlockType() != BlockType.WATER) {
                                         block.destroy();
                                         ItemType blockType = ItemType.valueOf(block.getBlockType().name());
                                         player.getInventory().add(new StoredBlock(0, 0, blockType));
@@ -170,13 +171,20 @@ public class Main extends Application {
                                     }
                                 }
                             }
+                            world.updateLiquids(player);
                         }
                     }
                     //build block
                     if (!destroying && player.getInventory().getActiveItem() instanceof StoredBlock) {
                         boolean canBuild = true;
                         for (Block block : world.getBlocks()) {
-                            if (Collision.collides(clickX, clickY, block)) { canBuild = false; }
+                            if (Collision.collides(clickX, clickY, block)) {
+                                if (block instanceof LiquidBlock) {
+                                    block.destroy();
+                                } else {
+                                    canBuild = false;
+                                }
+                            }
                         }
                         if (canBuild) {
                             StoredBlock item = (StoredBlock) player.getInventory().getActiveItem();

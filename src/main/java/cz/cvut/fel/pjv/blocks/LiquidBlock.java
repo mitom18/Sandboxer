@@ -23,6 +23,11 @@
  */
 package cz.cvut.fel.pjv.blocks;
 
+import cz.cvut.fel.pjv.Collision;
+import cz.cvut.fel.pjv.World;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Michal-jr
@@ -31,6 +36,12 @@ public class LiquidBlock extends Block {
 
     public LiquidBlock(double x, double y, BlockType type) {
         super(x, y, type);
+    }
+    
+    public List<Block> expand(World world) {
+        List<Block> newLiquid = new ArrayList<>();
+        //TODO: expand liquid
+        return newLiquid;
     }
     
 }

@@ -29,6 +29,7 @@ import cz.cvut.fel.pjv.blocks.BlockType;
 import cz.cvut.fel.pjv.blocks.Block;
 import cz.cvut.fel.pjv.creatures.CreatureType;
 import cz.cvut.fel.pjv.creatures.NPC;
+import cz.cvut.fel.pjv.creatures.Player;
 import cz.cvut.fel.pjv.items.Item;
 import cz.cvut.fel.pjv.items.StoredBlock;
 import cz.cvut.fel.pjv.items.ItemType;
@@ -106,6 +107,28 @@ public class World {
     public void updateNPCs() {
         for (NPC npc : npcs) {
             npc.update(this);
+        }
+    }
+    
+    public void updateLiquids(Player player) {
+        List<Block> newBlocks = new ArrayList<>();
+        for (Block block : blocks) {
+            if (block.isDestroyed() || block instanceof SolidBlock) { continue; }
+            if (!(block.getX() > player.getX()-block.getWidth()*4 && block.getX2() < player.getX2()+block.getWidth()*4)) {
+                continue;
+            }
+            if (block instanceof LiquidBlock) {
+                LiquidBlock lBlock = (LiquidBlock) block;
+                int i = 0;
+                for (Block newBlock : lBlock.expand(this)) {
+                    i++;
+                    System.out.println(i);
+                    newBlocks.add(newBlock);
+                }
+            }
+        }
+        for (Block newBlock : newBlocks) {
+            blocks.add(newBlock);
         }
     }
 
