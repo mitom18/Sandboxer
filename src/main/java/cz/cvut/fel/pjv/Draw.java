@@ -272,9 +272,10 @@ public class Draw {
         }
         for (Block block : world.getBlocks()) {
             if (block.isDestroyed()) { continue; }
-            if (block instanceof LiquidBlock) { g.setGlobalAlpha(0.5); } else { g.setGlobalAlpha(1); }
+            if (block instanceof LiquidBlock) { g.setGlobalAlpha(0.5); }
             g.drawImage(Block.getImage(), block.getIMAGE_X(), block.getIMAGE_Y(), block.getIMAGE_WIDTH(), block.getIMAGE_HEIGHT(), 
                     block.getX(), block.getY(), block.getWidth(), block.getHeight());
+            g.setGlobalAlpha(1);
         }
         for (Item item : world.getItems()) {
             if (!item.isPicked()) {

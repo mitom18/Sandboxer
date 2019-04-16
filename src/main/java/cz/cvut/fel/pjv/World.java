@@ -119,10 +119,7 @@ public class World {
             }
             if (block instanceof LiquidBlock) {
                 LiquidBlock lBlock = (LiquidBlock) block;
-                int i = 0;
                 for (Block newBlock : lBlock.expand(this)) {
-                    i++;
-                    System.out.println(i);
                     newBlocks.add(newBlock);
                 }
             }

@@ -40,7 +40,22 @@ public class LiquidBlock extends Block {
     
     public List<Block> expand(World world) {
         List<Block> newLiquid = new ArrayList<>();
-        //TODO: expand liquid
+        boolean blockUnder = false;
+        int i = 0;
+        double y = getY();
+        while (!blockUnder) {
+            i++;
+            for (Block block : world.getBlocks()) {
+                if (block.isDestroyed() || block.getX() != getX()) { continue; }
+                if (Collision.collides(getX()+getWidth()/2, y+getHeight()*1.5, block)) {
+                    blockUnder = true;
+                    break;
+                }
+            }
+            if (!blockUnder) { newLiquid.add(new LiquidBlock(getX(), getY()+getHeight()*i, BlockType.WATER)); }
+            y += getHeight();
+        }
+        
         return newLiquid;
     }
     
