@@ -21,19 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cz.cvut.fel.pjv;
+package cz.cvut.fel.pjv.creatures;
 
 import javafx.scene.image.Image;
 
-
 /**
- * Player class.
- * 
+ *
  * @author Michal-jr
- * @version 1.0
  */
-public class Player {
-    
+public abstract class Creature {
     private double x, y;
     private double velocityX = 2;
     private double velocityY = 0;
@@ -46,32 +42,19 @@ public class Player {
     private final double IMAGE_WIDTH = 64;
     private final double IMAGE_HEIGHT = 64;
     private double spriteX, spriteY, spriteFrame = 0;
-    private final Image image = new Image( "spritesheet_hero.png" );
-    private final Inventory inventory = new Inventory();
+    private final Image image;
 
     /**
-     * Create player on given coordinates.
+     * Create creature on given coordinates.
      *
      * @param x
      * @param y
      * @since 1.0
      */
-    public Player(double x, double y) {
+    public Creature(double x, double y, CreatureType type) {
         this.x = x;
         this.y = y;
-    }
-    
-    /**
-     * Update player's state.
-     * 
-     * @param world instance of the world
-     * @since 1.0
-     */
-    public void update(World world) {
-        Collision.playerIsInLiquid(this, world);
-        move();
-        Collision.preventCollision(this, world);
-        Collision.controlItems(this, world);
+        this.image = type.getSpritesheet();
     }
     
     /**
@@ -133,7 +116,7 @@ public class Player {
         if (!up && !down) { y += GRAVITY/1.5; }
         onGround = false;
     }
-
+    
     /**
      * Set if player is moving left.
      * 
@@ -192,18 +175,6 @@ public class Player {
      */
     public void setSwimming(boolean swimming) {
         this.swimming = swimming;
-    }
-    
-    /**
-     * Scroll through inventory items in hotbar.
-     *
-     * @param moveBy
-     * @since 1.0
-     */
-    public void changeActiveItem(int moveBy) {
-        int moveTo = (inventory.getActiveItemIndex() + moveBy) % 10;
-        if (moveTo < 0) { moveTo = 9; }
-        inventory.setActiveItemIndex(moveTo);
     }
     
     /**
@@ -343,14 +314,6 @@ public class Player {
     }
 
     /**
-     * @return player's inventory
-     * @since 1.0
-     */
-    public Inventory getInventory() {
-        return inventory;
-    }
-
-    /**
      * Set player's X position in pixels.
      *
      * @param x
@@ -419,5 +382,4 @@ public class Player {
     public void setOnGround(boolean onGround) {
         this.onGround = onGround;
     }
-    
 }

@@ -23,8 +23,10 @@
  */
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.creatures.Player;
 import cz.cvut.fel.pjv.blocks.LiquidBlock;
 import cz.cvut.fel.pjv.blocks.Block;
+import cz.cvut.fel.pjv.creatures.Creature;
 import cz.cvut.fel.pjv.items.Item;
 
 /**
@@ -43,54 +45,54 @@ public abstract class Collision {
      * @param world instance of world where player exists
      * @since 1.0
      */
-    public static void preventCollision(Player player, World world) {
+    public static void preventCollision(Creature creature, World world) {
         for (Block block : world.getBlocks()) {
             if (block.isDestroyed() || block instanceof LiquidBlock) { continue; }
-            if (!(block.getX() > player.getX()-block.getWidth()*4 && block.getX2() < player.getX2()+block.getWidth()*4)) {
+            if (!(block.getX() > creature.getX()-block.getWidth()*4 && block.getX2() < creature.getX2()+block.getWidth()*4)) {
                 continue;
             }
-            if (collides(player, block)) {
-                double bottomCollision = block.getY2() - player.getY();
-                double topCollision = player.getY2() - block.getY();
-                double leftCollision = player.getX2() - block.getX();
-                double rightCollision = block.getX2() - player.getX();
+            if (collides(creature, block)) {
+                double bottomCollision = block.getY2() - creature.getY();
+                double topCollision = creature.getY2() - block.getY();
+                double leftCollision = creature.getX2() - block.getX();
+                double rightCollision = block.getX2() - creature.getX();
 
                 if(topCollision < bottomCollision && topCollision < leftCollision && topCollision < rightCollision) {
-                    player.setY(block.getY()-player.getHeight()); //top collision
-                    player.setVelocityY(0.0); //set player's velocity to 0
-                    player.setOnGround(true); //player is standing on the ground
+                    creature.setY(block.getY()-creature.getHeight()); //top collision
+                    creature.setVelocityY(0.0); //set player's velocity to 0
+                    creature.setOnGround(true); //player is standing on the ground
                 }
                 if(bottomCollision < topCollision && bottomCollision < leftCollision && bottomCollision < rightCollision)
-                    player.setY(block.getY2()); //bottom collision
+                    creature.setY(block.getY2()); //bottom collision
                 if(leftCollision < rightCollision && leftCollision < topCollision && leftCollision < bottomCollision)
-                    player.setX(block.getX()-player.getWidth()); //left collision
+                    creature.setX(block.getX()-creature.getWidth()); //left collision
                 if(rightCollision < leftCollision && rightCollision < topCollision && rightCollision < bottomCollision)
-                    player.setX(block.getX2()); //right collision
+                    creature.setX(block.getX2()); //right collision
             }
         }
     }
     
-    private static boolean collides(Player player, Block block) {
-        return player.getX() < block.getX2() && player.getX2() > block.getX() && player.getY() < block.getY2() && player.getY2() > block.getY();
+    private static boolean collides(Creature creature, Block block) {
+        return creature.getX() < block.getX2() && creature.getX2() > block.getX() && creature.getY() < block.getY2() && creature.getY2() > block.getY();
     }
     
-    public static void playerIsInLiquid(Player player, World world) {
+    public static void creatureIsInLiquid(Creature creature, World world) {
         boolean collidesWithBlock = false;
         for (Block block : world.getBlocks()) {
             if (block.isDestroyed()) { continue; }
-            if (!(block.getX() > player.getX()-block.getWidth()*4 && block.getX2() < player.getX2()+block.getWidth()*4)) {
+            if (!(block.getX() > creature.getX()-block.getWidth()*4 && block.getX2() < creature.getX2()+block.getWidth()*4)) {
                 continue;
             }
-            if (collides(player, block)) {
+            if (collides(creature, block)) {
                 collidesWithBlock = true;
                 if (block instanceof LiquidBlock) {
-                    player.setSwimming(true);
+                    creature.setSwimming(true);
                 } else {
-                    player.setSwimming(false);
+                    creature.setSwimming(false);
                 }
             }
         }
-        if (!collidesWithBlock) { player.setSwimming(false); }
+        if (!collidesWithBlock) { creature.setSwimming(false); }
     }
     
     /**

@@ -23,8 +23,11 @@
  */
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.creatures.Inventory;
+import cz.cvut.fel.pjv.creatures.Player;
 import cz.cvut.fel.pjv.blocks.LiquidBlock;
 import cz.cvut.fel.pjv.blocks.Block;
+import cz.cvut.fel.pjv.creatures.NPC;
 import cz.cvut.fel.pjv.items.Item;
 import cz.cvut.fel.pjv.items.StoredBlock;
 import javafx.scene.canvas.GraphicsContext;
@@ -77,6 +80,9 @@ public class Draw {
         
         if (player.getX() < 90 && player.movingLeft()) {
             player.setX(player.getX() + playerVelocityX);
+            for (NPC npc : world.getNpcs()) {
+                npc.setX(npc.getX() + playerVelocityX);
+            }
             for (Item item : world.getItems()) {
                 if (!item.isPicked()) {
                     item.setX(item.getX() + playerVelocityX);
@@ -100,6 +106,9 @@ public class Draw {
         
         if (player.getX() > WIDTH-90-player.getWidth() && player.movingRight()) {
             player.setX(player.getX() - playerVelocityX);
+            for (NPC npc : world.getNpcs()) {
+                npc.setX(npc.getX() - playerVelocityX);
+            }
             for (Item item : world.getItems()) {
                 if (!item.isPicked()) {
                     item.setX(item.getX() - playerVelocityX);
@@ -123,6 +132,9 @@ public class Draw {
         
         if ((player.getY() < 90 && player.jumping()) || (player.getY() > HEIGHT-90-player.getHeight() && player.falling())) {
             player.setY(player.getY() - playerVelocityY);
+            for (NPC npc : world.getNpcs()) {
+                npc.setY(npc.getY() - playerVelocityY);
+            }
             for (Item item : world.getItems()) {
                 if (!item.isPicked()) {
                     item.setY(item.getY() - playerVelocityY);
@@ -168,6 +180,13 @@ public class Draw {
             player.setY(playerY);
             player.setWidth(player.getWidth()*zoomScale);
             player.setHeight(player.getHeight()*zoomScale);
+            for (NPC npc : world.getNpcs()) {
+                npc.setVelocityMultiplier(zoomScale);
+                npc.setX(npc.getX()*zoomScale - offsetX);
+                npc.setY(npc.getY()*zoomScale - offsetY);
+                npc.setWidth(npc.getWidth()*zoomScale);
+                npc.setHeight(npc.getHeight()*zoomScale);
+            }
             for (Item item : world.getItems()) {
                 if (!item.isPicked()) {
                     item.setX(item.getX()*zoomScale - offsetX);
@@ -247,6 +266,10 @@ public class Draw {
         Player player = game.getPlayer();
         g.drawImage(player.getImage(), player.getSpriteX(), player.getSpriteY(), player.getIMAGE_WIDTH(), player.getIMAGE_HEIGHT(), 
                 player.getX(), player.getY(), player.getWidth(), player.getHeight());
+        for (NPC npc : world.getNpcs()) {
+            g.drawImage(npc.getImage(), npc.getSpriteX(), npc.getSpriteY(), npc.getIMAGE_WIDTH(), npc.getIMAGE_HEIGHT(), 
+                npc.getX(), npc.getY(), npc.getWidth(), npc.getHeight());
+        }
         for (Block block : world.getBlocks()) {
             if (block.isDestroyed()) { continue; }
             if (block instanceof LiquidBlock) { g.setGlobalAlpha(0.5); } else { g.setGlobalAlpha(1); }

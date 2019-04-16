@@ -23,6 +23,7 @@
  */
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.creatures.Player;
 import cz.cvut.fel.pjv.blocks.BlockType;
 import cz.cvut.fel.pjv.blocks.Block;
 import cz.cvut.fel.pjv.items.StoredBlock;
@@ -211,6 +212,7 @@ public class Main extends Application {
             public void handle(long now) {
                 if (now - lastUpdate >= 10_000_000) { //update each 10 miliseconds
                     player.update(world);
+                    world.updateNPCs();
                     draw.shiftCamera(game);
                     draw.render(gc, game);
                     lastUpdate = now;

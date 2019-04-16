@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Zdenek.
+ * Copyright 2019 Michal-jr.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,53 +21,63 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cz.cvut.fel.pjv;
+package cz.cvut.fel.pjv.creatures;
 
-import cz.cvut.fel.pjv.creatures.Player;
+import cz.cvut.fel.pjv.Collision;
+import cz.cvut.fel.pjv.World;
+
 
 /**
- * Contains all entities in the game.
- *
- * @author Zdenek
+ * Player class.
+ * 
+ * @author Michal-jr
  * @version 1.0
  */
-public class Game {
+public class Player extends Creature {
     
-    /**
-     * Instance of Player.
-     */
-    private final Player player;
-    
-    /*
-     * Instance of World.
-     */
-    private final World world;
+    private final Inventory inventory = new Inventory();
 
     /**
-     * Create new game.
+     * Create player on given coordinates.
      *
-     * @param SCREEN_WIDTH width of the canvas in pixels
+     * @param x
+     * @param y
      * @since 1.0
      */
-    public Game(double SCREEN_WIDTH) {
-        player = new Player((int) SCREEN_WIDTH/2, 0);
-        world = new World();
-    }
-
-    /**
-     * @return instance of the player
-     * @since 1.0
-     */
-    public Player getPlayer() {
-        return player;
-    }
-
-    /**
-     * @return instance of the world
-     * @since 1.0
-     */
-    public World getWorld() {
-        return world;
+    public Player(double x, double y) {
+        super(x, y, CreatureType.PLAYER);
     }
     
+    /**
+     * Update player's state.
+     * 
+     * @param world instance of the world
+     * @since 1.0
+     */
+    public void update(World world) {
+        Collision.creatureIsInLiquid(this, world);
+        move();
+        Collision.preventCollision(this, world);
+        Collision.controlItems(this, world);
+    }
+
+    /**
+     * Scroll through inventory items in hotbar.
+     *
+     * @param moveBy
+     * @since 1.0
+     */
+    public void changeActiveItem(int moveBy) {
+        int moveTo = (inventory.getActiveItemIndex() + moveBy) % 10;
+        if (moveTo < 0) { moveTo = 9; }
+        inventory.setActiveItemIndex(moveTo);
+    }
+    
+    /**
+     * @return player's inventory
+     * @since 1.0
+     */
+    public Inventory getInventory() {
+        return inventory;
+    }
 }

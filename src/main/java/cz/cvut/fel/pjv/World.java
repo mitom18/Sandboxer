@@ -27,6 +27,8 @@ import cz.cvut.fel.pjv.blocks.LiquidBlock;
 import cz.cvut.fel.pjv.blocks.SolidBlock;
 import cz.cvut.fel.pjv.blocks.BlockType;
 import cz.cvut.fel.pjv.blocks.Block;
+import cz.cvut.fel.pjv.creatures.CreatureType;
+import cz.cvut.fel.pjv.creatures.NPC;
 import cz.cvut.fel.pjv.items.Item;
 import cz.cvut.fel.pjv.items.StoredBlock;
 import cz.cvut.fel.pjv.items.ItemType;
@@ -56,10 +58,15 @@ public class World {
      */
     private List<Item> items;
     
+    /**
+     * Array of instances of NPCs in the world.
+     */
+    private List<NPC> npcs;
+    
     /*
      * Instance of Map.
      */
-    private Map map;
+    private final Map map;
     
     /**
      * Create new world.
@@ -90,6 +97,16 @@ public class World {
         
         items = new ArrayList<>();
         items.add(new StoredBlock(0,650, ItemType.DIAMOND_ORE));
+        
+        npcs = new ArrayList<>();
+        npcs.add(new NPC(250, 0, CreatureType.SKELETON));
+        npcs.add(new NPC(350, 0, CreatureType.SKELETON));
+    }
+    
+    public void updateNPCs() {
+        for (NPC npc : npcs) {
+            npc.update(this);
+        }
     }
 
     /**
@@ -106,6 +123,14 @@ public class World {
      */
     public List<Item> getItems() {
         return items;
+    }
+    
+    /**
+     * @return list of all NPCs in the world
+     * @since 1.0
+     */
+    public List<NPC> getNpcs() {
+        return npcs;
     }
     
     /**

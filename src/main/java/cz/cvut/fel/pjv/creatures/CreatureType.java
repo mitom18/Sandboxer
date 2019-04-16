@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Zdenek.
+ * Copyright 2019 Michal-jr.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,53 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cz.cvut.fel.pjv;
+package cz.cvut.fel.pjv.creatures;
 
-import cz.cvut.fel.pjv.creatures.Player;
+import javafx.scene.image.Image;
 
 /**
- * Contains all entities in the game.
+ * Enumeration class representing all types of NPCs that can appear in the world.
  *
- * @author Zdenek
+ * @author Michal-jr
  * @version 1.0
  */
-public class Game {
+public enum CreatureType {
     
     /**
-     * Instance of Player.
+     * Type of knight.
      */
-    private final Player player;
+    PLAYER(0, new Image("spritesheet_hero.png")),
     
-    /*
-     * Instance of World.
+    /**
+     * Type of knight.
      */
-    private final World world;
+    SKELETON(1, new Image("spritesheet_skeleton.png"));
 
-    /**
-     * Create new game.
-     *
-     * @param SCREEN_WIDTH width of the canvas in pixels
-     * @since 1.0
-     */
-    public Game(double SCREEN_WIDTH) {
-        player = new Player((int) SCREEN_WIDTH/2, 0);
-        world = new World();
+    private final int id;
+    private final Image spritesheet;
+
+
+    private CreatureType(int id, Image spritesheet) {
+        this.id = id;
+        this.spritesheet = spritesheet;
     }
 
     /**
-     * @return instance of the player
+     * @return spritesheet of the NPC
      * @since 1.0
      */
-    public Player getPlayer() {
-        return player;
-    }
-
-    /**
-     * @return instance of the world
-     * @since 1.0
-     */
-    public World getWorld() {
-        return world;
+    public Image getSpritesheet() {
+        return spritesheet;
     }
     
 }
