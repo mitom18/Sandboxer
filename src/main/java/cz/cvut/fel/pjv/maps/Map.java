@@ -57,6 +57,7 @@ public class Map {
      * Allowed values: 0 - 100
      */
     private final int DIAMOND_PROBABILITY;
+    private final int CAVE_PROBABILITY;
 
     private List<List<Integer>> terrain;
     private List<List<BlockType>> map;
@@ -85,6 +86,7 @@ public class Map {
 
         FLAT_LAND_PROBABILITY = 10;
         DIAMOND_PROBABILITY = 1;
+        CAVE_PROBABILITY = 10;
         
         r = new Random();
         seed = r.nextLong();
@@ -116,6 +118,7 @@ public class Map {
 
         FLAT_LAND_PROBABILITY = 10;
         DIAMOND_PROBABILITY = 1;
+        CAVE_PROBABILITY = 10;
         
         r = new Random();
         seed = r.nextLong();
@@ -274,7 +277,7 @@ public class Map {
      * 
      * @since 1.1
      */
-    private void generateMap(){
+    private void generateMap() {
         map = new ArrayList<>(WIDTH);
         
         /**
@@ -306,23 +309,61 @@ public class Map {
                 if (terrain.get(i).get(j) == 1) {
                     
                     if ((j == 0) || (j == HEIGHT - 1)) {
+                        // Bedrock
                         map.get(i).add(BlockType.BEDROCK);
                     } else if (j >= dirtStoneBorder) {
                         if ((j == completeSkyline.get(i)) && (!isUnderWater)) {
+                            // Grass
                             map.get(i).add(BlockType.DIRT_WITH_GRASS);
                         } else {
+                            // Dirt
                             map.get(i).add(BlockType.DIRT);
                         }
                     } else if ((j <= HEIGHT / 8) && (isDiamond == 1)) {
+                        // Diamond
                         map.get(i).add(BlockType.DIAMOND_ORE);
                     } else {
+                        // Stone
                         map.get(i).add(BlockType.STONE);
                     }
                 } else if (j <= HEIGHT / 2 - HEIGHT / 16) {
+                    // Water
                     map.get(i).add(BlockType.WATER);
                     isUnderWater = true;
                 } else {
+                    // Nothing/air
                     map.get(i).add(null);
+                }
+            }
+        }
+        
+        generateCaves();
+    }
+    
+    private void generateCaves() {
+        
+        boolean buildingCave = false;
+        int moreCaveProb = 100;
+        
+        for (int i = 0; i < WIDTH; i++) {
+            
+            for (int j = 0; j < HEIGHT; j++) {
+                
+                if ((j < completeSkyline.get(i)) && (randomIntInRange(1, 100 / CAVE_PROBABILITY) == 1) && (!buildingCave)) {
+                    buildingCave = true;
+                }
+                
+                if (buildingCave) {
+                    
+                    if (moreCaveProb != 0) {
+                        
+                        if (randomIntInRange(1, 100 / moreCaveProb) == 1) {
+                            map.get(i).set(j, null);
+                            moreCaveProb -= 5;
+                        }
+                    } else {
+                        buildingCave = false;
+                    }
                 }
             }
         }
