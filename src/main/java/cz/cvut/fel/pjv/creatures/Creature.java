@@ -26,8 +26,10 @@ package cz.cvut.fel.pjv.creatures;
 import javafx.scene.image.Image;
 
 /**
+ * Creature is a living entity which can move around the world and interact with it.
  *
  * @author Michal-jr
+ * @version 1.0
  */
 public abstract class Creature {
     private double x, y;
@@ -46,10 +48,11 @@ public abstract class Creature {
     private int hp;
 
     /**
-     * Create creature on given coordinates.
+     * Create new creature on given coordinates.
      *
      * @param x
      * @param y
+     * @param type
      * @since 1.0
      */
     public Creature(double x, double y, CreatureType type) {
@@ -122,7 +125,7 @@ public abstract class Creature {
     }
     
     /**
-     * Set if player is moving left.
+     * Set if creature is moving left.
      * 
      * @param left
      * @since 1.0
@@ -132,7 +135,7 @@ public abstract class Creature {
     }
 
     /**
-     * Set if player is moving right.
+     * Set if creature is moving right.
      * 
      * @param right
      * @since 1.0
@@ -142,7 +145,7 @@ public abstract class Creature {
     }
 
     /**
-     * Set if player is moving up.
+     * Set if creature is moving up.
      * 
      * @param up
      * @since 1.0
@@ -152,7 +155,7 @@ public abstract class Creature {
     }
     
     /**
-     * Set if player is moving down.
+     * Set if creature is moving down.
      * 
      * @param down
      * @since 1.0
@@ -162,7 +165,7 @@ public abstract class Creature {
     }
 
     /**
-     * Set if player is running.
+     * Set if creature is running.
      *
      * @param running
      * @since 1.0
@@ -172,7 +175,7 @@ public abstract class Creature {
     }
     
     /**
-     * Set if player is swimming.
+     * Set if creature is swimming.
      *
      * @param swimming
      * @since 1.0
@@ -182,7 +185,7 @@ public abstract class Creature {
     }
     
     /**
-     * @return true if player is moving left, false otherwise
+     * @return true if creature is moving left, false otherwise
      * @since 1.0
      */
     public boolean movingLeft() {
@@ -190,7 +193,7 @@ public abstract class Creature {
     }
     
     /**
-     * @return true if player is moving right, false otherwise
+     * @return true if creature is moving right, false otherwise
      * @since 1.0
      */
     public boolean movingRight() {
@@ -198,7 +201,7 @@ public abstract class Creature {
     }
     
     /**
-     * @return true if player is jumping, false otherwise
+     * @return true if creature is jumping, false otherwise
      * @since 1.0
      */
     public boolean jumping() {
@@ -206,7 +209,7 @@ public abstract class Creature {
     }
     
     /**
-     * @return true if player is falling, false otherwise
+     * @return true if creature is falling, false otherwise
      * @since 1.0
      */
     public boolean falling() {
@@ -214,7 +217,7 @@ public abstract class Creature {
     }
 
     /**
-     * @return player's X velocity
+     * @return creature's X velocity
      * @since 1.0
      */
     public double getVelocityX() {
@@ -222,19 +225,23 @@ public abstract class Creature {
     }
     
     /**
-     * @return player's X velocity
+     * @return creature's X velocity
      * @since 1.0
      */
     public double getVelocityY() {
         return velocityY;
     }
 
+    /**
+     * @return creature's health point
+     * @since 1.0
+     */
     public int getHp() {
         return hp;
     }
 
     /**
-     * @return player's X position in pixels
+     * @return creature's X position in pixels
      * @since 1.0
      */
     public double getX() {
@@ -242,7 +249,7 @@ public abstract class Creature {
     }
     
     /**
-     * @return player's X2 position in pixels
+     * @return creature's X2 position in pixels
      * @since 1.0
      */
     public double getX2() {
@@ -250,7 +257,7 @@ public abstract class Creature {
     }
 
     /**
-     * @return player's Y position in pixels
+     * @return creature's Y position in pixels
      * @since 1.0
      */
     public double getY() {
@@ -258,7 +265,7 @@ public abstract class Creature {
     }
     
     /**
-     * @return player's Y2 position in pixels
+     * @return creature's Y2 position in pixels
      * @since 1.0
      */
     public double getY2() {
@@ -266,7 +273,7 @@ public abstract class Creature {
     }
 
     /**
-     * @return player's width in pixels
+     * @return creature's width in pixels
      * @since 1.0
      */
     public double getWidth() {
@@ -274,7 +281,7 @@ public abstract class Creature {
     }
 
     /**
-     * @return player's height in pixels
+     * @return creature's height in pixels
      * @since 1.0
      */
     public double getHeight() {
@@ -282,7 +289,7 @@ public abstract class Creature {
     }
 
     /**
-     * @return player actual animation frame width in pixels
+     * @return creature's actual animation frame width in pixels
      * @since 1.0
      */
     public double getIMAGE_WIDTH() {
@@ -290,7 +297,7 @@ public abstract class Creature {
     }
 
     /**
-     * @return player actual animation frame height in pixels
+     * @return creature's actual animation frame height in pixels
      * @since 1.0
      */
     public double getIMAGE_HEIGHT() {
@@ -298,7 +305,7 @@ public abstract class Creature {
     }
 
     /**
-     * @return player's sprite sheet
+     * @return creature's spritesheet
      * @since 1.0
      */
     public Image getImage() {
@@ -306,7 +313,7 @@ public abstract class Creature {
     }
 
     /**
-     * @return X position of actual animation frame in sprite sheet
+     * @return X position of actual animation frame in spritesheet
      * @since 1.0
      */
     public double getSpriteX() {
@@ -314,7 +321,7 @@ public abstract class Creature {
     }
 
     /**
-     * @return Y position of actual animation frame in sprite sheet
+     * @return Y position of actual animation frame in spritesheet
      * @since 1.0
      */
     public double getSpriteY() {
@@ -322,7 +329,7 @@ public abstract class Creature {
     }
 
     /**
-     * Set player's X position in pixels.
+     * Set creature's X position in pixels.
      *
      * @param x
      * @since 1.0
@@ -332,7 +339,7 @@ public abstract class Creature {
     }
 
     /**
-     * Set player's Y position in pixels.
+     * Set creature's Y position in pixels.
      *
      * @param y
      * @since 1.0
@@ -342,7 +349,7 @@ public abstract class Creature {
     }
 
     /**
-     * Set player's width in pixels.
+     * Set creature's width in pixels.
      *
      * @param width
      * @since 1.0
@@ -352,7 +359,7 @@ public abstract class Creature {
     }
 
     /**
-     * Set player's height in pixels.
+     * Set creature's height in pixels.
      *
      * @param height
      * @since 1.0
@@ -362,7 +369,7 @@ public abstract class Creature {
     }
 
     /**
-     * Set player's vertical velocity.
+     * Set creature's vertical velocity.
      * 
      * @param velocityY
      * @since 1.0
@@ -372,7 +379,7 @@ public abstract class Creature {
     }
 
     /**
-     * Set player's velocity multiplier.
+     * Set creature's velocity multiplier.
      *
      * @param velocityMultiplier
      * @since 1.0
@@ -382,7 +389,7 @@ public abstract class Creature {
     }
 
     /**
-     * Set if player is standing on the ground.
+     * Set if creature is standing on the ground.
      * 
      * @param onGround
      * @since 1.0

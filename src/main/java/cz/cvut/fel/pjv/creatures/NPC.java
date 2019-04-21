@@ -27,11 +27,21 @@ import cz.cvut.fel.pjv.Collision;
 import cz.cvut.fel.pjv.World;
 
 /**
+ * Character that is not controlled by player.
  *
  * @author Michal-jr
+ * @version 1.0
  */
 public class NPC extends Creature {
 
+    /**
+     * Create new NPC on given coordinates.
+     *
+     * @param x
+     * @param y
+     * @param type
+     * @since 1.0
+     */
     public NPC(double x, double y, CreatureType type) {
         super(x, y, type);
     }

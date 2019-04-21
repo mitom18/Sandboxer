@@ -38,11 +38,11 @@ import cz.cvut.fel.pjv.items.Item;
 public abstract class Collision {
     
     /**
-     * Check if player is colliding with other entity.
-     * If it is colliding than edit player's coordinates.
+     * Check if creature is colliding with other entity.
+     * If it is colliding than edit creature's coordinates.
      * 
      * @param creature instance of creature
-     * @param world instance of world where player exists
+     * @param world instance of world where creature exists
      * @since 1.0
      */
     public static void preventCollision(Creature creature, World world) {
@@ -59,8 +59,8 @@ public abstract class Collision {
 
                 if(topCollision < bottomCollision && topCollision < leftCollision && topCollision < rightCollision) {
                     creature.setY(block.getY()-creature.getHeight()); //top collision
-                    creature.setVelocityY(0.0); //set player's velocity to 0
-                    creature.setOnGround(true); //player is standing on the ground
+                    creature.setVelocityY(0.0); //set creature's velocity to 0
+                    creature.setOnGround(true); //creature is standing on the ground
                 }
                 if(bottomCollision < topCollision && bottomCollision < leftCollision && bottomCollision < rightCollision)
                     creature.setY(block.getY2()); //bottom collision
@@ -76,6 +76,13 @@ public abstract class Collision {
         return creature.getX() < block.getX2() && creature.getX2() > block.getX() && creature.getY() < block.getY2() && creature.getY2() > block.getY();
     }
     
+    /**
+     * Check if creature is in liquid. If so, set that creature is swimming.
+     *
+     * @param creature instance of creature
+     * @param world instance of world
+     * @since 1.0
+     */
     public static void creatureIsInLiquid(Creature creature, World world) {
         boolean collidesWithBlock = false;
         for (Block block : world.getBlocks()) {

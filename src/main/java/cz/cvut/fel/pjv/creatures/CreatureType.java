@@ -26,7 +26,7 @@ package cz.cvut.fel.pjv.creatures;
 import javafx.scene.image.Image;
 
 /**
- * Enumeration class representing all types of NPCs that can appear in the world.
+ * Enumeration class representing all types of creatures that can appear in the world.
  *
  * @author Michal-jr
  * @version 1.0
@@ -34,12 +34,12 @@ import javafx.scene.image.Image;
 public enum CreatureType {
     
     /**
-     * Type of knight.
+     * Type of player.
      */
     PLAYER(0, new Image("spritesheet_hero.png"), 10),
     
     /**
-     * Type of knight.
+     * Type of skeleton.
      */
     SKELETON(1, new Image("spritesheet_skeleton.png"), 5);
 
@@ -55,13 +55,17 @@ public enum CreatureType {
     }
 
     /**
-     * @return spritesheet of the NPC
+     * @return spritesheet of the specified creature
      * @since 1.0
      */
     public Image getSpritesheet() {
         return spritesheet;
     }
 
+    /**
+     * @return health points of the specified creature
+     * @since 1.0
+     */
     public int getHp() {
         return hp;
     }

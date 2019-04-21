@@ -29,15 +29,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Special type of block. Liquids can expand.
  *
  * @author Michal-jr
+ * @version 1.0
  */
 public class LiquidBlock extends Block {
 
+    /**
+     * Create new liquid block on given coordinates.
+     *
+     * @param x
+     * @param y
+     * @param type
+     * @since 1.0
+     */
     public LiquidBlock(double x, double y, BlockType type) {
         super(x, y, type);
     }
     
+    /**
+     * Liquid can expand downward if there is no solid block underneath.
+     *
+     * @param world instance of the world
+     * @return list of new liquid blocks
+     * @since 1.0
+     */
     public List<Block> expand(World world) {
         List<Block> newLiquid = new ArrayList<>();
         boolean blockUnder = false;

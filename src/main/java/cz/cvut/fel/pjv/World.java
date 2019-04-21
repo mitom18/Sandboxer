@@ -104,12 +104,23 @@ public class World {
         npcs.add(new NPC(350, 0, CreatureType.SKELETON));
     }
     
+    /**
+     * Update all NPCs in the world.
+     * 
+     * @since 1.0
+     */
     public void updateNPCs() {
         for (NPC npc : npcs) {
             npc.update(this);
         }
     }
     
+    /**
+     * Update all liquids around the player. Liquids can expand.
+     *
+     * @param player instance of player
+     * @since 1.0
+     */
     public void updateLiquids(Player player) {
         List<Block> newBlocks = new ArrayList<>();
         for (Block block : blocks) {

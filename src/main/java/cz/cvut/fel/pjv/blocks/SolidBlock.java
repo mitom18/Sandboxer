@@ -24,11 +24,21 @@
 package cz.cvut.fel.pjv.blocks;
 
 /**
+ * Classic solid block. Collides with creatures.
  *
  * @author Michal-jr
+ * @version 1.0
  */
 public class SolidBlock extends Block {
 
+    /**
+     * Create new solid block on given coordinates.
+     *
+     * @param x
+     * @param y
+     * @param type
+     * @since 1.0
+     */
     public SolidBlock(double x, double y, BlockType type) {
         super(x, y, type);
     }

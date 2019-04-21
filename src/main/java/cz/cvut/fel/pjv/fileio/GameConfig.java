@@ -27,8 +27,10 @@ import cz.cvut.fel.pjv.blocks.BlockType;
 import java.util.List;
 
 /**
+ * Class for game configuration.
  *
  * @author zdenek
+ * @version 1.0
  */
 public class GameConfig {
     

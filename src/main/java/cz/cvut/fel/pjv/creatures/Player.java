@@ -28,7 +28,7 @@ import cz.cvut.fel.pjv.World;
 
 
 /**
- * Player class.
+ * Character that is controlled by player.
  * 
  * @author Michal-jr
  * @version 1.0
@@ -82,6 +82,10 @@ public class Player extends Creature {
         return inventory;
     }
 
+    /**
+     * @return player's saturation points
+     * @since 1.0
+     */
     public int getSaturation() {
         return saturation;
     }
