@@ -41,7 +41,7 @@ public abstract class Collision {
      * Check if player is colliding with other entity.
      * If it is colliding than edit player's coordinates.
      * 
-     * @param player instance of player
+     * @param creature instance of creature
      * @param world instance of world where player exists
      * @since 1.0
      */

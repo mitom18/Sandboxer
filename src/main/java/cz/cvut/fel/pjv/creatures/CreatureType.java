@@ -36,20 +36,22 @@ public enum CreatureType {
     /**
      * Type of knight.
      */
-    PLAYER(0, new Image("spritesheet_hero.png")),
+    PLAYER(0, new Image("spritesheet_hero.png"), 10),
     
     /**
      * Type of knight.
      */
-    SKELETON(1, new Image("spritesheet_skeleton.png"));
+    SKELETON(1, new Image("spritesheet_skeleton.png"), 5);
 
     private final int id;
     private final Image spritesheet;
+    private int hp;
 
 
-    private CreatureType(int id, Image spritesheet) {
+    private CreatureType(int id, Image spritesheet, int hp) {
         this.id = id;
         this.spritesheet = spritesheet;
+        this.hp = hp;
     }
 
     /**
@@ -58,6 +60,10 @@ public enum CreatureType {
      */
     public Image getSpritesheet() {
         return spritesheet;
+    }
+
+    public int getHp() {
+        return hp;
     }
     
 }

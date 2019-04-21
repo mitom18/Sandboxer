@@ -41,8 +41,9 @@ public abstract class Creature {
     private double height = 52;
     private final double IMAGE_WIDTH = 64;
     private final double IMAGE_HEIGHT = 64;
-    private double spriteX, spriteY, spriteFrame = 0;
+    private double spriteX, spriteY, spriteFrame, frameLimit = 0;
     private final Image image;
+    private int hp;
 
     /**
      * Create creature on given coordinates.
@@ -55,20 +56,22 @@ public abstract class Creature {
         this.x = x;
         this.y = y;
         this.image = type.getSpritesheet();
+        this.hp = type.getHp();
     }
     
     /**
-     * Update player's position in the world and animate his movement.
+     * Update creature's position in the world and animate its movement.
      * 
      * @since 1.0
      */
     public void move() {
-        if (running) { velocityX = 4*velocityMultiplier; } else { velocityX = 2*velocityMultiplier; }
+        frameLimit++;
+        if (running) { velocityX = 4*velocityMultiplier; frameLimit = 0; } else { velocityX = 2*velocityMultiplier; }
         if (swimming) { velocityX = 1*velocityMultiplier; }
         if (left) {
             x -= velocityX;
             spriteY = 9 * IMAGE_HEIGHT;
-            spriteFrame--;
+            if (frameLimit % 2 == 0) { spriteFrame--; }
             if (spriteFrame < 0) { spriteFrame = 8; }
             if (!onGround) { spriteFrame = 1; }
             spriteX = spriteFrame * IMAGE_WIDTH;
@@ -76,7 +79,7 @@ public abstract class Creature {
         if (right) {
             x += velocityX;
             spriteY = 11 * IMAGE_HEIGHT;
-            spriteFrame++;
+            if (frameLimit % 2 == 0) { spriteFrame++; }
             if (spriteFrame > 8) { spriteFrame = 0; }
             if (!onGround) { spriteFrame = 1; }
             spriteX = spriteFrame * IMAGE_WIDTH;
@@ -95,6 +98,7 @@ public abstract class Creature {
         } else {
             swim();
         }
+        if (frameLimit < 1) { frameLimit = 0; }
     }
     
     private void fall() {
@@ -223,6 +227,10 @@ public abstract class Creature {
      */
     public double getVelocityY() {
         return velocityY;
+    }
+
+    public int getHp() {
+        return hp;
     }
 
     /**

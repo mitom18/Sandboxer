@@ -31,6 +31,7 @@ import cz.cvut.fel.pjv.creatures.NPC;
 import cz.cvut.fel.pjv.items.Item;
 import cz.cvut.fel.pjv.items.StoredBlock;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 /**
@@ -250,6 +251,21 @@ public class Draw {
         g.setStroke(Color.GOLD);
         g.strokeRect(INV_START_X+INV_HEIGHT*inv.getActiveItemIndex(), INV_START_Y, INV_HEIGHT, INV_HEIGHT);
     }
+    
+    private void drawBars(GraphicsContext g, Player player) {
+        final Image HEARTH = new Image("hearts.png");
+        double x = WIDTH - 160;
+        for (int i = 0; i < player.getHp(); i++) {
+            g.drawImage(HEARTH, x, 10, 15, 15);
+            x += 15;
+        }
+        final Image MEAT = new Image("meat.png");
+        x = WIDTH - 160;
+        for (int i = 0; i < player.getSaturation(); i++) {
+            g.drawImage(MEAT, x, 30, 15, 15);
+            x += 15;
+        }
+    }
 
     /**
      * Draw the world and entities in it.
@@ -284,6 +300,7 @@ public class Draw {
             }
         }
         drawInventory(g, player.getInventory());
+        drawBars(g, player);
     }
 
     /**

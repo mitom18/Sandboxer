@@ -171,6 +171,7 @@ public class Main extends Application {
                                     }
                                 }
                             }
+                            world.updateLiquids(player);
                         }
                     }
                     //build block
@@ -217,9 +218,8 @@ public class Main extends Application {
             long lastUpdate = 0;
             @Override
             public void handle(long now) {
-                if (now - lastUpdate >= 10_000_000) { //update each 10 miliseconds
+                if (now - lastUpdate >= 17_000_000) { //update each 17 miliseconds
                     player.update(world);
-                    world.updateLiquids(player);
                     world.updateNPCs();
                     draw.shiftCamera(game);
                     draw.render(gc, game);

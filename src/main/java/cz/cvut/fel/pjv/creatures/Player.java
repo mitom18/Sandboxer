@@ -36,6 +36,7 @@ import cz.cvut.fel.pjv.World;
 public class Player extends Creature {
     
     private final Inventory inventory = new Inventory();
+    private int saturation = 10;
 
     /**
      * Create player on given coordinates.
@@ -80,4 +81,9 @@ public class Player extends Creature {
     public Inventory getInventory() {
         return inventory;
     }
+
+    public int getSaturation() {
+        return saturation;
+    }
+    
 }
