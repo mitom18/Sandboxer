@@ -82,6 +82,7 @@ public class Draw {
         if (player.getX() < 90 && player.movingLeft()) {
             player.setX(player.getX() + playerVelocityX);
             for (NPC npc : world.getNpcs()) {
+                if (npc.isKilled()) { continue; }
                 npc.setX(npc.getX() + playerVelocityX);
             }
             for (Item item : world.getItems()) {
@@ -108,6 +109,7 @@ public class Draw {
         if (player.getX() > WIDTH-90-player.getWidth() && player.movingRight()) {
             player.setX(player.getX() - playerVelocityX);
             for (NPC npc : world.getNpcs()) {
+                if (npc.isKilled()) { continue; }
                 npc.setX(npc.getX() - playerVelocityX);
             }
             for (Item item : world.getItems()) {
@@ -134,6 +136,7 @@ public class Draw {
         if ((player.getY() < 90 && player.jumping()) || (player.getY() > HEIGHT-90-player.getHeight() && player.falling())) {
             player.setY(player.getY() - playerVelocityY);
             for (NPC npc : world.getNpcs()) {
+                if (npc.isKilled()) { continue; }
                 npc.setY(npc.getY() - playerVelocityY);
             }
             for (Item item : world.getItems()) {
@@ -176,12 +179,15 @@ public class Draw {
             double playerY = HEIGHT/2;
             double offsetX = player.getX()*zoomScale - playerX;
             double offsetY = player.getY()*zoomScale - playerY;
+            player.setVelocityY(player.getVelocityY()*zoomScale);
             player.setVelocityMultiplier(zoomScale);
             player.setX(playerX);
             player.setY(playerY);
             player.setWidth(player.getWidth()*zoomScale);
             player.setHeight(player.getHeight()*zoomScale);
             for (NPC npc : world.getNpcs()) {
+                if (npc.isKilled()) { continue; }
+                npc.setVelocityY(npc.getVelocityY()*zoomScale);
                 npc.setVelocityMultiplier(zoomScale);
                 npc.setX(npc.getX()*zoomScale - offsetX);
                 npc.setY(npc.getY()*zoomScale - offsetY);
@@ -283,6 +289,7 @@ public class Draw {
         g.drawImage(player.getImage(), player.getSpriteX(), player.getSpriteY(), player.getIMAGE_WIDTH(), player.getIMAGE_HEIGHT(), 
                 player.getX(), player.getY(), player.getWidth(), player.getHeight());
         for (NPC npc : world.getNpcs()) {
+            if (npc.isKilled()) { continue; }
             g.drawImage(npc.getImage(), npc.getSpriteX(), npc.getSpriteY(), npc.getIMAGE_WIDTH(), npc.getIMAGE_HEIGHT(), 
                 npc.getX(), npc.getY(), npc.getWidth(), npc.getHeight());
         }

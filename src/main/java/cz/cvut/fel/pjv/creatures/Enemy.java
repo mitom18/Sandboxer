@@ -27,38 +27,46 @@ import cz.cvut.fel.pjv.Collision;
 import cz.cvut.fel.pjv.World;
 
 /**
- * Character that is not controlled by player.
+ * NPC that is attacking player.
  *
  * @author Michal-jr
  * @version 1.0
  */
-public abstract class NPC extends Creature {
+public class Enemy extends NPC {
+    
+    private int attackRate = 20;
+    private int attackCounter = 0;
+    private int attackPower = 1;
 
-    /**
-     * Create new NPC on given coordinates.
-     *
-     * @param x
-     * @param y
-     * @param type
-     * @since 1.0
-     */
-    public NPC(double x, double y, CreatureType type) {
+    public Enemy(double x, double y, CreatureType type) {
         super(x, y, type);
     }
     
-    /**
-     * Update NPC's state.
-     * 
-     * @param world instance of the world
-     * @param player instance of the player
-     * @since 1.0
-     */
+    @Override
     public void update(World world, Player player) {
         Collision.creatureIsInLiquid(this, world);
-        setUp(true);
+        //setUp(true);
         move();
         Collision.preventCollision(this, world);
-        checkDeath();
+        attack(player);
     }
-  
+    
+    public void attack(Player player) {
+        if (attackCounter == attackRate) {
+            double attackX;
+            if (movingLeft()) {
+                attackX = getX()-getWidth()/2;
+            }
+            else if (movingRight()){
+                attackX = getX2()+getWidth()/2;
+            }
+            else { attackX = getX2()+getWidth()/2; }
+            if (Collision.creatureIsAttacked(attackX, getY()+getHeight()/2, player)) {
+                player.setHp(player.getHp()-attackPower);
+            }
+            attackCounter = 0;
+        }
+        attackCounter++;
+    }
+    
 }

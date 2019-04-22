@@ -59,6 +59,7 @@ public abstract class Collision {
 
                 if(topCollision < bottomCollision && topCollision < leftCollision && topCollision < rightCollision) {
                     creature.setY(block.getY()-creature.getHeight()); //top collision
+                    // TODO fall damage: creature.setHp(creature.getHp()-(int)creature.getVelocityY()/2);
                     creature.setVelocityY(0.0); //set creature's velocity to 0
                     creature.setOnGround(true); //creature is standing on the ground
                 }
@@ -114,6 +115,20 @@ public abstract class Collision {
     public static boolean collides(double clickX, double clickY, Block block) {
         if (block.isDestroyed()) { return block instanceof LiquidBlock; }
         return clickX < block.getX2() && clickX > block.getX() && clickY < block.getY2() && clickY > block.getY();
+    }
+    
+    /**
+     * Check if creature is attacked.
+     *
+     * @param x X coodrinate of the attack
+     * @param y Y coodrinate of the attack
+     * @param creature instance of the creature
+     * @return true if creature is attacked, false otherwise
+     * @since 1.0
+     */
+    public static boolean creatureIsAttacked(double x, double y, Creature creature) {
+        if (creature.isKilled()) { return false; }
+        return x < creature.getX2() && x > creature.getX() && y < creature.getY2() && y > creature.getY();
     }
     
     /**

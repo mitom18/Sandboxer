@@ -23,42 +23,16 @@
  */
 package cz.cvut.fel.pjv.creatures;
 
-import cz.cvut.fel.pjv.Collision;
-import cz.cvut.fel.pjv.World;
-
 /**
- * Character that is not controlled by player.
+ * NPC that is not attacking player.
  *
  * @author Michal-jr
  * @version 1.0
  */
-public abstract class NPC extends Creature {
+public class Friend extends NPC {
 
-    /**
-     * Create new NPC on given coordinates.
-     *
-     * @param x
-     * @param y
-     * @param type
-     * @since 1.0
-     */
-    public NPC(double x, double y, CreatureType type) {
+    public Friend(double x, double y, CreatureType type) {
         super(x, y, type);
     }
     
-    /**
-     * Update NPC's state.
-     * 
-     * @param world instance of the world
-     * @param player instance of the player
-     * @since 1.0
-     */
-    public void update(World world, Player player) {
-        Collision.creatureIsInLiquid(this, world);
-        setUp(true);
-        move();
-        Collision.preventCollision(this, world);
-        checkDeath();
-    }
-  
 }

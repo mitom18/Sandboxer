@@ -28,6 +28,7 @@ import cz.cvut.fel.pjv.blocks.SolidBlock;
 import cz.cvut.fel.pjv.blocks.BlockType;
 import cz.cvut.fel.pjv.blocks.Block;
 import cz.cvut.fel.pjv.creatures.CreatureType;
+import cz.cvut.fel.pjv.creatures.Enemy;
 import cz.cvut.fel.pjv.creatures.NPC;
 import cz.cvut.fel.pjv.creatures.Player;
 import cz.cvut.fel.pjv.items.Item;
@@ -100,18 +101,20 @@ public class World {
         items.add(new StoredBlock(0,650, ItemType.DIAMOND_ORE));
         
         npcs = new ArrayList<>();
-        npcs.add(new NPC(250, 0, CreatureType.SKELETON));
-        npcs.add(new NPC(350, 0, CreatureType.SKELETON));
+        npcs.add(new Enemy(250, 0, CreatureType.SKELETON));
+        npcs.add(new Enemy(350, 0, CreatureType.SKELETON));
     }
     
     /**
      * Update all NPCs in the world.
      * 
+     * @param player instance of the player
      * @since 1.0
      */
-    public void updateNPCs() {
+    public void updateNPCs(Player player) {
         for (NPC npc : npcs) {
-            npc.update(this);
+            if (npc.isKilled()) { continue; }
+            npc.update(this, player);
         }
     }
     

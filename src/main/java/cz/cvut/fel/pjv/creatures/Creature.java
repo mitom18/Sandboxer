@@ -46,6 +46,7 @@ public abstract class Creature {
     private double spriteX, spriteY, spriteFrame, frameLimit = 0;
     private final Image image;
     private int hp;
+    private boolean killed = false;
 
     /**
      * Create new creature on given coordinates.
@@ -122,6 +123,12 @@ public abstract class Creature {
         if (down) { y += velocityX; }
         if (!up && !down) { y += GRAVITY/1.5; }
         onGround = false;
+    }
+    
+    public void checkDeath() {
+        if (!killed && hp <= 0) {
+            killed = true;
+        }
     }
     
     /**
@@ -214,6 +221,10 @@ public abstract class Creature {
      */
     public boolean falling() {
         return velocityY > 0;
+    }
+
+    public boolean isKilled() {
+        return killed;
     }
 
     /**
@@ -397,4 +408,13 @@ public abstract class Creature {
     public void setOnGround(boolean onGround) {
         this.onGround = onGround;
     }
+
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+    
+    public void die() {
+        killed = true;
+    }
+    
 }

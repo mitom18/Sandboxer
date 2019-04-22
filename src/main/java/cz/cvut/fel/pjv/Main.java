@@ -39,6 +39,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
@@ -148,52 +149,62 @@ public class Main extends Application {
         gameScreen.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                MouseButton button = event.getButton();
                 double clickX = event.getSceneX();
                 double clickY = event.getSceneY();
-                if (clickX > player.getX()-Block.block_width*4 && clickX < player.getX2()+Block.block_width*4
-                    && clickY > player.getY()-Block.block_height*4 && clickY < player.getY2()+Block.block_height*4
-                    && (clickX < player.getX() || clickX > player.getX2() || clickY < player.getY()-12 || clickY > player.getY2())
-                ) {
-                    boolean destroying = false;
-                    //destroy block
-                    if (player.getInventory().getActiveItem() instanceof Tool) {
-                        Tool tool = (Tool) player.getInventory().getActiveItem();
-                        if (tool.isPickaxe()) {
+                
+                if (button == MouseButton.PRIMARY) {
+                    if (clickX > player.getX()-Block.block_width*4 && clickX < player.getX2()+Block.block_width*4
+                        && clickY > player.getY()-Block.block_height*4 && clickY < player.getY2()+Block.block_height*4
+                        && (clickX < player.getX() || clickX > player.getX2() || clickY < player.getY()-12 || clickY > player.getY2())
+                    ) {
+                        //destroy block
+                        if (player.getInventory().getActiveItem() instanceof Tool) {
+                            Tool tool = (Tool) player.getInventory().getActiveItem();
+                            if (tool.isPickaxe()) {
+                                for (Block block : world.getBlocks()) {
+                                    if (block.isDestroyed()) { continue; }
+                                    if (Collision.collides(clickX, clickY, block)) {
+                                        // Bedrock is indestructible.
+                                        if (block.getBlockType() != BlockType.BEDROCK && block.getBlockType() != BlockType.WATER) {
+                                            block.destroy();
+                                            ItemType blockType = ItemType.valueOf(block.getBlockType().name());
+                                            player.getInventory().add(new StoredBlock(0, 0, blockType));
+                                        }
+                                    }
+                                }
+                                world.updateLiquids(player);
+                            }
+                        }
+                    }
+                    player.attack(world, clickX);
+                }
+                else if (button == MouseButton.SECONDARY) {
+                    if (clickX > player.getX()-Block.block_width*4 && clickX < player.getX2()+Block.block_width*4
+                        && clickY > player.getY()-Block.block_height*4 && clickY < player.getY2()+Block.block_height*4
+                        && (clickX < player.getX() || clickX > player.getX2() || clickY < player.getY()-12 || clickY > player.getY2())
+                    ) {
+                        //build block
+                        if (player.getInventory().getActiveItem() instanceof StoredBlock) {
+                            boolean canBuild = true;
                             for (Block block : world.getBlocks()) {
-                                if (block.isDestroyed()) { continue; }
                                 if (Collision.collides(clickX, clickY, block)) {
-                                    // Bedrock is indestructible.
-                                    if (block.getBlockType() != BlockType.BEDROCK && block.getBlockType() != BlockType.WATER) {
+                                    if (block instanceof LiquidBlock) {
                                         block.destroy();
-                                        ItemType blockType = ItemType.valueOf(block.getBlockType().name());
-                                        player.getInventory().add(new StoredBlock(0, 0, blockType));
-                                        destroying = true;
+                                    } else {
+                                        canBuild = false;
                                     }
                                 }
                             }
-                            world.updateLiquids(player);
-                        }
-                    }
-                    //build block
-                    if (!destroying && player.getInventory().getActiveItem() instanceof StoredBlock) {
-                        boolean canBuild = true;
-                        for (Block block : world.getBlocks()) {
-                            if (Collision.collides(clickX, clickY, block)) {
-                                if (block instanceof LiquidBlock) {
-                                    block.destroy();
-                                } else {
-                                    canBuild = false;
-                                }
+                            if (canBuild) {
+                                StoredBlock item = (StoredBlock) player.getInventory().getActiveItem();
+                                double blockX = clickX - (clickX - draw.getCameraOffsetX()) % Block.block_width;
+                                double blockY = clickY - (clickY - draw.getCameraOffsetY()) % Block.block_height;
+                                if (clickX < draw.getCameraOffsetX()) { blockX = draw.getCameraOffsetX() - Block.block_width; }
+                                if (clickY < draw.getCameraOffsetY()) { blockY = draw.getCameraOffsetY() - Block.block_height; }
+                                world.getBlocks().add(item.place(blockX, blockY));
+                                player.getInventory().remove(item);
                             }
-                        }
-                        if (canBuild) {
-                            StoredBlock item = (StoredBlock) player.getInventory().getActiveItem();
-                            double blockX = clickX - (clickX - draw.getCameraOffsetX()) % Block.block_width;
-                            double blockY = clickY - (clickY - draw.getCameraOffsetY()) % Block.block_height;
-                            if (clickX < draw.getCameraOffsetX()) { blockX = draw.getCameraOffsetX() - Block.block_width; }
-                            if (clickY < draw.getCameraOffsetY()) { blockY = draw.getCameraOffsetY() - Block.block_height; }
-                            world.getBlocks().add(item.place(blockX, blockY));
-                            player.getInventory().remove(item);
                         }
                     }
                 }
@@ -220,7 +231,7 @@ public class Main extends Application {
             public void handle(long now) {
                 if (now - lastUpdate >= 17_000_000) { //update each 17 miliseconds
                     player.update(world);
-                    world.updateNPCs();
+                    world.updateNPCs(player);
                     draw.shiftCamera(game);
                     draw.render(gc, game);
                     lastUpdate = now;
