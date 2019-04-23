@@ -23,6 +23,7 @@
  */
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.blocks.Block;
 import cz.cvut.fel.pjv.creatures.Player;
 
 /**
@@ -50,8 +51,12 @@ public class Game {
      * @since 1.0
      */
     public Game(double SCREEN_WIDTH) {
-        player = new Player((int) SCREEN_WIDTH/2, 0);
         world = new World();
+        int playerX = (int) SCREEN_WIDTH/2;
+        // TODO spawn player on ground
+        int playerY = (int) (world.getMap().getCompleteSkyline().get(playerX) * Block.block_height - Block.block_height*2);
+        System.out.println("plY - " + playerY);
+        player = new Player(playerX, 0);
     }
 
     /**

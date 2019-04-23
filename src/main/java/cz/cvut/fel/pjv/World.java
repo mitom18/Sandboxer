@@ -101,7 +101,9 @@ public class World {
         items.add(new StoredBlock(0,650, ItemType.DIAMOND_ORE));
         
         npcs = new ArrayList<>();
+        // TODO spawn NPC on ground - int npc1Y = (int) (getMap().getCompleteSkyline().get(250) * Block.block_height - Block.block_height*2);
         npcs.add(new Enemy(250, 0, CreatureType.SKELETON));
+        // TODO spawn NPC on ground - int npc2Y = (int) (getMap().getCompleteSkyline().get(350) * Block.block_height - Block.block_height*2);
         npcs.add(new Enemy(350, 0, CreatureType.SKELETON));
     }
     

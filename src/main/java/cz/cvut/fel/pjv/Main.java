@@ -224,6 +224,7 @@ public class Main extends Application {
         });
         
         stage.setScene(gameScreen);
+        draw.zoom(game); //center camera to player
         
         AnimationTimer timer = new AnimationTimer() {
             long lastUpdate = 0;

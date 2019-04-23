@@ -84,6 +84,10 @@ public class Draw {
             for (NPC npc : world.getNpcs()) {
                 if (npc.isKilled()) { continue; }
                 npc.setX(npc.getX() + playerVelocityX);
+                if (npc.getX() > ((int) MAP_WIDTH/2) * Block.block_width) {
+                    //make loop world, take NPCs in one column of world from the right and move them to the left side of the world
+                    npc.setX(npc.getX() - MAP_WIDTH * Block.block_width);
+                }
             }
             for (Item item : world.getItems()) {
                 if (!item.isPicked()) {
@@ -111,12 +115,16 @@ public class Draw {
             for (NPC npc : world.getNpcs()) {
                 if (npc.isKilled()) { continue; }
                 npc.setX(npc.getX() - playerVelocityX);
+                if (npc.getX() < ((int) -MAP_WIDTH/2) * Block.block_width) {
+                    //make loop world, take NPCs in one column of world from the left and move them to the right side of the world
+                    npc.setX(npc.getX() + MAP_WIDTH * Block.block_width);
+                }
             }
             for (Item item : world.getItems()) {
                 if (!item.isPicked()) {
                     item.setX(item.getX() - playerVelocityX);
                     if (item.getX() < ((int) -MAP_WIDTH/2) * Block.block_width) {
-                        //make loop world, take items in one column of world from the right and move them to the left side of the world
+                        //make loop world, take items in one column of world from the left and move them to the right side of the world
                         item.setX(item.getX() + MAP_WIDTH * Block.block_width);
                     }
                 }

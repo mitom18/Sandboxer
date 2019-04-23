@@ -45,7 +45,19 @@ public class Enemy extends NPC {
     @Override
     public void update(World world, Player player) {
         Collision.creatureIsInLiquid(this, world);
-        //setUp(true);
+        if (player.getX2() < getX()) {
+            setRight(false);
+            setLeft(true);
+        }
+        else if (player.getX() > getX2()) {
+            setLeft(false);
+            setRight(true);
+        }
+        else {
+            setLeft(false);
+            setRight(false);
+        }
+        setUp(true);
         move();
         Collision.preventCollision(this, world);
         attack(player);
@@ -54,13 +66,13 @@ public class Enemy extends NPC {
     public void attack(Player player) {
         if (attackCounter == attackRate) {
             double attackX;
-            if (movingLeft()) {
+            if (player.getX2() < getX()+getWidth()/2) {
                 attackX = getX()-getWidth()/2;
             }
-            else if (movingRight()){
+            else if (player.getX() > getX()+getWidth()/2){
                 attackX = getX2()+getWidth()/2;
             }
-            else { attackX = getX2()+getWidth()/2; }
+            else { attackX = getX()+getWidth()/2; }
             if (Collision.creatureIsAttacked(attackX, getY()+getHeight()/2, player)) {
                 player.setHp(player.getHp()-attackPower);
             }
