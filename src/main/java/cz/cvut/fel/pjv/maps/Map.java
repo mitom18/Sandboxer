@@ -86,7 +86,7 @@ public class Map {
 
         FLAT_LAND_PROBABILITY = 10;
         DIAMOND_PROBABILITY = 1;
-        CAVE_PROBABILITY = 10;
+        CAVE_PROBABILITY = 2;
         
         r = new Random();
         seed = r.nextLong();
@@ -118,7 +118,7 @@ public class Map {
 
         FLAT_LAND_PROBABILITY = 10;
         DIAMOND_PROBABILITY = 1;
-        CAVE_PROBABILITY = 10;
+        CAVE_PROBABILITY = 2;
         
         r = new Random();
         seed = r.nextLong();
@@ -167,6 +167,14 @@ public class Map {
      */
     public List<List<BlockType>> getMap() {
         return map;
+    }
+    
+    /**
+     * @return list of integers, that specify how high the skyline is
+     * @since 1.0
+     */
+    public List<Integer> getCompleteSkyline() {
+        return completeSkyline;
     }
     
     /**
@@ -343,11 +351,12 @@ public class Map {
     private void generateCaves() {
         
         boolean buildingCave = false;
-        int moreCaveProb = 100;
         
         for (int i = 0; i < WIDTH; i++) {
             
-            for (int j = 0; j < HEIGHT; j++) {
+            int moreCaveProb = 100;
+            
+            for (int j = HEIGHT - 1; j >= 0; j--) {
                 
                 if ((j < completeSkyline.get(i)) && (randomIntInRange(1, 100 / CAVE_PROBABILITY) == 1) && (!buildingCave)) {
                     buildingCave = true;
@@ -359,7 +368,7 @@ public class Map {
                         
                         if (randomIntInRange(1, 100 / moreCaveProb) == 1) {
                             map.get(i).set(j, null);
-                            moreCaveProb -= 5;
+                            moreCaveProb -= 10;
                         }
                     } else {
                         buildingCave = false;
@@ -367,5 +376,9 @@ public class Map {
                 }
             }
         }
+    }
+    
+    private void generateCluster(int clusterWidth, int clusterHeight) {
+        
     }
 }
