@@ -236,6 +236,8 @@ public class Main extends Application {
                     draw.shiftCamera(game);
                     draw.render(gc, game);
                     lastUpdate = now;
+                    // TODO player is dead, menu for respawn
+                    //if (player.isKilled()) { stop(); }
                 }
             }
         };

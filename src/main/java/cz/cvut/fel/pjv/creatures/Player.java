@@ -60,23 +60,26 @@ public class Player extends Creature {
         move();
         Collision.preventCollision(this, world);
         Collision.controlItems(this, world);
-        checkDeath();
+        if (isAttacking()) { animateAttack(); }
     }
     
     public void attack(World world, double clickX) {
+        if (!isAttacking()) { setAttacking(true); }
         double attackX;
+        setLeftAttack(false);
+        setRightAttack(false);
         if (clickX < getX()+getWidth()/2) {
             attackX = getX()-getWidth();
+            setLeftAttack(true);
         } else {
             attackX = getX2()+getWidth();
+            setRightAttack(true);
         }
         for (NPC npc : world.getNpcs()) {
             if (!(npc instanceof Enemy)) { continue; }
             if (Collision.creatureIsAttacked(attackX, getY()+getHeight()/2, npc)) {
                 npc.setHp(npc.getHp()-1);
-                if (npc.getHp() <= 0) {
-                    npc.die();
-                }
+                if (npc.getHp() <= 0) { npc.die(); }
             }
         }
     }

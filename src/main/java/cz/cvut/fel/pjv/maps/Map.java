@@ -345,7 +345,7 @@ public class Map {
             }
         }
         
-        generateCaves();
+        // TODO caves - generateCaves();
     }
     
     private void generateCaves() {

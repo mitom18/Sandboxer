@@ -75,6 +75,7 @@ public class Enemy extends NPC {
             else { attackX = getX()+getWidth()/2; }
             if (Collision.creatureIsAttacked(attackX, getY()+getHeight()/2, player)) {
                 player.setHp(player.getHp()-attackPower);
+                if (player.getHp() <= 0) { player.die(); }
             }
             attackCounter = 0;
         }

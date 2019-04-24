@@ -37,13 +37,13 @@ public abstract class Creature {
     private double velocityY = 0;
     private double velocityMultiplier = 1;
     private final double GRAVITY = 0.3;
-    private boolean onGround = false;
-    private boolean left, right, up, down, running, swimming;
+    private boolean onGround, attacking = false;
+    private boolean left, right, up, down, running, swimming, leftAttack, rightAttack;
     private double width = 32;
     private double height = 52;
     private final double IMAGE_WIDTH = 64;
     private final double IMAGE_HEIGHT = 64;
-    private double spriteX, spriteY, spriteFrame, frameLimit = 0;
+    private double spriteX, spriteY, spriteFrame, frameLimit, attackAnimationLimit = 0;
     private final Image image;
     private int hp;
     private boolean killed = false;
@@ -131,6 +131,18 @@ public abstract class Creature {
         }
     }
     
+    public void animateAttack() {
+        spriteX = attackAnimationLimit*IMAGE_WIDTH;
+        if (leftAttack) { spriteY = 13*IMAGE_HEIGHT; }
+        else if (rightAttack) { spriteY = 15*IMAGE_HEIGHT; }
+        if (attackAnimationLimit < 5) {
+            attackAnimationLimit++;
+        } else {
+            attackAnimationLimit = 0;
+            attacking = false;
+        }
+    }
+    
     /**
      * Set if creature is moving left.
      * 
@@ -190,6 +202,18 @@ public abstract class Creature {
     public void setSwimming(boolean swimming) {
         this.swimming = swimming;
     }
+
+    public void setAttacking(boolean attacking) {
+        this.attacking = attacking;
+    }
+
+    public void setLeftAttack(boolean leftAttack) {
+        this.leftAttack = leftAttack;
+    }
+
+    public void setRightAttack(boolean rightAttack) {
+        this.rightAttack = rightAttack;
+    }
     
     /**
      * @return true if creature is moving left, false otherwise
@@ -225,6 +249,10 @@ public abstract class Creature {
 
     public boolean isKilled() {
         return killed;
+    }
+
+    public boolean isAttacking() {
+        return attacking;
     }
 
     /**
