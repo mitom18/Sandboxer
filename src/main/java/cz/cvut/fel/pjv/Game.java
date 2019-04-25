@@ -51,12 +51,14 @@ public class Game {
      * @since 1.0
      */
     public Game(double SCREEN_WIDTH) {
+        // Create a new world.
         world = new World();
-        int playerX = (int) SCREEN_WIDTH/2;
-        // TODO spawn player on ground
-        int playerY = (int) (world.getMap().getCompleteSkyline().get(playerX) * Block.block_height - Block.block_height*2);
-        System.out.println("plY - " + playerY);
-        player = new Player(playerX, 0);
+        // Spawn in the middle of the map.
+        int playerX = 0;
+        // Spawn on the skyline (in the middle of the map).
+        int playerY = (int) ((world.getMap().getHEIGHT() - world.getMap().getCompleteSkyline().get(world.getMap().getWIDTH() / 2) - 2) * Block.block_height);
+        // Create a new player at the given pixel coordinates.
+        player = new Player(playerX, playerY);
     }
 
     /**
