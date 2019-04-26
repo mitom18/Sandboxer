@@ -52,11 +52,14 @@ public class Map {
     private final int FLAT_LAND_PROBABILITY;
     
     /**
-     * Represents the probability in percent that DIAMOND_ORE will spawn at any 
-     * given place under height 10 in the terrain.
+     * Represents the probability in percent that DIAMOND_ORE will spawn instead of stone.
      * Allowed values: 0 - 100
      */
     private final int DIAMOND_PROBABILITY;
+    
+    /**
+     * Probability in thousandth.
+     */
     private final int CAVE_PROBABILITY;
 
     private List<List<Integer>> terrain;
@@ -86,7 +89,7 @@ public class Map {
 
         FLAT_LAND_PROBABILITY = 10;
         DIAMOND_PROBABILITY = 1;
-        CAVE_PROBABILITY = 2;
+        CAVE_PROBABILITY = 1;
         
         r = new Random();
         seed = r.nextLong();
@@ -118,7 +121,7 @@ public class Map {
 
         FLAT_LAND_PROBABILITY = 10;
         DIAMOND_PROBABILITY = 1;
-        CAVE_PROBABILITY = 2;
+        CAVE_PROBABILITY = 1;
         
         r = new Random();
         seed = r.nextLong();
@@ -345,40 +348,82 @@ public class Map {
             }
         }
         
-        // TODO caves - generateCaves();
+        generateCaves();
+    }
+    
+    private boolean canBeCave(int i, int j) {
+        return (i < WIDTH - 40) && (j < HEIGHT - 20) && (map.get(i).get(j) == BlockType.STONE) && (randomIntInRange(1, 1000 / CAVE_PROBABILITY) == 1);
     }
     
     private void generateCaves() {
         
-        boolean buildingCave = false;
-        
         for (int i = 0; i < WIDTH; i++) {
-            
-            int moreCaveProb = 100;
             
             for (int j = HEIGHT - 1; j >= 0; j--) {
                 
-                if ((j < completeSkyline.get(i)) && (randomIntInRange(1, 100 / CAVE_PROBABILITY) == 1) && (!buildingCave)) {
-                    buildingCave = true;
-                }
-                
-                if (buildingCave) {
+                if (canBeCave(i, j)) {
+                    List<List<Integer>> listOfVectors = generateVectorCluster(2 * randomIntInRange(5, 20), 2 * randomIntInRange(2, 4));
                     
-                    if (moreCaveProb != 0) {
-                        
-                        if (randomIntInRange(1, 100 / moreCaveProb) == 1) {
-                            map.get(i).set(j, null);
-                            moreCaveProb -= 10;
-                        }
-                    } else {
-                        buildingCave = false;
+                    for (List<Integer> vector : listOfVectors) {
+                        map.get(vector.get(0) + i).set(vector.get(1) + j, null);
                     }
                 }
             }
         }
     }
     
-    private void generateCluster(int clusterWidth, int clusterHeight) {
+    private List<List<Integer>> generateVectorCluster(int clusterWidth, int clusterHeight) {
+        List<List<Integer>> listOfVectors = new ArrayList<>(clusterWidth * clusterHeight);
         
+        int horizontalBuildingProb = 0;
+        int verticalBuildingProb;
+        
+        for (int i = 0; i < clusterWidth; i++) {
+            
+            boolean building = false;
+            
+            if (i < (clusterWidth / 2)) {
+                horizontalBuildingProb += 100 / (clusterWidth / 2);
+            } else {
+                if ((horizontalBuildingProb - 100 / (clusterWidth / 2)) != 0) {
+                    horizontalBuildingProb -= 100 / (clusterWidth / 2);
+                }
+            }
+            
+            for (int j = clusterHeight - 1; j >= 0; j--) {
+                verticalBuildingProb = horizontalBuildingProb;
+                
+                if ((!building) && (randomIntInRange(1, 100 / verticalBuildingProb) == 1)) {
+                    building = true;
+                }
+                
+                if (building) {
+                    List<Integer> vector = new ArrayList<>(2);
+                    vector.add(i);
+                    vector.add(j);
+                    listOfVectors.add(vector);
+                    
+                    verticalBuildingProb = 101 - verticalBuildingProb;
+                    
+                    if (randomIntInRange(1, 100 / verticalBuildingProb) == 1) {
+                        break;
+                    } else {
+                        verticalBuildingProb += 100 / (clusterHeight / 2);
+                        
+                        if (verticalBuildingProb > 100) {
+                            verticalBuildingProb = 100;
+                        }
+                    }
+                } else {
+                    verticalBuildingProb += 100 / (clusterHeight / 2);
+                    
+                    if (verticalBuildingProb > 100) {
+                        verticalBuildingProb = 100;
+                    }
+                }
+            }
+        }
+        
+        return listOfVectors;
     }
 }
