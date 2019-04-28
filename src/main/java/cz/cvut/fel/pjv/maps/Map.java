@@ -48,6 +48,7 @@ public class Map {
     private final double AMP_MAX;
     private final double PER_MIN;
     private final double PER_MAX;
+    
     /**
      * Represents the probability in percent.
      * Allowed values: 0.0 - 100.0
@@ -60,12 +61,13 @@ public class Map {
     private List<List<BlockType>> map;
     
     private List<Integer> completeSkyline;
+    private List<Cave> caves;
     
     private final long seed;
     private final Random r;
 
     /**
-     * Create new map with default size.
+     * Create a new map with default parameters.
      * 
      * @since 1.0
      */
@@ -83,43 +85,11 @@ public class Map {
 
         FLAT_LAND_PROBABILITY = 10;
         DIAMOND_PROBABILITY = 1;
-        CAVE_PROBABILITY = 0.05;
+        CAVE_PROBABILITY = 0.01;
         
         r = new Random();
         seed = r.nextLong();
         r.setSeed(seed); // These are nice seeds: 7451260251423394044L -7780041021634934149L
-        System.out.println(seed);
-        
-        generateTerrain();
-        generateMap();
-    }
-
-    /**
-     * Create new map with given size.
-     *
-     * @param WIDTH width of the map in blocks
-     * @param HEIGHT height of the map in blocks
-     * @since 1.0
-     */
-    public Map(int WIDTH, int HEIGHT) {
-        this.WIDTH = WIDTH;
-        this.HEIGHT = HEIGHT;
-        
-        AMPLITUDE_COEFFICIENT_MULTIPLICATOR = 8;
-        PERIOD_COEFFICIENT_MULTIPLICATOR = 12;
-
-        AMP_MIN = 0.5;
-        AMP_MAX = 1.5;
-        PER_MIN = 0.5;
-        PER_MAX = 1.5;
-
-        FLAT_LAND_PROBABILITY = 10;
-        DIAMOND_PROBABILITY = 1;
-        CAVE_PROBABILITY = 0.05;
-        
-        r = new Random();
-        seed = r.nextLong();
-        r.setSeed(seed);
         System.out.println(seed);
         
         generateTerrain();
@@ -370,61 +340,6 @@ public class Map {
             }
         }
     }
-    
-    /*private List<List<Integer>> generateVectorCluster(int clusterWidth, int clusterHeight) {
-     * List<List<Integer>> listOfVectors = new ArrayList<>(clusterWidth * clusterHeight);
-     * 
-     * double horizontalBuildingProb = 0;
-     * double verticalBuildingProb;
-     * 
-     * for (int i = 0; i < clusterWidth; i++) {
-     * 
-     * boolean building = false;
-     * 
-     * if (i < (clusterWidth / 2)) {
-     * horizontalBuildingProb += 100 / (clusterWidth / 2);
-     * } else {
-     * if ((horizontalBuildingProb - 100 / (clusterWidth / 2)) != 0) {
-     * horizontalBuildingProb -= 100 / (clusterWidth / 2);
-     * }
-     * }
-     * 
-     * for (int j = clusterHeight - 1; j >= 0; j--) {
-     * verticalBuildingProb = horizontalBuildingProb;
-     * 
-     * if ((!building) && calculateProbability(verticalBuildingProb)) {
-     * building = true;
-     * }
-     * 
-     * if (building) {
-     * List<Integer> vector = new ArrayList<>(2);
-     * vector.add(i);
-     * vector.add(j);
-     * listOfVectors.add(vector);
-     * 
-     * verticalBuildingProb = 100 - verticalBuildingProb;
-     * 
-     * if (calculateProbability(verticalBuildingProb)) {
-     * break;
-     * } else {
-     * verticalBuildingProb += 100 / (clusterHeight / 2);
-     * 
-     * if (verticalBuildingProb > 100) {
-     * verticalBuildingProb = 100;
-     * }
-     * }
-     * } else {
-     * verticalBuildingProb += 100 / (clusterHeight / 2);
-     * 
-     * if (verticalBuildingProb > 100) {
-     * verticalBuildingProb = 100;
-     * }
-     * }
-     * }
-     * }
-     * 
-     * return listOfVectors;
-     * }*/
     
     private boolean ellipseInnerArea(double x, double y, double a, double b) {
         return Math.pow(x - a, 2) / Math.pow(a, 2) + Math.pow(y - b, 2) / Math.pow(b, 2) <= 1;
