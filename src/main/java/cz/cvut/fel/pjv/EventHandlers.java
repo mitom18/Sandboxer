@@ -32,6 +32,8 @@ import cz.cvut.fel.pjv.items.StoredBlock;
 import cz.cvut.fel.pjv.items.Tool;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -45,13 +47,17 @@ import javafx.scene.input.ScrollEvent;
  */
 public class EventHandlers {
     private final Scene gameScreen;
+    private final GameAnimationTimer timer;
     private final Draw draw;
+    private final GraphicsContext gc;
     private final Game game;
     private final Player player;
 
-    public EventHandlers(Scene gameScreen, Draw draw, Game game, Player player) {
+    public EventHandlers(Scene gameScreen, GameAnimationTimer timer, Draw draw, GraphicsContext gc, Game game, Player player) {
         this.gameScreen = gameScreen;
+        this.timer = timer;
         this.draw = draw;
+        this.gc = gc;
         this.game = game;
         this.player = player;
     }
@@ -65,15 +71,26 @@ public class EventHandlers {
         gameScreen.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                switch (event.getCode()) {
-                    case W:     player.setUp(true); break;
-                    case A:     player.setLeft(true); break;
-                    case S:     player.setDown(true); break;
-                    case D:     player.setRight(true); break;
-                    case SHIFT: player.run(true); break;
-                    case Q:     player.changeActiveItem(-1); break;
-                    case E:     player.changeActiveItem(1); break;
-                    case C:     draw.zoom(game); break;
+                if (timer.isRunning()) {
+                    switch (event.getCode()) {
+                        case W:     player.setUp(true); break;
+                        case A:     player.setLeft(true); break;
+                        case S:     player.setDown(true); break;
+                        case D:     player.setRight(true); break;
+                        case SHIFT: player.run(true); break;
+                        case Q:     player.changeActiveItem(-1); break;
+                        case E:     player.changeActiveItem(1); break;
+                        case C:     draw.zoom(game); break;
+                        case ESCAPE: {
+                            timer.stop();
+                            draw.drawPauseMenu(gc);
+                            break;
+                        }
+                    }
+                } else {
+                    if (event.getCode() == KeyCode.ESCAPE) {
+                        timer.start();
+                    }
                 }
             }
         });
@@ -81,12 +98,14 @@ public class EventHandlers {
         gameScreen.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                switch (event.getCode()) {
-                    case W:     player.setUp(false); break;
-                    case A:     player.setLeft(false); break;
-                    case S:     player.setDown(false); break;
-                    case D:     player.setRight(false); break;
-                    case SHIFT: player.run(false); break;
+                if (timer.isRunning()) {
+                    switch (event.getCode()) {
+                        case W:     player.setUp(false); break;
+                        case A:     player.setLeft(false); break;
+                        case S:     player.setDown(false); break;
+                        case D:     player.setRight(false); break;
+                        case SHIFT: player.run(false); break;
+                    }
                 }
             }
         });
@@ -96,15 +115,17 @@ public class EventHandlers {
         gameScreen.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                MouseButton button = event.getButton();
-                double clickX = event.getSceneX();
-                double clickY = event.getSceneY();
-                
-                if (button == MouseButton.PRIMARY) {
-                    createLeftMouseClickHandler(clickX, clickY);
-                }
-                else if (button == MouseButton.SECONDARY) {
-                    createRightMouseClickHandler(clickX, clickY);
+                if (timer.isRunning()) {
+                    MouseButton button = event.getButton();
+                    double clickX = event.getSceneX();
+                    double clickY = event.getSceneY();
+
+                    if (button == MouseButton.PRIMARY) {
+                        createLeftMouseClickHandler(clickX, clickY);
+                    }
+                    else if (button == MouseButton.SECONDARY) {
+                        createRightMouseClickHandler(clickX, clickY);
+                    }
                 }
             }
         });
@@ -112,7 +133,7 @@ public class EventHandlers {
         gameScreen.setOnScroll(new EventHandler<ScrollEvent>() {
             @Override
             public void handle(ScrollEvent event) {
-                if (event.getEventType() == ScrollEvent.SCROLL) {
+                if (timer.isRunning() && event.getEventType() == ScrollEvent.SCROLL) {
                     createMouseScrollHandler(event);
                 }
             }

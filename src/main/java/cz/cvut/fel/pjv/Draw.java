@@ -33,6 +33,8 @@ import cz.cvut.fel.pjv.items.StoredBlock;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 /**
  * Class for drawing and transforming the world.
@@ -316,6 +318,17 @@ public class Draw {
         }
         drawInventory(g, player.getInventory());
         drawBars(g, player);
+    }
+    
+    public void drawPauseMenu(GraphicsContext g) {
+        g.setGlobalAlpha(0.75);
+        g.setFill(Color.BLACK);
+        g.fillRect(0, 0, WIDTH, HEIGHT);
+        g.setGlobalAlpha(1);
+        g.setFill(Color.WHITE);
+        g.setFont(Font.font("Arial", FontWeight.BOLD, 38));
+        g.fillText("Press ESC to resume the game.", WIDTH/2-250, HEIGHT/2);
+        g.setFont(Font.getDefault());
     }
 
     /**

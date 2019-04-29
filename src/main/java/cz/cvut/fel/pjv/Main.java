@@ -24,15 +24,23 @@
 package cz.cvut.fel.pjv;
 
 import cz.cvut.fel.pjv.creatures.Player;
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 
@@ -69,19 +77,23 @@ public class Main extends Application {
         stage.setTitle("Basic Game");
         
         //gameMenu scene
-        Group rootGameMenu = new Group();
-        Button button1 = new Button("Start game");
-        button1.setPrefSize(WIDTH/10, HEIGHT/10);
-        button1.setLayoutX(WIDTH/2 - WIDTH/20);
-        button1.setLayoutY(HEIGHT/2 - HEIGHT/20);
-        button1.setOnAction(new EventHandler<ActionEvent>() {
+        GridPane startMenuGrid = new GridPane();
+        startMenuGrid.setBackground(Background.EMPTY);
+        startMenuGrid.setAlignment(Pos.CENTER);
+        ColumnConstraints columnConstrains = new ColumnConstraints(200, 200, 200);
+        startMenuGrid.getColumnConstraints().add(columnConstrains);
+        Button startButton = new Button("Start game");
+        startButton.setPrefSize(WIDTH/10, HEIGHT/10);
+        startButton.setDefaultButton(true);
+        startMenuGrid.add(startButton, 0, 0);
+        GridPane.setHalignment(startButton, HPos.CENTER);
+        startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 startGame(stage, savedGame);
             }
         });
-        rootGameMenu.getChildren().add(button1);
-        gameMenu = new Scene(rootGameMenu, WIDTH, HEIGHT, Color.BLACK);
+        gameMenu = new Scene(startMenuGrid, WIDTH, HEIGHT, Color.BLACK);
         
         //gameScreen scene
         Group rootGameScreen = new Group();
@@ -90,12 +102,23 @@ public class Main extends Application {
         gameScreen = new Scene(rootGameScreen, Color.BLACK);
         
         //respawnMenu scene
-        Group rootRespawnMenu = new Group();
-        Button button2 = new Button("Respawn");
-        button2.setPrefSize(WIDTH/10, HEIGHT/10);
-        button2.setLayoutX(WIDTH/2 - WIDTH/20);
-        button2.setLayoutY(HEIGHT/2 - HEIGHT/20);
-        button2.setOnAction(new EventHandler<ActionEvent>() {
+        GridPane respawnMenuGrid = new GridPane();
+        respawnMenuGrid.setBackground(Background.EMPTY);
+        respawnMenuGrid.setAlignment(Pos.CENTER);
+        //ColumnConstraints columnConstrains = new ColumnConstraints(200, 200, 200);
+        respawnMenuGrid.getColumnConstraints().add(columnConstrains);
+        Label headerLabel = new Label("You died.");
+        headerLabel.setTextFill(Color.RED);
+        headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 38));
+        respawnMenuGrid.add(headerLabel, 0, 0);
+        GridPane.setHalignment(headerLabel, HPos.CENTER);
+        GridPane.setMargin(headerLabel, new Insets(0, 0, 150, 0));
+        Button respawnButton = new Button("Respawn");
+        respawnButton.setPrefSize(WIDTH/10, HEIGHT/10);
+        respawnButton.setDefaultButton(true);
+        respawnMenuGrid.add(respawnButton, 0, 1);
+        GridPane.setHalignment(respawnButton, HPos.CENTER);
+        respawnButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 if (savedGame != null) {
@@ -104,8 +127,7 @@ public class Main extends Application {
                 }
             }
         });
-        rootRespawnMenu.getChildren().add(button2);
-        respawnMenu = new Scene(rootRespawnMenu, WIDTH, HEIGHT, Color.BLACK);
+        respawnMenu = new Scene(respawnMenuGrid, WIDTH, HEIGHT, Color.BLACK);
 
         stage.setScene(gameMenu);
         stage.show();
@@ -132,13 +154,14 @@ public class Main extends Application {
         Canvas gameCanvas = (Canvas) gameScreen.getRoot().getChildrenUnmodifiable().get(0);
         final GraphicsContext gc = gameCanvas.getGraphicsContext2D();
 
-        EventHandlers eventHandlers = new EventHandlers(gameScreen, draw, game, player);
+        GameAnimationTimer timer = new GameAnimationTimer(stage, draw, gc, game);
+        
+        EventHandlers eventHandlers = new EventHandlers(gameScreen, timer, draw, gc, game, player);
         eventHandlers.create();
         
         stage.setScene(gameScreen);
         draw.zoom(game); //center camera to player
         
-        GameAnimationTimer timer = new GameAnimationTimer(stage, draw, gc, game);
         timer.start();
     }
     
