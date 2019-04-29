@@ -120,15 +120,29 @@ public abstract class Collision {
     /**
      * Check if creature is attacked.
      *
-     * @param x X coodrinate of the attack
-     * @param y Y coodrinate of the attack
+     * @param x X coordinate of the attack
+     * @param y Y coordinate of the attack
+     * @param width width of the attack
+     * @param height height of the attack
      * @param creature instance of the creature
      * @return true if creature is attacked, false otherwise
      * @since 1.0
      */
-    public static boolean creatureIsAttacked(double x, double y, Creature creature) {
+    public static boolean creatureIsAttacked(double x, double y, double width, double height, Creature creature) {
         if (creature.isKilled()) { return false; }
-        return x < creature.getX2() && x > creature.getX() && y < creature.getY2() && y > creature.getY();
+        boolean xControl;
+        boolean yControl;
+        if (width < 0) {
+            xControl = x+width < creature.getX2() && x > creature.getX();
+        } else {
+            xControl = x < creature.getX2() && x+width > creature.getX();
+        }
+        if (height < 0) {
+            yControl = y+height < creature.getY2() && y > creature.getY();
+        } else {
+            yControl = y < creature.getY2() && y+height > creature.getY();
+        }
+        return xControl && yControl;
     }
     
     /**

@@ -65,25 +65,25 @@ public class Player extends Creature {
     
     public void attack(World world, double clickX) {
         if (!isAttacking()) { setAttacking(true); }
-        double attackX;
+        double attackWidth;
         setLeftAttack(false);
         setRightAttack(false);
         if (clickX < getX()+getWidth()/2) {
-            attackX = getX()-getWidth();
+            attackWidth = -getWidth();
             setLeftAttack(true);
         } else {
-            attackX = getX2()+getWidth();
+            attackWidth = getWidth();
             setRightAttack(true);
         }
         for (NPC npc : world.getNpcs()) {
             if (!(npc instanceof Enemy)) { continue; }
-            if (Collision.creatureIsAttacked(attackX, getY()+getHeight()/2, npc)) {
+            if (Collision.creatureIsAttacked(getX()+getWidth()/2, getY(), attackWidth, getHeight(), npc)) {
                 npc.setHp(npc.getHp()-1);
                 if (npc.getHp() <= 0) { npc.die(); }
             }
         }
     }
-
+    
     /**
      * Scroll through inventory items in hotbar.
      *

@@ -58,7 +58,6 @@ public abstract class NPC extends Creature {
         setUp(true);
         move();
         Collision.preventCollision(this, world);
-        checkDeath();
     }
   
 }

@@ -45,6 +45,7 @@ public abstract class Creature {
     private final double IMAGE_HEIGHT = 64;
     private double spriteX, spriteY, spriteFrame, frameLimit, attackAnimationLimit = 0;
     private final Image image;
+    private final CreatureType type;
     private int hp;
     private boolean killed = false;
 
@@ -59,6 +60,7 @@ public abstract class Creature {
     public Creature(double x, double y, CreatureType type) {
         this.x = x;
         this.y = y;
+        this.type = type;
         this.image = type.getSpritesheet();
         this.hp = type.getHp();
     }
@@ -125,12 +127,6 @@ public abstract class Creature {
         onGround = false;
     }
     
-    public void checkDeath() {
-        if (!killed && hp <= 0) {
-            killed = true;
-        }
-    }
-    
     public void animateAttack() {
         spriteX = attackAnimationLimit*IMAGE_WIDTH;
         if (leftAttack) { spriteY = 13*IMAGE_HEIGHT; }
@@ -141,6 +137,11 @@ public abstract class Creature {
             attackAnimationLimit = 0;
             attacking = false;
         }
+    }
+    
+    public void revive() {
+        hp = type.getHp();
+        killed = false;
     }
     
     /**

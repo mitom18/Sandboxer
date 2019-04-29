@@ -77,4 +77,9 @@ public class Game {
         return world;
     }
     
+    public void respawnPlayer() {
+        player.revive();
+        //TODO respawn on spawn point
+    }
+    
 }

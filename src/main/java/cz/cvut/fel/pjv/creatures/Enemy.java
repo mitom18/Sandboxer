@@ -25,6 +25,7 @@ package cz.cvut.fel.pjv.creatures;
 
 import cz.cvut.fel.pjv.Collision;
 import cz.cvut.fel.pjv.World;
+import cz.cvut.fel.pjv.blocks.Block;
 
 /**
  * NPC that is attacking player.
@@ -60,26 +61,34 @@ public class Enemy extends NPC {
         setUp(true);
         move();
         Collision.preventCollision(this, world);
-        attack(player);
-    }
-    
-    public void attack(Player player) {
         if (attackCounter == attackRate) {
-            double attackX;
-            if (player.getX2() < getX()+getWidth()/2) {
-                attackX = getX()-getWidth()/2;
-            }
-            else if (player.getX() > getX()+getWidth()/2){
-                attackX = getX2()+getWidth()/2;
-            }
-            else { attackX = getX()+getWidth()/2; }
-            if (Collision.creatureIsAttacked(attackX, getY()+getHeight()/2, player)) {
-                player.setHp(player.getHp()-attackPower);
-                if (player.getHp() <= 0) { player.die(); }
-            }
+            attack(player);
             attackCounter = 0;
         }
         attackCounter++;
+        if (isAttacking()) { animateAttack(); }
+    }
+    
+    public void attack(Player player) {
+        if (player.getX2() > getX()-Block.block_width*4 && player.getX() < getX2()+Block.block_width*4) {
+            if (!isAttacking()) { setAttacking(true); }
+            double attackWidth;
+            setLeftAttack(false);
+            setRightAttack(false);
+            if (player.getX2() < getX()+getWidth()/2) {
+                attackWidth = -getWidth()/2;
+                setLeftAttack(true);
+            }
+            else if (player.getX() > getX()+getWidth()/2){
+                attackWidth = getWidth()/2;
+                setRightAttack(true);
+            }
+            else { attackWidth = 0; }
+            if (Collision.creatureIsAttacked(getX()+getWidth()/2, getY(), attackWidth, getHeight(), player)) {
+                player.setHp(player.getHp()-attackPower);
+                if (player.getHp() <= 0) { player.die(); }
+            }
+        }
     }
     
 }

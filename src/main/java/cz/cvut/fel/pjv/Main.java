@@ -24,12 +24,6 @@
 package cz.cvut.fel.pjv;
 
 import cz.cvut.fel.pjv.creatures.Player;
-import cz.cvut.fel.pjv.blocks.BlockType;
-import cz.cvut.fel.pjv.blocks.Block;
-import cz.cvut.fel.pjv.blocks.LiquidBlock;
-import cz.cvut.fel.pjv.items.StoredBlock;
-import cz.cvut.fel.pjv.items.ItemType;
-import cz.cvut.fel.pjv.items.Tool;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -38,10 +32,6 @@ import javafx.scene.*;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -56,7 +46,8 @@ public class Main extends Application {
     
     private final double WIDTH = 1280;
     private final double HEIGHT = 640;
-    Scene gameMenu, gameScreen;
+    static Scene gameMenu, gameScreen, respawnMenu;
+    static Game savedGame;
     
     /**
      * @param args the command line arguments
@@ -79,14 +70,14 @@ public class Main extends Application {
         
         //gameMenu scene
         Group rootGameMenu = new Group();
-        Button button1= new Button("Start game");
+        Button button1 = new Button("Start game");
         button1.setPrefSize(WIDTH/10, HEIGHT/10);
         button1.setLayoutX(WIDTH/2 - WIDTH/20);
         button1.setLayoutY(HEIGHT/2 - HEIGHT/20);
         button1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                startGame(stage);
+                startGame(stage, savedGame);
             }
         });
         rootGameMenu.getChildren().add(button1);
@@ -97,6 +88,24 @@ public class Main extends Application {
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         rootGameScreen.getChildren().add(canvas);
         gameScreen = new Scene(rootGameScreen, Color.BLACK);
+        
+        //respawnMenu scene
+        Group rootRespawnMenu = new Group();
+        Button button2 = new Button("Respawn");
+        button2.setPrefSize(WIDTH/10, HEIGHT/10);
+        button2.setLayoutX(WIDTH/2 - WIDTH/20);
+        button2.setLayoutY(HEIGHT/2 - HEIGHT/20);
+        button2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                if (savedGame != null) {
+                    savedGame.respawnPlayer();
+                    startGame(stage, savedGame);
+                }
+            }
+        });
+        rootRespawnMenu.getChildren().add(button2);
+        respawnMenu = new Scene(rootRespawnMenu, WIDTH, HEIGHT, Color.BLACK);
 
         stage.setScene(gameMenu);
         stage.show();
@@ -108,8 +117,14 @@ public class Main extends Application {
      * @param stage
      * @since 1.0
      */
-    private void startGame(Stage stage) {
-        final Game game = new Game(WIDTH);
+    private void startGame(Stage givenStage, Game savedGame) {
+        final Stage stage = givenStage;
+        final Game game;
+        if (savedGame == null) {
+            game = new Game(WIDTH);
+        } else {
+            game = savedGame;
+        }
         final World world = game.getWorld();
         final Player player = game.getPlayer();
         
@@ -117,131 +132,18 @@ public class Main extends Application {
         Canvas gameCanvas = (Canvas) gameScreen.getRoot().getChildrenUnmodifiable().get(0);
         final GraphicsContext gc = gameCanvas.getGraphicsContext2D();
 
-        gameScreen.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                switch (event.getCode()) {
-                    case W:     player.setUp(true); break;
-                    case A:     player.setLeft(true); break;
-                    case S:     player.setDown(true); break;
-                    case D:     player.setRight(true); break;
-                    case SHIFT: player.run(true); break;
-                    case Q:     player.changeActiveItem(-1); break;
-                    case E:     player.changeActiveItem(1); break;
-                    case C:     draw.zoom(game); break;
-                }
-            }
-        });
-
-        gameScreen.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                switch (event.getCode()) {
-                    case W:     player.setUp(false); break;
-                    case A:     player.setLeft(false); break;
-                    case S:     player.setDown(false); break;
-                    case D:     player.setRight(false); break;
-                    case SHIFT: player.run(false); break;
-                }
-            }
-        });
-        
-        gameScreen.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                MouseButton button = event.getButton();
-                double clickX = event.getSceneX();
-                double clickY = event.getSceneY();
-                
-                if (button == MouseButton.PRIMARY) {
-                    if (clickX > player.getX()-Block.block_width*4 && clickX < player.getX2()+Block.block_width*4
-                        && clickY > player.getY()-Block.block_height*4 && clickY < player.getY2()+Block.block_height*4
-                        && (clickX < player.getX() || clickX > player.getX2() || clickY < player.getY()-12 || clickY > player.getY2())
-                    ) {
-                        //destroy block
-                        if (player.getInventory().getActiveItem() instanceof Tool) {
-                            Tool tool = (Tool) player.getInventory().getActiveItem();
-                            if (tool.isPickaxe()) {
-                                for (Block block : world.getBlocks()) {
-                                    if (block.isDestroyed()) { continue; }
-                                    if (Collision.collides(clickX, clickY, block)) {
-                                        // Bedrock is indestructible.
-                                        if (block.getBlockType() != BlockType.BEDROCK && block.getBlockType() != BlockType.WATER) {
-                                            block.destroy();
-                                            ItemType blockType = ItemType.valueOf(block.getBlockType().name());
-                                            player.getInventory().add(new StoredBlock(0, 0, blockType));
-                                        }
-                                    }
-                                }
-                                world.updateLiquids(player);
-                            }
-                        }
-                    }
-                    player.attack(world, clickX);
-                }
-                else if (button == MouseButton.SECONDARY) {
-                    if (clickX > player.getX()-Block.block_width*4 && clickX < player.getX2()+Block.block_width*4
-                        && clickY > player.getY()-Block.block_height*4 && clickY < player.getY2()+Block.block_height*4
-                        && (clickX < player.getX() || clickX > player.getX2() || clickY < player.getY()-12 || clickY > player.getY2())
-                    ) {
-                        //build block
-                        if (player.getInventory().getActiveItem() instanceof StoredBlock) {
-                            boolean canBuild = true;
-                            for (Block block : world.getBlocks()) {
-                                if (Collision.collides(clickX, clickY, block)) {
-                                    if (block instanceof LiquidBlock) {
-                                        block.destroy();
-                                    } else {
-                                        canBuild = false;
-                                    }
-                                }
-                            }
-                            if (canBuild) {
-                                StoredBlock item = (StoredBlock) player.getInventory().getActiveItem();
-                                double blockX = clickX - (clickX - draw.getCameraOffsetX()) % Block.block_width;
-                                double blockY = clickY - (clickY - draw.getCameraOffsetY()) % Block.block_height;
-                                if (clickX < draw.getCameraOffsetX()) { blockX = draw.getCameraOffsetX() - Block.block_width; }
-                                if (clickY < draw.getCameraOffsetY()) { blockY = draw.getCameraOffsetY() - Block.block_height; }
-                                world.getBlocks().add(item.place(blockX, blockY));
-                                player.getInventory().remove(item);
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        
-        gameScreen.setOnScroll(new EventHandler<ScrollEvent>() {
-            @Override
-            public void handle(ScrollEvent event) {
-                if (event.getEventType() == ScrollEvent.SCROLL) {
-                    draw.setZoomScale(draw.getZoomScale() + event.getDeltaY()/1000);
-                    if (draw.getZoomScale() > draw.getMAX_ZOOM_SCALE()) { draw.setZoomScale(draw.getMAX_ZOOM_SCALE()); }
-                    if (draw.getZoomScale() < draw.getMIN_ZOOM_SCALE()) { draw.setZoomScale(draw.getMIN_ZOOM_SCALE()); }
-                    draw.zoom(game);
-                }
-            }
-        });
+        EventHandlers eventHandlers = new EventHandlers(gameScreen, draw, game, player);
+        eventHandlers.create();
         
         stage.setScene(gameScreen);
         draw.zoom(game); //center camera to player
         
-        AnimationTimer timer = new AnimationTimer() {
-            long lastUpdate = 0;
-            @Override
-            public void handle(long now) {
-                if (now - lastUpdate >= 17_000_000) { //update each 17 miliseconds
-                    player.update(world);
-                    world.updateNPCs(player);
-                    draw.shiftCamera(game);
-                    draw.render(gc, game);
-                    lastUpdate = now;
-                    // TODO player is dead, menu for respawn
-                    //if (player.isKilled()) { stop(); }
-                }
-            }
-        };
+        GameAnimationTimer timer = new GameAnimationTimer(stage, draw, gc, game);
         timer.start();
+    }
+    
+    public static void saveGame(Game gameToSave) {
+        savedGame = gameToSave;
     }
     
 }
