@@ -35,6 +35,7 @@ import cz.cvut.fel.pjv.items.Item;
 import cz.cvut.fel.pjv.items.StoredBlock;
 import cz.cvut.fel.pjv.items.ItemType;
 import cz.cvut.fel.pjv.maps.Map;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +46,7 @@ import java.util.List;
  * @author Zdenek
  * @version 1.0
  */
-public class World {
+public class World implements Serializable {
     
     private final int WIDTH;
     private final int HEIGHT;

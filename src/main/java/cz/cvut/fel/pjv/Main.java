@@ -24,7 +24,14 @@
 package cz.cvut.fel.pjv;
 
 import cz.cvut.fel.pjv.creatures.Player;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -33,6 +40,8 @@ import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
@@ -80,32 +89,118 @@ public class Main extends Application {
         GridPane startMenuGrid = new GridPane();
         startMenuGrid.setBackground(Background.EMPTY);
         startMenuGrid.setAlignment(Pos.CENTER);
-        ColumnConstraints columnConstrains = new ColumnConstraints(200, 200, 200);
-        startMenuGrid.getColumnConstraints().add(columnConstrains);
-        Button startButton = new Button("Start game");
-        startButton.setPrefSize(WIDTH/10, HEIGHT/10);
-        startButton.setDefaultButton(true);
-        startMenuGrid.add(startButton, 0, 0);
-        GridPane.setHalignment(startButton, HPos.CENTER);
-        startButton.setOnAction(new EventHandler<ActionEvent>() {
+        ColumnConstraints columnOneConstrains = new ColumnConstraints(200, 200, 200);
+        ColumnConstraints columnTwoConstrains = new ColumnConstraints(200, 200, 200);
+        startMenuGrid.getColumnConstraints().addAll(columnOneConstrains, columnTwoConstrains);
+        Button newGameButton = new Button("New game");
+        newGameButton.setPrefSize(WIDTH/10, HEIGHT/10);
+        startMenuGrid.add(newGameButton, 0, 0);
+        GridPane.setHalignment(newGameButton, HPos.CENTER);
+        newGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 startGame(stage, savedGame);
             }
         });
+        Button loadGameButton = new Button("Load game");
+        loadGameButton.setPrefSize(WIDTH/10, HEIGHT/10);
+        startMenuGrid.add(loadGameButton, 1, 0);
+        GridPane.setHalignment(loadGameButton, HPos.CENTER);
+        loadGameButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        gameMenu.getRoot().getChildrenUnmodifiable().get(0).setVisible(false);
+                        gameMenu.getRoot().getChildrenUnmodifiable().get(1).setVisible(false);
+                        gameMenu.getRoot().getChildrenUnmodifiable().get(2).setVisible(true);
+                    }
+                });
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException ex) {
+                            System.err.println("Game could not be loaded. Loading process was interrupted.");
+                        }
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                savedGame = loadSavedGameROM();
+                                startGame(stage, savedGame);
+                            }
+                        });
+                    }
+                }).start();
+            }
+        });
+        Label loadingLabel = new Label("Loading...");
+        loadingLabel.setTextFill(Color.WHITE);
+        loadingLabel.setFont(Font.font("Arial", FontWeight.BOLD, 26));
+        startMenuGrid.add(loadingLabel, 0, 0, 2, 1);
+        GridPane.setHalignment(loadingLabel, HPos.CENTER);
+        GridPane.setMargin(loadingLabel, new Insets(0, 0, 0, 0));
+        loadingLabel.setVisible(false);
         gameMenu = new Scene(startMenuGrid, WIDTH, HEIGHT, Color.BLACK);
         
         //gameScreen scene
         Group rootGameScreen = new Group();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
-        rootGameScreen.getChildren().add(canvas);
+        Button saveButton = new Button("Save game");
+        saveButton.setLayoutX(WIDTH/2-30);
+        saveButton.setLayoutY(HEIGHT-250);
+        saveButton.setVisible(false);
+        saveButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        gameScreen.getRoot().getChildrenUnmodifiable().get(1).setDisable(true);
+                        gameScreen.getRoot().getChildrenUnmodifiable().get(2).setVisible(true);
+                    }
+                });
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException ex) {
+                            System.err.println("Game could not be saved. Saving process was interrupted.");
+                        }
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                saveGameROM(savedGame);
+                                gameScreen.getRoot().getChildrenUnmodifiable().get(1).setDisable(false);
+                                gameScreen.getRoot().getChildrenUnmodifiable().get(2).setVisible(false);
+                                Alert alert = new Alert(AlertType.INFORMATION);
+                                alert.setTitle("Success");
+                                alert.setHeaderText(null);
+                                alert.setContentText("The game was saved successfully!");
+                                alert.showAndWait();
+                            }
+                        });
+                    }
+                }).start();   
+            }
+        });
+        Label savingLabel = new Label("Saving...");
+        savingLabel.setTextFill(Color.WHITE);
+        savingLabel.setFont(Font.font("Arial", FontWeight.BOLD, 26));
+        savingLabel.setLayoutX(WIDTH/2-35);
+        savingLabel.setLayoutY(HEIGHT-200);
+        savingLabel.setVisible(false);
+        rootGameScreen.getChildren().addAll(canvas, saveButton, savingLabel);
         gameScreen = new Scene(rootGameScreen, Color.BLACK);
         
         //respawnMenu scene
         GridPane respawnMenuGrid = new GridPane();
         respawnMenuGrid.setBackground(Background.EMPTY);
         respawnMenuGrid.setAlignment(Pos.CENTER);
-        //ColumnConstraints columnConstrains = new ColumnConstraints(200, 200, 200);
+        ColumnConstraints columnConstrains = new ColumnConstraints(200, 200, 200);
         respawnMenuGrid.getColumnConstraints().add(columnConstrains);
         Label headerLabel = new Label("You died.");
         headerLabel.setTextFill(Color.RED);
@@ -144,6 +239,7 @@ public class Main extends Application {
         final Game game;
         if (savedGame == null) {
             game = new Game(WIDTH);
+            saveGameRAM(game);
         } else {
             game = savedGame;
         }
@@ -165,8 +261,44 @@ public class Main extends Application {
         timer.start();
     }
     
-    public static void saveGame(Game gameToSave) {
+    public static void saveGameRAM(Game gameToSave) {
         savedGame = gameToSave;
+    }
+    
+    public static void saveGameROM(Game gameToSaveToFile) {
+        new File("saves").mkdirs();
+        try (
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("saves/savedWorld.txt"))
+        ) {
+            oos.writeObject(gameToSaveToFile);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            System.err.println("An error occured during file saving.");
+        }
+    }
+    
+    public static Game loadSavedGameROM() {
+        try (
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("saves/savedWorld.txt"))
+        ) {
+            Game game = (Game) ois.readObject();
+            return game;
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.err.println("Game could not be loaded. Loaded file doesn't contain game object.");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            System.err.println("An error occured during file loading.");
+        }
+        return null;
+    }
+    
+    public static void showSaveButton() {
+        gameScreen.getRoot().getChildrenUnmodifiable().get(1).setVisible(true);
+    }
+    
+    public static void hideSaveButton() {
+        gameScreen.getRoot().getChildrenUnmodifiable().get(1).setVisible(false);
     }
     
 }

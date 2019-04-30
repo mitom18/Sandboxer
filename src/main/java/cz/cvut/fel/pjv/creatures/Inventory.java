@@ -27,6 +27,7 @@ import cz.cvut.fel.pjv.items.Item;
 import cz.cvut.fel.pjv.items.StoredBlock;
 import cz.cvut.fel.pjv.items.ItemType;
 import cz.cvut.fel.pjv.items.Tool;
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -35,7 +36,7 @@ import java.util.Arrays;
  * @author Michal-jr
  * @version 1.0
  */
-public class Inventory {
+public class Inventory implements Serializable {
     Item[] inv = new Item [64];
     int activeItemIndex = 0;
 

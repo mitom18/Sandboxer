@@ -23,7 +23,13 @@
  */
 package cz.cvut.fel.pjv.items;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+import javax.imageio.ImageIO;
 
 /**
  * Item class. Item lays in the world or is in the player's inventory.
@@ -31,12 +37,12 @@ import javafx.scene.image.Image;
  * @author Michal-jr
  * @version 1.0
  */
-public abstract class Item {
+public abstract class Item implements Serializable {
     private double x, y;
     private double width = 24;
     private double height = 24;
     private boolean picked;
-    private final Image IMAGE;
+    private transient Image IMAGE;
     private final double IMAGE_X;
     private final double IMAGE_Y;
     private final double IMAGE_WIDTH = 128;
@@ -188,6 +194,16 @@ public abstract class Item {
      */
     public double getIMAGE_HEIGHT() {
         return IMAGE_HEIGHT;
+    }
+    
+    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
+        s.defaultReadObject();
+        IMAGE = SwingFXUtils.toFXImage(ImageIO.read(s), null);
+    }
+
+    private void writeObject(ObjectOutputStream s) throws IOException {
+        s.defaultWriteObject();
+        ImageIO.write(SwingFXUtils.fromFXImage(IMAGE, null), "png", s);
     }
     
 }

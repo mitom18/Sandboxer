@@ -25,6 +25,7 @@ package cz.cvut.fel.pjv;
 
 import cz.cvut.fel.pjv.blocks.Block;
 import cz.cvut.fel.pjv.creatures.Player;
+import java.io.Serializable;
 
 /**
  * Contains all entities in the game.
@@ -32,7 +33,7 @@ import cz.cvut.fel.pjv.creatures.Player;
  * @author Zdenek
  * @version 1.0
  */
-public class Game {
+public class Game implements Serializable {
     
     /**
      * Instance of Player.

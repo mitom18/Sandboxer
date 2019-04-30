@@ -33,6 +33,7 @@ import cz.cvut.fel.pjv.items.Tool;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -84,11 +85,13 @@ public class EventHandlers {
                         case ESCAPE: {
                             timer.stop();
                             draw.drawPauseMenu(gc);
+                            Main.showSaveButton();
                             break;
                         }
                     }
                 } else {
                     if (event.getCode() == KeyCode.ESCAPE) {
+                        Main.hideSaveButton();
                         timer.start();
                     }
                 }

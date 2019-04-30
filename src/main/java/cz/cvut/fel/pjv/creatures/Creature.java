@@ -23,7 +23,13 @@
  */
 package cz.cvut.fel.pjv.creatures;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+import javax.imageio.ImageIO;
 
 /**
  * Creature is a living entity which can move around the world and interact with it.
@@ -31,7 +37,7 @@ import javafx.scene.image.Image;
  * @author Michal-jr
  * @version 1.0
  */
-public abstract class Creature {
+public abstract class Creature implements Serializable {
     private double x, y;
     private double velocityX = 2;
     private double velocityY = 0;
@@ -44,7 +50,7 @@ public abstract class Creature {
     private final double IMAGE_WIDTH = 64;
     private final double IMAGE_HEIGHT = 64;
     private double spriteX, spriteY, spriteFrame, frameLimit, attackAnimationLimit = 0;
-    private final Image image;
+    private transient Image image;
     private final CreatureType type;
     private int hp;
     private boolean killed = false;
@@ -444,6 +450,16 @@ public abstract class Creature {
     
     public void die() {
         killed = true;
+    }
+    
+    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
+        s.defaultReadObject();
+        image = SwingFXUtils.toFXImage(ImageIO.read(s), null);
+    }
+
+    private void writeObject(ObjectOutputStream s) throws IOException {
+        s.defaultWriteObject();
+        ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", s);
     }
     
 }

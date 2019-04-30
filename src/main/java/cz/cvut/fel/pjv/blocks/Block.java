@@ -23,6 +23,7 @@
  */
 package cz.cvut.fel.pjv.blocks;
 
+import java.io.Serializable;
 import javafx.scene.image.Image;
 
 
@@ -32,7 +33,7 @@ import javafx.scene.image.Image;
  * @author Michal-jr
  * @version 1.0
  */
-public abstract class Block {
+public abstract class Block implements Serializable {
  
     /**
      * Actual width of the block in pixels.

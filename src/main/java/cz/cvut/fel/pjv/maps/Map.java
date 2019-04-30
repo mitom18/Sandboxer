@@ -24,6 +24,7 @@
 package cz.cvut.fel.pjv.maps;
 
 import cz.cvut.fel.pjv.blocks.BlockType;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -36,7 +37,7 @@ import java.util.Random;
  * @author Zdenek
  * @version 1.1
  */
-public class Map {
+public class Map implements Serializable {
 
     private final int WIDTH;
     private final int HEIGHT;

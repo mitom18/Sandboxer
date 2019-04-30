@@ -327,7 +327,7 @@ public class Draw {
         g.setGlobalAlpha(1);
         g.setFill(Color.WHITE);
         g.setFont(Font.font("Arial", FontWeight.BOLD, 38));
-        g.fillText("Press ESC to resume the game.", WIDTH/2-250, HEIGHT/2);
+        g.fillText("Press ESC to resume the game.", WIDTH/2-265, HEIGHT/2);
         g.setFont(Font.getDefault());
     }
 

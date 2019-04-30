@@ -63,7 +63,7 @@ public class GameAnimationTimer extends AnimationTimer {
             lastUpdate = now;
             if (player.isKilled()) {
                 stop();
-                Main.saveGame(game);
+                Main.saveGameRAM(game);
                 stage.setScene(Main.respawnMenu);
             }
         }
