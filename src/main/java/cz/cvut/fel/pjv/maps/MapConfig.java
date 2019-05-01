@@ -23,11 +23,16 @@
  */
 package cz.cvut.fel.pjv.maps;
 
+import cz.cvut.fel.pjv.blocks.BlockType;
+import java.util.List;
+
 /**
  * Object representation of the JSON configuration file.
  * @author Zdenek
  */
 public class MapConfig {
+    
+    public List<List<BlockType>> completeMap;
     
     public int width;
     public int height;
@@ -49,4 +54,7 @@ public class MapConfig {
     public double caveProbability;
     
     public String seed;
+
+    public MapConfig() {
+    }
 }

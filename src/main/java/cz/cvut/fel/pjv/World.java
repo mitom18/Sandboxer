@@ -35,6 +35,7 @@ import cz.cvut.fel.pjv.items.Item;
 import cz.cvut.fel.pjv.items.StoredBlock;
 import cz.cvut.fel.pjv.items.ItemType;
 import cz.cvut.fel.pjv.maps.Map;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,12 +75,13 @@ public class World implements Serializable {
     /**
      * Create new world.
      *
+     * @throws java.io.IOException
      * @since 1.0
      */
-    public World() {
+    public World() throws IOException {
         map = new Map();
-        WIDTH = map.getWIDTH();
-        HEIGHT = map.getHEIGHT();
+        WIDTH = map.getWidth();
+        HEIGHT = map.getHeight();
         createWorld();
     }
     

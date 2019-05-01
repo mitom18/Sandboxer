@@ -23,11 +23,13 @@
  */
 package cz.cvut.fel.pjv.maps;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.cvut.fel.pjv.blocks.BlockType;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Class Map generates a map. The map defines how a game world is going to look.
@@ -38,60 +40,33 @@ import java.util.Random;
  * @version 1.1
  */
 public class Map implements Serializable {
-
-    private final int WIDTH;
-    private final int HEIGHT;
     
-    private final double AMPLITUDE_COEFFICIENT_MULTIPLICATOR;
-    private final double PERIOD_COEFFICIENT_MULTIPLICATOR;
-    
-    private final double AMP_MIN;
-    private final double AMP_MAX;
-    private final double PER_MIN;
-    private final double PER_MAX;
-    
-    /**
-     * Represents the probability in percent.
-     * Allowed values: 0.0 - 100.0
-     */
-    private final double FLAT_LAND_PROBABILITY;
-    private final double DIAMOND_PROBABILITY;
-    private final double CAVE_PROBABILITY;
+    private MapConfig mapConfig;
 
     private List<List<Integer>> terrain;
     private List<List<BlockType>> map;
     
     private List<Integer> completeSkyline;
     private List<Cave> caves;
-    
-    private final long seed;
-    private final Random r;
 
     /**
      * Create a new map with default parameters.
      * 
+     * @throws java.io.IOException
      * @since 1.0
      */
-    public Map() {
-        WIDTH = 1024;
-        HEIGHT = 128;
+    public Map() throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
         
-        AMPLITUDE_COEFFICIENT_MULTIPLICATOR = 8;
-        PERIOD_COEFFICIENT_MULTIPLICATOR = 12;
-
-        AMP_MIN = 0.5;
-        AMP_MAX = 1.5;
-        PER_MIN = 0.5;
-        PER_MAX = 1.5;
-
-        FLAT_LAND_PROBABILITY = 10;
-        DIAMOND_PROBABILITY = 1;
-        CAVE_PROBABILITY = 0.01;
+        try {
+            mapConfig = objectMapper.readValue(
+                new File("mapConfig.JSON"), MapConfig.class
+            );
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
         
-        r = new Random();
-        seed = r.nextLong();
-        r.setSeed(seed); // These are nice seeds: 7451260251423394044L -7780041021634934149L
-        System.out.println(seed);
+        RNG.setNewSeed();
         
         generateTerrain();
         generateMap();
@@ -102,23 +77,23 @@ public class Map implements Serializable {
      * @since 1.1
      */
     public long getSeed() {
-        return seed;
+        return RNG.getSeed();
     }
     
     /**
      * @return width of the map in blocks
      * @since 1.0
      */
-    public int getWIDTH() {
-        return WIDTH;
+    public int getWidth() {
+        return mapConfig.width;
     }
 
     /**
      * @return height of the map in blocks
      * @since 1.0
      */
-    public int getHEIGHT() {
-        return HEIGHT;
+    public int getHeight() {
+        return mapConfig.height;
     }
 
     /**
@@ -146,30 +121,6 @@ public class Map implements Serializable {
     }
     
     /**
-     * Generates a random double in a given range.
-     * 
-     * @param min smallest possible generated number
-     * @param max largest possible generated number
-     * @return random double in the given range
-     * @since 1.1
-     */
-    private double randomDoubleInRange(double min, double max) {
-        return min + (max - min) * r.nextDouble();
-    }
-    
-    /**
-     * Generates a random integer in a given range.
-     * 
-     * @param min smallest possible generated number
-     * @param max largest possible generated number
-     * @return random int in the given range
-     * @since 1.1
-     */
-    private int randomIntInRange(int min, int max) {
-        return min + r.nextInt((max - min) + 1);
-    }
-    
-    /**
      * Contains a periodical mathematical function.
      * 
      * @param x the variable x
@@ -181,17 +132,6 @@ public class Map implements Serializable {
         return y;
     }
     
-    private boolean calculateProbability(double probability) {
-        
-        if (probability <= 0) {
-            return false;
-        } else if (probability >= 100) {
-            return true;
-        } else {
-            return randomIntInRange(1, (int) (100 / probability)) == 1;
-        }
-    }
-    
     /**
      * Fills the 2D ArrayList terrain with values that represent terrain (1)
      * and void (0) using a mathematical function.
@@ -201,32 +141,32 @@ public class Map implements Serializable {
      * @since 1.0
      */
     private void generateTerrain() {
-        terrain = new ArrayList<>(WIDTH);
-        completeSkyline = new ArrayList<>(WIDTH);
+        terrain = new ArrayList<>(mapConfig.width);
+        completeSkyline = new ArrayList<>(mapConfig.width);
         
-        double amplitudeCoefficient = randomDoubleInRange(AMP_MIN, AMP_MAX) * AMPLITUDE_COEFFICIENT_MULTIPLICATOR;
-        double periodCoefficient = 1 / (randomDoubleInRange(PER_MIN, PER_MAX) * PERIOD_COEFFICIENT_MULTIPLICATOR);
+        double amplitudeCoefficient = RNG.randomDoubleInRange(mapConfig.ampMin, mapConfig.ampMax) * mapConfig.amplitudeCoefficientMultiplicator;
+        double periodCoefficient = 1 / (RNG.randomDoubleInRange(mapConfig.perMin, mapConfig.perMax) * mapConfig.periodCoefficientMultiplicator);
         
         double period = (2 * Math.PI) / (periodCoefficient);
-        double previousY = HEIGHT / 2;
+        double previousY = mapConfig.height / 2;
         
         int counter = 1;
 
-        for (int i = 0; i < WIDTH; i++) {
-            terrain.add(new ArrayList<Integer>(HEIGHT));
+        for (int i = 0; i < mapConfig.width; i++) {
+            terrain.add(new ArrayList<Integer>(mapConfig.height));
             
             double skyline = calculateSkyline((double) i, amplitudeCoefficient, periodCoefficient, previousY);
             completeSkyline.add((int) skyline);
             
             if ((int)period == counter) {
                 
-                if (calculateProbability(FLAT_LAND_PROBABILITY)) {
-                    amplitudeCoefficient = randomDoubleInRange(AMP_MIN, AMP_MAX) * 1;
+                if (RNG.calculateProbability(mapConfig.flatLandProbability)) {
+                    amplitudeCoefficient = RNG.randomDoubleInRange(mapConfig.ampMin, mapConfig.ampMax) * 1;
                 } else {
-                    amplitudeCoefficient = randomDoubleInRange(AMP_MIN, AMP_MAX) * AMPLITUDE_COEFFICIENT_MULTIPLICATOR;
+                    amplitudeCoefficient = RNG.randomDoubleInRange(mapConfig.ampMin, mapConfig.ampMax) * mapConfig.amplitudeCoefficientMultiplicator;
                 }
                 
-                periodCoefficient = 1 / (randomDoubleInRange(PER_MIN, PER_MAX) * PERIOD_COEFFICIENT_MULTIPLICATOR);
+                periodCoefficient = 1 / (RNG.randomDoubleInRange(mapConfig.perMin, mapConfig.perMax) * mapConfig.periodCoefficientMultiplicator);
                 
                 period = (2 * Math.PI) / (periodCoefficient);
                 double nextSkyline = calculateSkyline((double) i + 1, amplitudeCoefficient, periodCoefficient, previousY);
@@ -235,9 +175,9 @@ public class Map implements Serializable {
                 counter = 1;
             }
 
-            for (int j = 0; j < HEIGHT; j++) {
+            for (int j = 0; j < mapConfig.height; j++) {
                 
-                if ((j == 0) || (j == HEIGHT - 1)) {
+                if ((j == 0) || (j == mapConfig.height - 1)) {
                     terrain.get(i).add(1);
                 } else if (j <= skyline) {
                     terrain.get(i).add(1);
@@ -259,7 +199,7 @@ public class Map implements Serializable {
      * @since 1.1
      */
     private void generateMap() {
-        map = new ArrayList<>(WIDTH);
+        map = new ArrayList<>(mapConfig.width);
         
         /**
          * Used to define the border between STONE and DIRT.
@@ -268,26 +208,26 @@ public class Map implements Serializable {
         
         int dirtStoneBorder;
         
-        for (int i = 0; i < WIDTH; i++) {
-            map.add(new ArrayList<BlockType>(HEIGHT));
+        for (int i = 0; i < mapConfig.width; i++) {
+            map.add(new ArrayList<BlockType>(mapConfig.height));
             
             boolean isUnderWater = false;
             
             if (skylineModifier < - 2) {
-                skylineModifier += randomIntInRange(0, 2);
+                skylineModifier += RNG.randomIntInRange(0, 2);
             } else if (skylineModifier > 6) {
-                skylineModifier += randomIntInRange(-2, 1);
+                skylineModifier += RNG.randomIntInRange(-2, 1);
             } else {
-                skylineModifier += randomIntInRange(-1, 1);
+                skylineModifier += RNG.randomIntInRange(-1, 1);
             }
             
             dirtStoneBorder = completeSkyline.get(i) - skylineModifier - 1;
             
-            for (int j = HEIGHT - 1; j >= 0; j--) {
+            for (int j = mapConfig.height - 1; j >= 0; j--) {
                 
                 if (terrain.get(i).get(j) == 1) {
                     
-                    if ((j == 0) || (j == HEIGHT - 1)) {
+                    if ((j == 0) || (j == mapConfig.height - 1)) {
                         // Bedrock
                         map.get(i).add(BlockType.BEDROCK);
                     } else if (j >= dirtStoneBorder) {
@@ -298,14 +238,14 @@ public class Map implements Serializable {
                             // Dirt
                             map.get(i).add(BlockType.DIRT);
                         }
-                    } else if ((j <= HEIGHT / 8) && calculateProbability(DIAMOND_PROBABILITY)) {
+                    } else if ((j <= mapConfig.height / 8) && RNG.calculateProbability(mapConfig.diamondProbability)) {
                         // Diamond
                         map.get(i).add(BlockType.DIAMOND_ORE);
                     } else {
                         // Stone
                         map.get(i).add(BlockType.STONE);
                     }
-                } else if (j <= HEIGHT / 2 - HEIGHT / 16) {
+                } else if (j <= mapConfig.height / 2 - mapConfig.height / 16) {
                     // Water
                     map.get(i).add(BlockType.WATER);
                     isUnderWater = true;
@@ -324,12 +264,12 @@ public class Map implements Serializable {
         int maxCaveWidth = 30;
         int maxCaveHeight = 14;
         
-        for (int i = 0; i < WIDTH; i++) {
+        for (int i = 0; i < mapConfig.width; i++) {
             
-            for (int j = HEIGHT - 1; j >= 0; j--) {
+            for (int j = mapConfig.height - 1; j >= 0; j--) {
                 
-                if ((i < WIDTH - maxCaveWidth) && (j < HEIGHT - maxCaveHeight) && (map.get(i).get(j) == BlockType.STONE) && calculateProbability(CAVE_PROBABILITY)) {
-                    List<List<Integer>> listOfVectors = generateVectorCluster(randomIntInRange(10, maxCaveWidth), randomIntInRange(4, maxCaveHeight));
+                if ((i < mapConfig.width - maxCaveWidth) && (j < mapConfig.height - maxCaveHeight) && (map.get(i).get(j) == BlockType.STONE) && RNG.calculateProbability(mapConfig.caveProbability)) {
+                    List<List<Integer>> listOfVectors = generateVectorCluster(RNG.randomIntInRange(10, maxCaveWidth), RNG.randomIntInRange(4, maxCaveHeight));
                     
                     for (List<Integer> vector : listOfVectors) {
                         

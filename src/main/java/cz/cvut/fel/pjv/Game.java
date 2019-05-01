@@ -25,6 +25,7 @@ package cz.cvut.fel.pjv;
 
 import cz.cvut.fel.pjv.blocks.Block;
 import cz.cvut.fel.pjv.creatures.Player;
+import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -49,15 +50,16 @@ public class Game implements Serializable {
      * Create new game.
      *
      * @param SCREEN_WIDTH width of the canvas in pixels
+     * @throws java.io.IOException
      * @since 1.0
      */
-    public Game(double SCREEN_WIDTH) {
+    public Game(double SCREEN_WIDTH) throws IOException {
         // Create a new world.
         world = new World();
         // Spawn in the middle of the map.
         int playerX = 0;
         // Spawn on the skyline (in the middle of the map).
-        int playerY = (int) ((world.getMap().getHEIGHT() - world.getMap().getCompleteSkyline().get(world.getMap().getWIDTH() / 2) - 2) * Block.block_height);
+        int playerY = (int) ((world.getMap().getHeight() - world.getMap().getCompleteSkyline().get(world.getMap().getWidth() / 2) - 2) * Block.block_height);
         // Create a new player at the given pixel coordinates.
         player = new Player(playerX, playerY);
     }

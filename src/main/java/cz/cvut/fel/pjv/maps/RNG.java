@@ -23,6 +23,9 @@
  */
 package cz.cvut.fel.pjv.maps;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 /**
@@ -31,14 +34,25 @@ import java.util.Random;
  */
 public abstract class RNG {
     
-    private final MapConfig mapConfig = new MapConfig();
+    private static MapConfig mapConfig;
     
-    private final String inputSeed;
-    private final long seed;
-    private final Random r;
+    private static String inputSeed;
+    private static long seed;
+    private static Random r;
 
-    public RNG() {
+    public static void setNewSeed() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        
+        try {
+            mapConfig = objectMapper.readValue(
+                new File("mapConfig.JSON"), MapConfig.class
+            );
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
+        
         inputSeed = mapConfig.seed;
+        // These are nice seeds: 7451260251423394044L -7780041021634934149L
         r = new Random();
         
         if (inputSeed.equals("")) {
@@ -50,11 +64,11 @@ public abstract class RNG {
         r.setSeed(seed);
     }
     
-    public long getSeed() {
+    public static long getSeed() {
         return seed;
     }
 
-    public Random getR() {
+    public static Random getR() {
         return r;
     }
     
@@ -66,7 +80,7 @@ public abstract class RNG {
      * @return random double in the given range
      * @since 1.1
      */
-    public double randomDoubleInRange(double min, double max) {
+    public static double randomDoubleInRange(double min, double max) {
         return min + (max - min) * r.nextDouble();
     }
     
@@ -78,11 +92,11 @@ public abstract class RNG {
      * @return random int in the given range
      * @since 1.1
      */
-    public int randomIntInRange(int min, int max) {
+    public static int randomIntInRange(int min, int max) {
         return min + r.nextInt((max - min) + 1);
     }
     
-    public boolean calculateProbability(double probability) {
+    public static boolean calculateProbability(double probability) {
         
         if (probability <= 0) {
             return false;
