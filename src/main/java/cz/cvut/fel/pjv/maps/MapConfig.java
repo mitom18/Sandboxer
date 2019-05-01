@@ -23,101 +23,30 @@
  */
 package cz.cvut.fel.pjv.maps;
 
-import java.util.Random;
-
 /**
- *
+ * Object representation of the JSON configuration file.
  * @author Zdenek
  */
 public class MapConfig {
     
-    private final int WIDTH;
-    private final int HEIGHT;
+    public int width;
+    public int height;
     
-    private final double AMPLITUDE_COEFFICIENT_MULTIPLICATOR;
-    private final double PERIOD_COEFFICIENT_MULTIPLICATOR;
+    public double amplitudeCoefficientMultiplicator;
+    public double periodCoefficientMultiplicator;
     
-    private final double AMP_MIN;
-    private final double AMP_MAX;
-    private final double PER_MIN;
-    private final double PER_MAX;
+    public double ampMin;
+    public double ampMax;
+    public double perMin;
+    public double perMax;
     
     /**
      * Represents the probability in percent.
      * Allowed values: 0.0 - 100.0
      */
-    private final double FLAT_LAND_PROBABILITY;
-    private final double DIAMOND_PROBABILITY;
-    private final double CAVE_PROBABILITY;
+    public double flatLandProbability;
+    public double diamondProbability;
+    public double caveProbability;
     
-    private final String SEED;
-    
-    public MapConfig() {
-        WIDTH = 1024;
-        HEIGHT = 128;
-        
-        AMPLITUDE_COEFFICIENT_MULTIPLICATOR = 8;
-        PERIOD_COEFFICIENT_MULTIPLICATOR = 12;
-
-        AMP_MIN = 0.5;
-        AMP_MAX = 1.5;
-        PER_MIN = 0.5;
-        PER_MAX = 1.5;
-
-        FLAT_LAND_PROBABILITY = 10;
-        DIAMOND_PROBABILITY = 1;
-        CAVE_PROBABILITY = 0.01;
-        
-        SEED = "";
-    }
-
-    public int getWIDTH() {
-        return WIDTH;
-    }
-
-    public int getHEIGHT() {
-        return HEIGHT;
-    }
-
-    public double getAMPLITUDE_COEFFICIENT_MULTIPLICATOR() {
-        return AMPLITUDE_COEFFICIENT_MULTIPLICATOR;
-    }
-
-    public double getPERIOD_COEFFICIENT_MULTIPLICATOR() {
-        return PERIOD_COEFFICIENT_MULTIPLICATOR;
-    }
-
-    public double getAMP_MIN() {
-        return AMP_MIN;
-    }
-
-    public double getAMP_MAX() {
-        return AMP_MAX;
-    }
-
-    public double getPER_MIN() {
-        return PER_MIN;
-    }
-
-    public double getPER_MAX() {
-        return PER_MAX;
-    }
-
-    public double getFLAT_LAND_PROBABILITY() {
-        return FLAT_LAND_PROBABILITY;
-    }
-
-    public double getDIAMOND_PROBABILITY() {
-        return DIAMOND_PROBABILITY;
-    }
-
-    public double getCAVE_PROBABILITY() {
-        return CAVE_PROBABILITY;
-    }
-
-    public String getSEED() {
-        return SEED;
-    }
-    
-    
+    public String seed;
 }

@@ -38,7 +38,7 @@ public abstract class RNG {
     private final Random r;
 
     public RNG() {
-        inputSeed = mapConfig.getSEED();
+        inputSeed = mapConfig.seed;
         r = new Random();
         
         if (inputSeed.equals("")) {
