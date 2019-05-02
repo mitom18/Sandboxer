@@ -24,13 +24,14 @@
 package cz.cvut.fel.pjv.maps;
 
 import cz.cvut.fel.pjv.blocks.BlockType;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Object representation of the JSON configuration file.
  * @author Zdenek
  */
-public class MapConfig {
+public class MapConfig implements Serializable {
     
     public List<List<BlockType>> completeMap;
     

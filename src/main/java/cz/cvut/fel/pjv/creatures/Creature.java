@@ -127,9 +127,10 @@ public abstract class Creature implements Serializable {
     }
     
     private void swim() {
-        if (up) { y -= velocityX; }
-        if (down) { y += velocityX; }
-        if (!up && !down) { y += GRAVITY/1.5; }
+        if (up) { velocityY = -velocityX; }
+        if (down) { velocityY = velocityX; }
+        if (!up && !down) { velocityY = GRAVITY/1.5; }
+        y += velocityY;
         onGround = false;
     }
     
@@ -252,6 +253,10 @@ public abstract class Creature implements Serializable {
      */
     public boolean falling() {
         return velocityY > 0;
+    }
+    
+    public boolean swimming() {
+        return swimming;
     }
 
     public boolean isKilled() {
