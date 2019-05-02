@@ -80,8 +80,8 @@ public class World implements Serializable {
      */
     public World() throws IOException {
         map = new Map();
-        WIDTH = map.getWidth();
-        HEIGHT = map.getHeight();
+        WIDTH = map.getWIDTH();
+        HEIGHT = map.getHEIGHT();
         createWorld();
     }
     

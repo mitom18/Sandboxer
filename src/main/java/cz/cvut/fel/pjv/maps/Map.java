@@ -41,13 +41,19 @@ import java.util.List;
  */
 public class Map implements Serializable {
     
-    private MapConfig mapConfig;
+    private final MapConfig mapConfig;
+    
+    private final int WIDTH;
+    private final int HEIGHT;
 
     private List<List<Integer>> terrain;
     private List<List<BlockType>> map;
     
     private List<Integer> completeSkyline;
     private List<Cave> caves;
+    
+    private final int playerX;
+    private final int playerY;
 
     /**
      * Create a new map with default parameters.
@@ -65,8 +71,25 @@ public class Map implements Serializable {
         RNG.setMapConfig(mapConfig);
         RNG.setNewSeed();
         
-        generateTerrain();
-        generateMap();
+        if (mapConfig.completeMap.get(0).isEmpty()) {
+            WIDTH = mapConfig.width;
+            HEIGHT = mapConfig.height;
+            
+            generateTerrain();
+            generateMap();
+            
+            // Spawn in the middle of the map.
+            playerX = 0;
+            // Spawn on the skyline (in the middle of the map).
+            playerY = HEIGHT - completeSkyline.get(WIDTH / 2) - 2;
+        } else {
+            WIDTH = mapConfig.completeMap.get(0).size();
+            HEIGHT = mapConfig.completeMap.size();
+            customMap();
+            
+            playerX = mapConfig.playerX;
+            playerY = mapConfig.playerY;
+        }
     }
     
     /**
@@ -81,16 +104,16 @@ public class Map implements Serializable {
      * @return width of the map in blocks
      * @since 1.0
      */
-    public int getWidth() {
-        return mapConfig.width;
+    public int getWIDTH() {
+        return WIDTH;
     }
 
     /**
      * @return height of the map in blocks
      * @since 1.0
      */
-    public int getHeight() {
-        return mapConfig.height;
+    public int getHEIGHT() {
+        return HEIGHT;
     }
 
     /**
@@ -117,6 +140,26 @@ public class Map implements Serializable {
         return completeSkyline;
     }
     
+    public int getPlayerX() {
+        return playerX;
+    }
+    
+    public int getPlayerY() {
+        return playerY;
+    }
+    
+    private void customMap() {
+        map = new ArrayList<>(WIDTH);
+        
+        for (int i = 0; i < WIDTH; i++) {
+            map.add(new ArrayList<BlockType>(HEIGHT));
+            
+            for (int j = 0; j < HEIGHT; j++) {
+                map.get(i).add(mapConfig.completeMap.get(j).get(i));
+            }
+        }
+    }
+    
     /**
      * Contains a periodical mathematical function.
      * 
@@ -138,19 +181,19 @@ public class Map implements Serializable {
      * @since 1.0
      */
     private void generateTerrain() {
-        terrain = new ArrayList<>(mapConfig.width);
-        completeSkyline = new ArrayList<>(mapConfig.width);
+        terrain = new ArrayList<>(WIDTH);
+        completeSkyline = new ArrayList<>(WIDTH);
         
         double amplitudeCoefficient = RNG.randomDoubleInRange(mapConfig.ampMin, mapConfig.ampMax) * mapConfig.amplitudeCoefficientMultiplicator;
         double periodCoefficient = 1 / (RNG.randomDoubleInRange(mapConfig.perMin, mapConfig.perMax) * mapConfig.periodCoefficientMultiplicator);
         
         double period = (2 * Math.PI) / (periodCoefficient);
-        double previousY = mapConfig.height / 2;
+        double previousY = HEIGHT / 2;
         
         int counter = 1;
 
-        for (int i = 0; i < mapConfig.width; i++) {
-            terrain.add(new ArrayList<Integer>(mapConfig.height));
+        for (int i = 0; i < WIDTH; i++) {
+            terrain.add(new ArrayList<Integer>(HEIGHT));
             
             double skyline = calculateSkyline((double) i, amplitudeCoefficient, periodCoefficient, previousY);
             completeSkyline.add((int) skyline);
@@ -172,9 +215,9 @@ public class Map implements Serializable {
                 counter = 1;
             }
 
-            for (int j = 0; j < mapConfig.height; j++) {
+            for (int j = 0; j < HEIGHT; j++) {
                 
-                if ((j == 0) || (j == mapConfig.height - 1)) {
+                if (j == 0) {
                     terrain.get(i).add(1);
                 } else if (j <= skyline) {
                     terrain.get(i).add(1);
@@ -196,7 +239,7 @@ public class Map implements Serializable {
      * @since 1.1
      */
     private void generateMap() {
-        map = new ArrayList<>(mapConfig.width);
+        map = new ArrayList<>(WIDTH);
         
         /**
          * Used to define the border between STONE and DIRT.
@@ -205,8 +248,8 @@ public class Map implements Serializable {
         
         int dirtStoneBorder;
         
-        for (int i = 0; i < mapConfig.width; i++) {
-            map.add(new ArrayList<BlockType>(mapConfig.height));
+        for (int i = 0; i < WIDTH; i++) {
+            map.add(new ArrayList<BlockType>(HEIGHT));
             
             boolean isUnderWater = false;
             
@@ -220,11 +263,11 @@ public class Map implements Serializable {
             
             dirtStoneBorder = completeSkyline.get(i) - skylineModifier - 1;
             
-            for (int j = mapConfig.height - 1; j >= 0; j--) {
+            for (int j = HEIGHT - 1; j >= 0; j--) {
                 
                 if (terrain.get(i).get(j) == 1) {
                     
-                    if ((j == 0) || (j == mapConfig.height - 1)) {
+                    if (j == 0) {
                         // Bedrock
                         map.get(i).add(BlockType.BEDROCK);
                     } else if (j >= dirtStoneBorder) {
@@ -235,14 +278,14 @@ public class Map implements Serializable {
                             // Dirt
                             map.get(i).add(BlockType.DIRT);
                         }
-                    } else if ((j <= mapConfig.height / 8) && RNG.calculateProbability(mapConfig.diamondProbability)) {
+                    } else if ((j <= HEIGHT / 8) && RNG.calculateProbability(mapConfig.diamondProbability)) {
                         // Diamond
                         map.get(i).add(BlockType.DIAMOND_ORE);
                     } else {
                         // Stone
                         map.get(i).add(BlockType.STONE);
                     }
-                } else if (j <= mapConfig.height / 2 - mapConfig.height / 16) {
+                } else if (j <= HEIGHT / 2 - HEIGHT / 16) {
                     // Water
                     map.get(i).add(BlockType.WATER);
                     isUnderWater = true;

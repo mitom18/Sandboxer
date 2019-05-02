@@ -35,7 +35,7 @@ public abstract class RNG {
     
     private static String inputSeed;
     private static long seed;
-    private static Random r;
+    private static Random r = new Random();
 
     public static void setMapConfig(MapConfig mapConfig) {
         RNG.mapConfig = mapConfig;
@@ -44,7 +44,6 @@ public abstract class RNG {
     public static void setNewSeed() {
         inputSeed = mapConfig.seed;
         // These are nice seeds: 7451260251423394044L -7780041021634934149L
-        r = new Random();
         
         if (inputSeed.equals("")) {
             seed = r.nextLong();

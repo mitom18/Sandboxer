@@ -34,6 +34,9 @@ public class MapConfig {
     
     public List<List<BlockType>> completeMap;
     
+    public int playerX;
+    public int playerY;
+    
     public int width;
     public int height;
     

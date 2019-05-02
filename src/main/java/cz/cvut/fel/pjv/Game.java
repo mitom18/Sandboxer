@@ -56,10 +56,9 @@ public class Game implements Serializable {
     public Game(double SCREEN_WIDTH) throws IOException {
         // Create a new world.
         world = new World();
-        // Spawn in the middle of the map.
-        int playerX = 0;
-        // Spawn on the skyline (in the middle of the map).
-        int playerY = (int) ((world.getMap().getHeight() - world.getMap().getCompleteSkyline().get(world.getMap().getWidth() / 2) - 2) * Block.block_height);
+        
+        int playerX = world.getMap().getPlayerX();
+        int playerY = (int) (world.getMap().getPlayerY() * Block.block_height);
         // Create a new player at the given pixel coordinates.
         player = new Player(playerX, playerY);
     }

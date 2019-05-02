@@ -1,5 +1,10 @@
 {
-    "completeMap": [[]],
+    "completeMap": [
+        []
+    ],
+
+    "playerX": 0,
+    "playerY": 0,
 
     "width": 1024,
     "height": 128,
