@@ -24,7 +24,10 @@
 package cz.cvut.fel.pjv;
 
 import cz.cvut.fel.pjv.fileio.GameSaver;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Optional;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -34,8 +37,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -77,8 +83,10 @@ public class UIControls {
             public void handle(ActionEvent e) {
                 try {
                     Main.startGame(stage, null);
+                } catch (FileNotFoundException ex) {
+                        createErrorAlert("Game could not start. Game config file is missing.");
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    createErrorAlert("Game could not start. Game config file is corrupted.");
                 }
             }
         });
@@ -86,38 +94,44 @@ public class UIControls {
         loadGameButton.setPrefSize(WIDTH/10, HEIGHT/10);
         startMenuGrid.add(loadGameButton, 1, 0);
         GridPane.setHalignment(loadGameButton, HPos.CENTER);
+        if (GameSaver.savesFolderIsEmpty()) { loadGameButton.setDisable(true); }
         loadGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        Main.gameMenu.getRoot().getChildrenUnmodifiable().get(0).setVisible(false);
-                        Main.gameMenu.getRoot().getChildrenUnmodifiable().get(1).setVisible(false);
-                        Main.gameMenu.getRoot().getChildrenUnmodifiable().get(2).setVisible(true);
-                    }
-                });
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException ex) {
-                            System.err.println("Game could not be loaded. Loading process was interrupted.");
+                final String fileName = createSelectDialog(GameSaver.getSavedGames(), "Load game", "Choose the game to load:");
+                if (fileName != null) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            Main.gameMenu.getRoot().getChildrenUnmodifiable().get(0).setVisible(false);
+                            Main.gameMenu.getRoot().getChildrenUnmodifiable().get(1).setVisible(false);
+                            Main.gameMenu.getRoot().getChildrenUnmodifiable().get(2).setVisible(true);
                         }
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                Main.savedGame = GameSaver.loadSavedGame();
-                                try {
-                                    Main.startGame(stage, Main.savedGame);
-                                } catch (IOException ex) {
-                                    ex.printStackTrace();
-                                }
+                    });
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException ex) {
+                                System.err.println("Game could not be loaded. Loading process was interrupted.");
                             }
-                        });
-                    }
-                }).start();
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Main.savedGame = GameSaver.loadSavedGame(fileName);
+                                    try {
+                                        Main.startGame(stage, Main.savedGame);
+                                    } catch (FileNotFoundException ex) {
+                                        createErrorAlert("Game could not start. Game config file is missing.");
+                                    } catch (IOException ex) {
+                                        createErrorAlert("Game could not start. Game config file is corrupted.");
+                                    }
+                                }
+                            });
+                        }
+                    }).start();
+                }
             }
         });
         Label loadingLabel = new Label("Loading...");
@@ -154,7 +168,7 @@ public class UIControls {
                         try {
                             Thread.sleep(100);
                         } catch (InterruptedException ex) {
-                            System.err.println("Game could not be saved. Saving process was interrupted.");
+                            createErrorAlert("Game could not be saved. Saving process was interrupted.");
                         }
                         Platform.runLater(new Runnable() {
                             @Override
@@ -162,11 +176,6 @@ public class UIControls {
                                 GameSaver.saveGame(Main.savedGame);
                                 Main.gameScreen.getRoot().getChildrenUnmodifiable().get(1).setDisable(false);
                                 Main.gameScreen.getRoot().getChildrenUnmodifiable().get(2).setVisible(false);
-                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                alert.setTitle("Success");
-                                alert.setHeaderText(null);
-                                alert.setContentText("The game was saved successfully!");
-                                alert.showAndWait();
                             }
                         });
                     }
@@ -208,14 +217,56 @@ public class UIControls {
                     Main.savedGame.respawnPlayer();
                     try {
                         Main.startGame(stage, Main.savedGame);
+                    } catch (FileNotFoundException ex) {
+                        createErrorAlert("Game could not start. Game config file is missing.");
                     } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
+                        createErrorAlert("Game could not start. Game config file is corrupted.");
+                    } 
                 }
             }
         });
         
         return respawnMenuGrid;
+    }
+    
+    public static void createAlert(AlertType type, String title, String header, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+    
+    public static void createErrorAlert(String content) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+    
+    public static String createInputDialog(String defaultText, String title, String content) {
+        TextInputDialog dialog = new TextInputDialog(defaultText);
+        dialog.setTitle(title);
+        dialog.setHeaderText(null);
+        dialog.setContentText(content);
+        Optional<String> result = dialog.showAndWait();
+        if (!result.isPresent()){
+            return null;
+        }
+        return result.get();
+    }
+    
+    public static String createSelectDialog(ArrayList<String> choices, String title, String content) {
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(0), choices);
+        dialog.setTitle(title);
+        dialog.setHeaderText(null);
+        dialog.setContentText(content);
+        Optional<String> result = dialog.showAndWait();
+        if (!result.isPresent()){
+            return null;
+        }
+        return result.get();
     }
     
     public static void showSaveButton() {
