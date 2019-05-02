@@ -143,7 +143,7 @@ public class Draw {
             if (cameraOffsetX > Block.block_width) { cameraOffsetX %= Block.block_width; }
         }
         
-        if ((player.getY() < 90 && player.jumping()) || (player.getY() > HEIGHT-90-player.getHeight() && player.falling())) {
+        if ((player.getY() < 90 && (player.jumping() || player.swimming())) || (player.getY() > HEIGHT-90-player.getHeight() && (player.falling() || player.swimming()))) {
             player.setY(player.getY() - playerVelocityY);
             for (NPC npc : world.getNpcs()) {
                 if (npc.isKilled()) { continue; }

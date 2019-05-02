@@ -24,34 +24,12 @@
 package cz.cvut.fel.pjv;
 
 import cz.cvut.fel.pjv.creatures.Player;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 
@@ -63,8 +41,8 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
     
-    private final double WIDTH = 1280;
-    private final double HEIGHT = 640;
+    private static final double WIDTH = 1280;
+    private static final double HEIGHT = 640;
     static Scene gameMenu, gameScreen, respawnMenu;
     static Game savedGame;
     
@@ -87,156 +65,10 @@ public class Main extends Application {
         final Stage stage = primaryStage;
         stage.setTitle("Basic Game");
         
-        //gameMenu scene
-        GridPane startMenuGrid = new GridPane();
-        startMenuGrid.setBackground(Background.EMPTY);
-        startMenuGrid.setAlignment(Pos.CENTER);
-        ColumnConstraints columnOneConstrains = new ColumnConstraints(200, 200, 200);
-        ColumnConstraints columnTwoConstrains = new ColumnConstraints(200, 200, 200);
-        startMenuGrid.getColumnConstraints().addAll(columnOneConstrains, columnTwoConstrains);
-        Button newGameButton = new Button("New game");
-        newGameButton.setPrefSize(WIDTH/10, HEIGHT/10);
-        startMenuGrid.add(newGameButton, 0, 0);
-        GridPane.setHalignment(newGameButton, HPos.CENTER);
-        newGameButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                try {
-                    startGame(stage, savedGame);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-        Button loadGameButton = new Button("Load game");
-        loadGameButton.setPrefSize(WIDTH/10, HEIGHT/10);
-        startMenuGrid.add(loadGameButton, 1, 0);
-        GridPane.setHalignment(loadGameButton, HPos.CENTER);
-        loadGameButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        gameMenu.getRoot().getChildrenUnmodifiable().get(0).setVisible(false);
-                        gameMenu.getRoot().getChildrenUnmodifiable().get(1).setVisible(false);
-                        gameMenu.getRoot().getChildrenUnmodifiable().get(2).setVisible(true);
-                    }
-                });
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException ex) {
-                            System.err.println("Game could not be loaded. Loading process was interrupted.");
-                        }
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                savedGame = loadSavedGameROM();
-                                try {
-                                    startGame(stage, savedGame);
-                                } catch (IOException ex) {
-                                    ex.printStackTrace();
-                                }
-                            }
-                        });
-                    }
-                }).start();
-            }
-        });
-        Label loadingLabel = new Label("Loading...");
-        loadingLabel.setTextFill(Color.WHITE);
-        loadingLabel.setFont(Font.font("Arial", FontWeight.BOLD, 26));
-        startMenuGrid.add(loadingLabel, 0, 0, 2, 1);
-        GridPane.setHalignment(loadingLabel, HPos.CENTER);
-        GridPane.setMargin(loadingLabel, new Insets(0, 0, 0, 0));
-        loadingLabel.setVisible(false);
-        gameMenu = new Scene(startMenuGrid, WIDTH, HEIGHT, Color.BLACK);
-        
-        //gameScreen scene
-        Group rootGameScreen = new Group();
-        Canvas canvas = new Canvas(WIDTH, HEIGHT);
-        Button saveButton = new Button("Save game");
-        saveButton.setLayoutX(WIDTH/2-30);
-        saveButton.setLayoutY(HEIGHT-250);
-        saveButton.setVisible(false);
-        saveButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        gameScreen.getRoot().getChildrenUnmodifiable().get(1).setDisable(true);
-                        gameScreen.getRoot().getChildrenUnmodifiable().get(2).setVisible(true);
-                    }
-                });
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException ex) {
-                            System.err.println("Game could not be saved. Saving process was interrupted.");
-                        }
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                saveGameROM(savedGame);
-                                gameScreen.getRoot().getChildrenUnmodifiable().get(1).setDisable(false);
-                                gameScreen.getRoot().getChildrenUnmodifiable().get(2).setVisible(false);
-                                Alert alert = new Alert(AlertType.INFORMATION);
-                                alert.setTitle("Success");
-                                alert.setHeaderText(null);
-                                alert.setContentText("The game was saved successfully!");
-                                alert.showAndWait();
-                            }
-                        });
-                    }
-                }).start();   
-            }
-        });
-        Label savingLabel = new Label("Saving...");
-        savingLabel.setTextFill(Color.WHITE);
-        savingLabel.setFont(Font.font("Arial", FontWeight.BOLD, 26));
-        savingLabel.setLayoutX(WIDTH/2-35);
-        savingLabel.setLayoutY(HEIGHT-200);
-        savingLabel.setVisible(false);
-        rootGameScreen.getChildren().addAll(canvas, saveButton, savingLabel);
-        gameScreen = new Scene(rootGameScreen, Color.BLACK);
-        
-        //respawnMenu scene
-        GridPane respawnMenuGrid = new GridPane();
-        respawnMenuGrid.setBackground(Background.EMPTY);
-        respawnMenuGrid.setAlignment(Pos.CENTER);
-        ColumnConstraints columnConstrains = new ColumnConstraints(200, 200, 200);
-        respawnMenuGrid.getColumnConstraints().add(columnConstrains);
-        Label headerLabel = new Label("You died.");
-        headerLabel.setTextFill(Color.RED);
-        headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 38));
-        respawnMenuGrid.add(headerLabel, 0, 0);
-        GridPane.setHalignment(headerLabel, HPos.CENTER);
-        GridPane.setMargin(headerLabel, new Insets(0, 0, 150, 0));
-        Button respawnButton = new Button("Respawn");
-        respawnButton.setPrefSize(WIDTH/10, HEIGHT/10);
-        respawnButton.setDefaultButton(true);
-        respawnMenuGrid.add(respawnButton, 0, 1);
-        GridPane.setHalignment(respawnButton, HPos.CENTER);
-        respawnButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                if (savedGame != null) {
-                    savedGame.respawnPlayer();
-                    try {
-                        startGame(stage, savedGame);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            }
-        });
-        respawnMenu = new Scene(respawnMenuGrid, WIDTH, HEIGHT, Color.BLACK);
+        UIControls ui = new UIControls(WIDTH, HEIGHT, stage);
+        gameMenu = new Scene(ui.createStartMenu(), WIDTH, HEIGHT, Color.BLACK);
+        gameScreen = new Scene(ui.createGameScreen(), Color.BLACK);
+        respawnMenu = new Scene(ui.createRespawnMenu(), WIDTH, HEIGHT, Color.BLACK);
 
         stage.setScene(gameMenu);
         stage.show();
@@ -245,15 +77,17 @@ public class Main extends Application {
     /**
      * Starts the game.
      *
-     * @param stage
+     * @param givenStage
+     * @param savedGame
+     * @throws java.io.IOException
      * @since 1.0
      */
-    private void startGame(Stage givenStage, Game savedGame) throws IOException {
+    public static void startGame(Stage givenStage, Game savedGame) throws IOException {
         final Stage stage = givenStage;
         final Game game;
         if (savedGame == null) {
             game = new Game(WIDTH);
-            saveGameRAM(game);
+            saveGame(game);
         } else {
             game = savedGame;
         }
@@ -275,44 +109,7 @@ public class Main extends Application {
         timer.start();
     }
     
-    public static void saveGameRAM(Game gameToSave) {
+    public static void saveGame(Game gameToSave) {
         savedGame = gameToSave;
     }
-    
-    public static void saveGameROM(Game gameToSaveToFile) {
-        new File("saves").mkdirs();
-        try (
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("saves/savedWorld.txt"))
-        ) {
-            oos.writeObject(gameToSaveToFile);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            System.err.println("An error occured during file saving.");
-        }
-    }
-    
-    public static Game loadSavedGameROM() {
-        try (
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("saves/savedWorld.txt"))
-        ) {
-            Game game = (Game) ois.readObject();
-            return game;
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-            System.err.println("Game could not be loaded. Loaded file doesn't contain game object.");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            System.err.println("An error occured during file loading.");
-        }
-        return null;
-    }
-    
-    public static void showSaveButton() {
-        gameScreen.getRoot().getChildrenUnmodifiable().get(1).setVisible(true);
-    }
-    
-    public static void hideSaveButton() {
-        gameScreen.getRoot().getChildrenUnmodifiable().get(1).setVisible(false);
-    }
-    
 }

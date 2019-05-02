@@ -85,13 +85,13 @@ public class EventHandlers {
                         case ESCAPE: {
                             timer.stop();
                             draw.drawPauseMenu(gc);
-                            Main.showSaveButton();
+                            UIControls.showSaveButton();
                             break;
                         }
                     }
                 } else {
                     if (event.getCode() == KeyCode.ESCAPE) {
-                        Main.hideSaveButton();
+                        UIControls.hideSaveButton();
                         timer.start();
                     }
                 }
