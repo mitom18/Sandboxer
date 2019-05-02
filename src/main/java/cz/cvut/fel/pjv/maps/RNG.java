@@ -23,9 +23,6 @@
  */
 package cz.cvut.fel.pjv.maps;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.File;
-import java.io.IOException;
 import java.util.Random;
 
 /**
@@ -40,17 +37,11 @@ public abstract class RNG {
     private static long seed;
     private static Random r;
 
+    public static void setMapConfig(MapConfig mapConfig) {
+        RNG.mapConfig = mapConfig;
+    }
+
     public static void setNewSeed() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        
-        try {
-            mapConfig = objectMapper.readValue(
-                new File("mapConfig.JSON"), MapConfig.class
-            );
-        } catch (IOException ex) {
-            System.out.println(ex);
-        }
-        
         inputSeed = mapConfig.seed;
         // These are nice seeds: 7451260251423394044L -7780041021634934149L
         r = new Random();

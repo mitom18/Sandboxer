@@ -58,14 +58,11 @@ public class Map implements Serializable {
     public Map() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         
-        try {
-            mapConfig = objectMapper.readValue(
-                new File("mapConfig.JSON"), MapConfig.class
-            );
-        } catch (IOException ex) {
-            System.out.println(ex);
-        }
+        mapConfig = objectMapper.readValue(
+            new File("mapConfig.JSON"), MapConfig.class
+        );
         
+        RNG.setMapConfig(mapConfig);
         RNG.setNewSeed();
         
         generateTerrain();

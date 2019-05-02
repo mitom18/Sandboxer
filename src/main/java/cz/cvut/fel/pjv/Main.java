@@ -30,6 +30,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -99,7 +101,11 @@ public class Main extends Application {
         newGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                startGame(stage, savedGame);
+                try {
+                    startGame(stage, savedGame);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
         Button loadGameButton = new Button("Load game");
@@ -129,7 +135,11 @@ public class Main extends Application {
                             @Override
                             public void run() {
                                 savedGame = loadSavedGameROM();
-                                startGame(stage, savedGame);
+                                try {
+                                    startGame(stage, savedGame);
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                }
                             }
                         });
                     }
@@ -218,7 +228,11 @@ public class Main extends Application {
             public void handle(ActionEvent e) {
                 if (savedGame != null) {
                     savedGame.respawnPlayer();
-                    startGame(stage, savedGame);
+                    try {
+                        startGame(stage, savedGame);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         });
@@ -234,7 +248,7 @@ public class Main extends Application {
      * @param stage
      * @since 1.0
      */
-    private void startGame(Stage givenStage, Game savedGame) {
+    private void startGame(Stage givenStage, Game savedGame) throws IOException {
         final Stage stage = givenStage;
         final Game game;
         if (savedGame == null) {
