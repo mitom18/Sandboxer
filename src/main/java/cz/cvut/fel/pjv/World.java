@@ -34,6 +34,7 @@ import cz.cvut.fel.pjv.creatures.Player;
 import cz.cvut.fel.pjv.items.Item;
 import cz.cvut.fel.pjv.items.StoredBlock;
 import cz.cvut.fel.pjv.items.ItemType;
+import cz.cvut.fel.pjv.maps.Cave;
 import cz.cvut.fel.pjv.maps.Map;
 import java.io.IOException;
 import java.io.Serializable;
@@ -85,6 +86,18 @@ public class World implements Serializable {
         createWorld();
     }
     
+    private void spawnNPCs() {
+        npcs = new ArrayList<>();
+        int i = 0;
+        for (Cave cave : map.getCaves()) {
+            npcs.add(new Enemy((cave.getSpawner().getX() - map.getMap().size() / 2) * Block.block_width, cave.getSpawner().getY() * Block.block_height, CreatureType.SKELETON));
+            i++;
+            System.out.println("NPC num: " + i);
+            System.out.println("x: " + cave.getSpawner().getX() * Block.block_width);
+            System.out.println("y: " + cave.getSpawner().getY() * Block.block_height);
+        }
+    }
+    
     private void createWorld() {
         blocks = new ArrayList<>();
         
@@ -103,11 +116,7 @@ public class World implements Serializable {
         items = new ArrayList<>();
         items.add(new StoredBlock(0,650, ItemType.DIAMOND_ORE));
         
-        npcs = new ArrayList<>();
-        // TODO spawn NPC on ground - int npc1Y = (int) (getMap().getCompleteSkyline().get(250) * Block.block_height - Block.block_height*2);
-        npcs.add(new Enemy(250, 0, CreatureType.SKELETON));
-        // TODO spawn NPC on ground - int npc2Y = (int) (getMap().getCompleteSkyline().get(350) * Block.block_height - Block.block_height*2);
-        npcs.add(new Enemy(350, 0, CreatureType.SKELETON));
+        spawnNPCs();
     }
     
     /**

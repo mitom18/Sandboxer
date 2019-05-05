@@ -24,6 +24,7 @@
 package cz.cvut.fel.pjv.maps;
 
 import cz.cvut.fel.pjv.blocks.BlockType;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ import java.util.List;
  *
  * @author Zdenek
  */
-public class Cave {
+public class Cave implements Serializable {
     
     /**
      * Variables x and y are the coordinates of the center of the core ellipse of a cave.
@@ -45,6 +46,8 @@ public class Cave {
      * The complete cave is stored as a list of vectors, that represent the cave's area.
      */
     private List<Vector> caveVectors;
+    
+    private Vector spawner;
 
     public Cave(int x, int y, List<List<BlockType>> map) {
         this.x = x;
@@ -52,10 +55,15 @@ public class Cave {
         this.map = map;
         
         generateCaveVectors();
+        createSpawner();
     }
 
     public List<Vector> getCaveVectors() {
         return caveVectors;
+    }
+
+    public Vector getSpawner() {
+        return spawner;
     }
     
     private boolean ellipseInnerArea(double x, double y, double a, double b) {
@@ -90,7 +98,7 @@ public class Cave {
             if ((vector.getY() >= 0) && (vector.getY() < map.get(0).size())) {
 
                 if (vector.getX() < 0) {
-                    vector.setX(map.size() - vector.getX());
+                    vector.setX(map.size() + vector.getX());
                 } else if (vector.getX() >= map.size()) {
                     vector.setX(vector.getX() - map.size());
                 }
@@ -111,7 +119,7 @@ public class Cave {
         int newCenterX = x;
         int newCenterY = y;
         
-        for (int i = 0; i < RNG.randomIntInRange(2, 6); i++) {
+        for (int i = 0; i < RNG.randomIntInRange(3, 7); i++) {
             addEllipseToCave(newEllipse(newCenterX, newCenterY));
             
             // get x from a random Vector in caveVectors
@@ -121,6 +129,26 @@ public class Cave {
             // same for y
             newCenterY = caveVectors.get(RNG.randomIntInRange(0, caveVectors.size() - 1)).getY();
             //newCenterY += RNG.randomIntInRange(-3, 3);
+        }
+    }
+    
+    private void createSpawner() {
+        Vector min = caveVectors.get(0);
+        
+        for (Vector vector : caveVectors) {
+            
+            if (vector.getY() < min.getY()) {
+                min = vector;
+            }
+        }
+        
+        spawner = min;
+        
+        // create space for the head of the spawned NPC
+        Vector spaceForHead = new Vector(spawner.getX(), spawner.getY() + 1, null);
+        
+        if (!caveVectors.contains(spaceForHead)) {
+            caveVectors.add(spaceForHead);
         }
     }
 }

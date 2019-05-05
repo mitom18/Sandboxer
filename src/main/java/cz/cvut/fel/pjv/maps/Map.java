@@ -146,6 +146,10 @@ public class Map implements Serializable {
     public int getPlayerY() {
         return playerY;
     }
+
+    public List<Cave> getCaves() {
+        return caves;
+    }
     
     private void customMap() {
         map = new ArrayList<>(WIDTH);

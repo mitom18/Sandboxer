@@ -24,12 +24,13 @@
 package cz.cvut.fel.pjv.maps;
 
 import cz.cvut.fel.pjv.blocks.BlockType;
+import java.io.Serializable;
 
 /**
  *
  * @author Zdenek
  */
-public class Vector {
+public class Vector implements Serializable {
     
     private int x;
     private int y;
