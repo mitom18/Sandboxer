@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Zdeněk.
+ * Copyright 2019 Zdenek.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,18 +31,12 @@ import java.util.Random;
  */
 public abstract class RNG {
     
-    private static MapConfig mapConfig;
-    
     private static String inputSeed;
     private static long seed;
     private static Random r = new Random();
 
-    public static void setMapConfig(MapConfig mapConfig) {
-        RNG.mapConfig = mapConfig;
-    }
-
     public static void setNewSeed() {
-        inputSeed = mapConfig.seed;
+        inputSeed = Map.mapConfig.seed;
         // These are nice seeds: 7451260251423394044L -7780041021634934149L
         
         if (inputSeed.equals("")) {

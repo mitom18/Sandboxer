@@ -41,7 +41,7 @@ import java.util.List;
  */
 public class Map implements Serializable {
     
-    private final MapConfig mapConfig;
+    public static MapConfig mapConfig;
     
     private final int WIDTH;
     private final int HEIGHT;
@@ -68,7 +68,6 @@ public class Map implements Serializable {
             new File("mapConfig.JSON"), MapConfig.class
         );
         
-        RNG.setMapConfig(mapConfig);
         RNG.setNewSeed();
         
         if (mapConfig.completeMap.get(0).isEmpty()) {
@@ -297,51 +296,28 @@ public class Map implements Serializable {
         }
         
         generateCaves();
+        generateStructures();
     }
     
     private void generateCaves() {
+        caves = new ArrayList<>();
         
-        int maxCaveWidth = 30;
-        int maxCaveHeight = 14;
-        
-        for (int i = 0; i < mapConfig.width; i++) {
+        for (int i = 0; i < WIDTH; i++) {
             
-            for (int j = mapConfig.height - 1; j >= 0; j--) {
+            for (int j = HEIGHT - 1; j >= 1; j--) {
                 
-                if ((i < mapConfig.width - maxCaveWidth) && (j < mapConfig.height - maxCaveHeight) && (map.get(i).get(j) == BlockType.STONE) && RNG.calculateProbability(mapConfig.caveProbability)) {
-                    List<List<Integer>> listOfVectors = generateVectorCluster(RNG.randomIntInRange(10, maxCaveWidth), RNG.randomIntInRange(4, maxCaveHeight));
+                if ((map.get(i).get(j) == BlockType.STONE) && RNG.calculateProbability(mapConfig.caveProbability)) {
+                    caves.add(new Cave(i, j, map));
                     
-                    for (List<Integer> vector : listOfVectors) {
-                        
-                        if (map.get(vector.get(0) + i).get(vector.get(1) + j) == BlockType.STONE) {
-                            map.get(vector.get(0) + i).set(vector.get(1) + j, null);
-                        }
+                    for (Vector vector : caves.get(caves.size() - 1).getCaveVectors()) {
+                        map.get(vector.getX()).set(vector.getY(), vector.getBlockType());
                     }
                 }
             }
         }
     }
     
-    private boolean ellipseInnerArea(double x, double y, double a, double b) {
-        return Math.pow(x - a, 2) / Math.pow(a, 2) + Math.pow(y - b, 2) / Math.pow(b, 2) <= 1;
-    }
-    
-    private List<List<Integer>> generateVectorCluster(int clusterWidth, int clusterHeight) {
-        List<List<Integer>> listOfVectors = new ArrayList<>(clusterWidth * clusterHeight);
+    private void generateStructures() {
         
-        for (int i = 0; i < clusterWidth; i++) {
-            
-            for (int j = clusterHeight - 1; j >= 0; j--) {
-                
-                if (ellipseInnerArea(i, j, clusterWidth / 2.0, clusterHeight / 2.0)) {
-                    List<Integer> vector = new ArrayList<>(2);
-                    vector.add(i);
-                    vector.add(j);
-                    listOfVectors.add(vector);
-                }
-            }
-        }
-        
-        return listOfVectors;
     }
 }

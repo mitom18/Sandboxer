@@ -23,20 +23,22 @@
  */
 package cz.cvut.fel.pjv.maps;
 
+import cz.cvut.fel.pjv.blocks.BlockType;
+
 /**
  *
  * @author Zdenek
  */
 public class Vector {
     
-    private final int x;
-    private final int y;
+    private int x;
+    private int y;
+    private BlockType blockType;
 
-    public Vector(int x, int y) {
+    public Vector(int x, int y, BlockType blockType) {
         this.x = x;
         this.y = y;
-        
-        checkCoords(x, y);
+        this.blockType = blockType;
     }
 
     public int getX() {
@@ -47,7 +49,42 @@ public class Vector {
         return y;
     }
     
-    private void checkCoords(int x, int y) {
-        
+    public void setX(int x) {
+        this.x = x;
     }
+    
+    public BlockType getBlockType() {
+        return blockType;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 67 * hash + this.x;
+        hash = 67 * hash + this.y;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Vector other = (Vector) obj;
+        if (this.x != other.x) {
+            return false;
+        }
+        if (this.y != other.y) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 }
