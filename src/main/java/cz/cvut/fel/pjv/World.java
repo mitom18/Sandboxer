@@ -29,6 +29,7 @@ import cz.cvut.fel.pjv.blocks.BlockType;
 import cz.cvut.fel.pjv.blocks.Block;
 import cz.cvut.fel.pjv.creatures.CreatureType;
 import cz.cvut.fel.pjv.creatures.Enemy;
+import cz.cvut.fel.pjv.creatures.Friend;
 import cz.cvut.fel.pjv.creatures.NPC;
 import cz.cvut.fel.pjv.creatures.Player;
 import cz.cvut.fel.pjv.items.Item;
@@ -96,6 +97,7 @@ public class World implements Serializable {
             System.out.println("x: " + cave.getSpawner().getX() * Block.block_width);
             System.out.println("y: " + cave.getSpawner().getY() * Block.block_height);
         }
+        npcs.add(new Friend(32, 0, CreatureType.MONK));
     }
     
     private void createWorld() {

@@ -40,7 +40,7 @@ import javafx.scene.text.FontWeight;
  * Class for drawing and transforming the world.
  *
  * @author Michal-jr
- * @version 1.0
+ * @version 1.1
  */
 public class Draw {
     
@@ -320,6 +320,12 @@ public class Draw {
         drawBars(g, player);
     }
     
+    /**
+     * Draw background of the pause menu. Paused game is still visible a bit.
+     *
+     * @param g a canvas 2D rendering context
+     * @since 1.1
+     */
     public void drawPauseMenu(GraphicsContext g) {
         g.setGlobalAlpha(0.75);
         g.setFill(Color.BLACK);

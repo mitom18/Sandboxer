@@ -31,7 +31,7 @@ import cz.cvut.fel.pjv.World;
  * Character that is controlled by player.
  * 
  * @author Michal-jr
- * @version 1.0
+ * @version 1.1
  */
 public class Player extends Creature {
     
@@ -41,8 +41,8 @@ public class Player extends Creature {
     /**
      * Create player on given coordinates.
      *
-     * @param x
-     * @param y
+     * @param x player's X position in pixels
+     * @param y player's Y position in pixels
      * @since 1.0
      */
     public Player(double x, double y) {
@@ -63,6 +63,13 @@ public class Player extends Creature {
         if (isAttacking()) { animateAttack(); }
     }
     
+    /**
+     * Perform attack and try to hit some enemy.
+     *
+     * @param world instance of the world
+     * @param clickX X position of the user's click event
+     * @since 1.1
+     */
     public void attack(World world, double clickX) {
         if (!isAttacking()) { setAttacking(true); }
         double attackWidth;

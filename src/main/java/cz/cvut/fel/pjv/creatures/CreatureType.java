@@ -39,6 +39,11 @@ public enum CreatureType {
     PLAYER(0, new Image("spritesheet_hero.png"), 10),
     
     /**
+     * Type of monk.
+     */
+    MONK(0, new Image("spritesheet_monk.png"), 15),
+    
+    /**
      * Type of skeleton.
      */
     SKELETON(1, new Image("spritesheet_skeleton.png"), 5);

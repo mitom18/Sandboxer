@@ -51,7 +51,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 /**
- * Class for creating forms, alerts and other ui controls.
+ * Class for creating forms, alerts and other UI controls.
  *
  * @author Michal-jr
  * @version 1.0
@@ -61,12 +61,24 @@ public class UIControls {
     private final double HEIGHT;
     private final Stage stage;
 
+    /**
+     * Create new instance that is able to create most of the needed UI controls.
+     *
+     * @param WIDTH width of the window in pixels
+     * @param HEIGHT height of the window in pixels
+     * @param stage instance of javafx stage (window)
+     * @since 1.0
+     */
     public UIControls(double WIDTH, double HEIGHT, Stage stage) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
         this.stage = stage;
     }
     
+    /**
+     * @return start menu as GridPane
+     * @since 1.0
+     */
     public GridPane createStartMenu() {
         GridPane startMenuGrid = new GridPane();
         startMenuGrid.setBackground(Background.EMPTY);
@@ -145,6 +157,10 @@ public class UIControls {
         return startMenuGrid;
     }
     
+    /**
+     * @return game screen as Group
+     * @since 1.0
+     */
     public Group createGameScreen() {
         Group rootGameScreen = new Group();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
@@ -193,6 +209,10 @@ public class UIControls {
         return rootGameScreen;
     }
     
+    /**
+     * @return respawn menu as GridPane
+     * @since 1.0
+     */
     public GridPane createRespawnMenu() {
         GridPane respawnMenuGrid = new GridPane();
         respawnMenuGrid.setBackground(Background.EMPTY);
@@ -229,6 +249,15 @@ public class UIControls {
         return respawnMenuGrid;
     }
     
+    /**
+     * Create alert with specified type.
+     *
+     * @param type type of the created alert
+     * @param title title of the created alert
+     * @param header header of the created alert
+     * @param content content of the created alert
+     * @since 1.0
+     */
     public static void createAlert(AlertType type, String title, String header, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -237,6 +266,12 @@ public class UIControls {
         alert.showAndWait();
     }
     
+    /**
+     * Create error alert.
+     *
+     * @param content error message
+     * @since 1.0
+     */
     public static void createErrorAlert(String content) {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle("Error");
@@ -245,6 +280,15 @@ public class UIControls {
         alert.showAndWait();
     }
     
+    /**
+     * Create input dialog (as alert).
+     *
+     * @param defaultText default text in input field
+     * @param title title of the dialog window
+     * @param content text content of the dialog
+     * @return user's input as String
+     * @since 1.0
+     */
     public static String createInputDialog(String defaultText, String title, String content) {
         TextInputDialog dialog = new TextInputDialog(defaultText);
         dialog.setTitle(title);
@@ -257,6 +301,15 @@ public class UIControls {
         return result.get();
     }
     
+    /**
+     * Create select dialog (as alert).
+     *
+     * @param choices list of available choices
+     * @param title title of the dialog window
+     * @param content text content of the dialog
+     * @return user's input as String
+     * @since 1.0
+     */
     public static String createSelectDialog(ArrayList<String> choices, String title, String content) {
         ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(0), choices);
         dialog.setTitle(title);
@@ -269,10 +322,20 @@ public class UIControls {
         return result.get();
     }
     
+    /**
+     * Show save button when game is paused.
+     *
+     * @since 1.0
+     */
     public static void showSaveButton() {
         Main.gameScreen.getRoot().getChildrenUnmodifiable().get(1).setVisible(true);
     }
     
+    /**
+     * Hide save button when game is resumed.
+     *
+     * @since 1.0
+     */
     public static void hideSaveButton() {
         Main.gameScreen.getRoot().getChildrenUnmodifiable().get(1).setVisible(false);
     }

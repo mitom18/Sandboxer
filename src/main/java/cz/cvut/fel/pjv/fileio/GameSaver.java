@@ -48,6 +48,13 @@ import javafx.scene.control.Alert.AlertType;
  * @version 1.0
  */
 public class GameSaver {
+
+    /**
+     * Save game to file.
+     *
+     * @param gameToSaveToFile instance of the game to be saved in file
+     * @since 1.0
+     */
     public static void saveGame(Game gameToSaveToFile) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 	Date date = new Date();
@@ -65,6 +72,13 @@ public class GameSaver {
         }
     }
     
+    /**
+     * Load saved game from file.
+     *
+     * @param fileName name of the file in which the game is saved
+     * @return instance of the loaded game
+     * @since 1.0
+     */
     public static Game loadSavedGame(String fileName) {
         if (fileName != null) {
             try (
@@ -81,6 +95,10 @@ public class GameSaver {
         return null;
     }
     
+    /**
+     * @return list of names of all saved games
+     * @since 1.0
+     */
     public static ArrayList<String> getSavedGames() {
         ArrayList<String> results = new ArrayList<>();
         File[] files = new File("saves").listFiles();
@@ -93,6 +111,12 @@ public class GameSaver {
         return results;
     }
     
+    /**
+     * Sort list of files by date of creation from the newest to the oldest.
+     *
+     * @param files list of files objects
+     * @since 1.0
+     */
     public static void sortFilesByDateCreated (File[] files) {
         Arrays.sort(files, new Comparator<File>() {
             @Override
@@ -104,6 +128,13 @@ public class GameSaver {
         });
     }
 
+    /**
+     * Get date of the given file's creation.
+     *
+     * @param file file object
+     * @return date of file's creation as long
+     * @since 1.0
+     */
     public static long getFileCreationEpoch (File file) {
         try {
             BasicFileAttributes attr = Files.readAttributes(file.toPath(),
@@ -115,6 +146,10 @@ public class GameSaver {
         }
     }
     
+    /**
+     * @return true if save folder is empty, false otherwise
+     * @since 1.0
+     */
     public static boolean savesFolderIsEmpty() {
         new File("saves").mkdirs();
         return new File("saves").listFiles().length == 0;

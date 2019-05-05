@@ -35,10 +35,18 @@ import cz.cvut.fel.pjv.blocks.Block;
  */
 public class Enemy extends NPC {
     
-    private int attackRate = 20;
+    private final int attackRate = 20;
     private int attackCounter = 0;
-    private int attackPower = 1;
+    private final int attackPower = 1;
 
+    /**
+     * Create new enemy NPC that is attacking the player.
+     *
+     * @param x creature's X position in pixels
+     * @param y creature's Y position in pixels
+     * @param type type of the creature from enumeration
+     * @since 1.0
+     */
     public Enemy(double x, double y, CreatureType type) {
         super(x, y, type);
     }
@@ -69,6 +77,12 @@ public class Enemy extends NPC {
         if (isAttacking()) { animateAttack(); }
     }
     
+    /**
+     * Attack player and update his HP if attack was successful.
+     *
+     * @param player instance of player
+     * @since 1.0
+     */
     public void attack(Player player) {
         if (player.getX2() > getX()-Block.block_width*4 && player.getX() < getX2()+Block.block_width*4) {
             if (!isAttacking()) { setAttacking(true); }

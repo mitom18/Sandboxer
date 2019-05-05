@@ -32,7 +32,7 @@ import java.io.Serializable;
  * Contains all entities in the game.
  *
  * @author Zdenek
- * @version 1.0
+ * @version 1.1
  */
 public class Game implements Serializable {
     
@@ -79,6 +79,11 @@ public class Game implements Serializable {
         return world;
     }
     
+    /**
+     * Respawn dead player.
+     *
+     * @since 1.1
+     */
     public void respawnPlayer() {
         player.revive();
         //TODO respawn on spawn point

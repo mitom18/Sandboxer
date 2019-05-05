@@ -35,7 +35,7 @@ import javax.imageio.ImageIO;
  * Creature is a living entity which can move around the world and interact with it.
  *
  * @author Michal-jr
- * @version 1.0
+ * @version 1.1
  */
 public abstract class Creature implements Serializable {
     private double x, y;
@@ -134,6 +134,11 @@ public abstract class Creature implements Serializable {
         onGround = false;
     }
     
+    /**
+     * Animate creature's attack.
+     *
+     * @since 1.1
+     */
     public void animateAttack() {
         spriteX = attackAnimationLimit*IMAGE_WIDTH;
         if (leftAttack) { spriteY = 13*IMAGE_HEIGHT; }
@@ -146,6 +151,11 @@ public abstract class Creature implements Serializable {
         }
     }
     
+    /**
+     * Revive creature. Respawn it with its maximum health points.
+     *
+     * @since 1.1
+     */
     public void revive() {
         hp = type.getHp();
         killed = false;
@@ -211,14 +221,32 @@ public abstract class Creature implements Serializable {
         this.swimming = swimming;
     }
 
+    /**
+     * Set if creature is attacking.
+     *
+     * @param attacking
+     * @since 1.1
+     */
     public void setAttacking(boolean attacking) {
         this.attacking = attacking;
     }
 
+    /**
+     * Set if creature is attacking left.
+     *
+     * @param leftAttack
+     * @since 1.1
+     */
     public void setLeftAttack(boolean leftAttack) {
         this.leftAttack = leftAttack;
     }
 
+    /**
+     * Set if creature is attacking right.
+     *
+     * @param rightAttack
+     * @since 1.1
+     */
     public void setRightAttack(boolean rightAttack) {
         this.rightAttack = rightAttack;
     }
@@ -255,14 +283,26 @@ public abstract class Creature implements Serializable {
         return velocityY > 0;
     }
     
+    /**
+     * @return true if creature is swimming, false otherwise
+     * @since 1.1
+     */
     public boolean swimming() {
         return swimming;
     }
 
+    /**
+     * @return true if creature is dead, false otherwise
+     * @since 1.1
+     */
     public boolean isKilled() {
         return killed;
     }
 
+    /**
+     * @return true if creature is attacking, false otherwise
+     * @since 1.1
+     */
     public boolean isAttacking() {
         return attacking;
     }
@@ -449,14 +489,26 @@ public abstract class Creature implements Serializable {
         this.onGround = onGround;
     }
 
+    /**
+     * Set creature's health points.
+     *
+     * @param hp health points
+     * @since 1.1
+     */
     public void setHp(int hp) {
         this.hp = hp;
     }
     
+    /**
+     * Set that creature is dead.
+     *
+     * @since 1.1
+     */
     public void die() {
         killed = true;
     }
     
+    //classes for serialization of image
     private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
         s.defaultReadObject();
         image = SwingFXUtils.toFXImage(ImageIO.read(s), null);
