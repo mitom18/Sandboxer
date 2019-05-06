@@ -33,7 +33,7 @@ import java.util.List;
 public class Structure implements Serializable {
     
     private final String structureName;
-    private final List<Vector> blueprint;
+    private final List<List<Object>> blueprint;
     
     private final int x;
     private final int y;

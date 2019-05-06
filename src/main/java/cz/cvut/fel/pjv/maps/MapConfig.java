@@ -36,7 +36,7 @@ public class MapConfig implements Serializable {
     
     public List<List<BlockType>> completeMap;
     
-    public Map<String, List<Vector>> structureBlueprints;
+    public Map<String, List<List<Object>>> structureBlueprints;
     
     public int playerX;
     public int playerY;
