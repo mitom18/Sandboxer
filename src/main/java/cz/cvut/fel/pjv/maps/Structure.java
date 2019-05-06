@@ -23,45 +23,28 @@
  */
 package cz.cvut.fel.pjv.maps;
 
-import cz.cvut.fel.pjv.blocks.BlockType;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 /**
- * Object representation of the JSON configuration file.
+ *
  * @author Zdenek
  */
-public class MapConfig implements Serializable {
+public class Structure implements Serializable {
     
-    public List<List<BlockType>> completeMap;
+    private final String structureName;
+    private final List<Vector> blueprint;
     
-    public Map<String, List<Vector>> structureBlueprints;
-    
-    public int playerX;
-    public int playerY;
-    
-    public int width;
-    public int height;
-    
-    public double amplitudeCoefficientMultiplicator;
-    public double periodCoefficientMultiplicator;
-    
-    public double ampMin;
-    public double ampMax;
-    public double perMin;
-    public double perMax;
-    
-    /**
-     * Represents the probability in percent.
-     * Allowed values: 0.0 - 100.0
-     */
-    public double flatLandProbability;
-    public double diamondProbability;
-    public double caveProbability;
-    
-    public String seed;
+    private final int x;
+    private final int y;
 
-    public MapConfig() {
+    public Structure(String structureName, int x, int y) {
+        this.structureName = structureName;
+        this.x = x;
+        this.y = y;
+        
+        blueprint = WorldMap.mapConfig.structureBlueprints.get(structureName);
     }
+    
+    
 }

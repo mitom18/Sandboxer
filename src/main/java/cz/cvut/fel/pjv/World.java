@@ -35,7 +35,7 @@ import cz.cvut.fel.pjv.items.Item;
 import cz.cvut.fel.pjv.items.StoredBlock;
 import cz.cvut.fel.pjv.items.ItemType;
 import cz.cvut.fel.pjv.maps.Cave;
-import cz.cvut.fel.pjv.maps.Map;
+import cz.cvut.fel.pjv.maps.WorldMap;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -43,7 +43,6 @@ import java.util.List;
 
 /**
  * Contains all entities in the world.
- * Takes the world map (2D ArrayList) as argument.
  * 
  * @author Zdenek
  * @version 1.0
@@ -69,9 +68,9 @@ public class World implements Serializable {
     private List<NPC> npcs;
     
     /*
-     * Instance of Map.
+     * Instance of WorldMap.
      */
-    private final Map map;
+    private final WorldMap worldMap;
     
     /**
      * Create new world.
@@ -80,17 +79,17 @@ public class World implements Serializable {
      * @since 1.0
      */
     public World() throws IOException {
-        map = new Map();
-        WIDTH = map.getWIDTH();
-        HEIGHT = map.getHEIGHT();
+        worldMap = new WorldMap();
+        WIDTH = worldMap.getWIDTH();
+        HEIGHT = worldMap.getHEIGHT();
         createWorld();
     }
     
     private void spawnNPCs() {
         npcs = new ArrayList<>();
         int i = 0;
-        for (Cave cave : map.getCaves()) {
-            npcs.add(new Enemy((cave.getSpawner().getX() - map.getMap().size() / 2) * Block.block_width, cave.getSpawner().getY() * Block.block_height, CreatureType.SKELETON));
+        for (Cave cave : worldMap.getCaves()) {
+            npcs.add(new Enemy((cave.getSpawner().getX() - worldMap.getMap().size() / 2) * Block.block_width, cave.getSpawner().getY() * Block.block_height, CreatureType.SKELETON));
             i++;
             System.out.println("NPC num: " + i);
             System.out.println("x: " + cave.getSpawner().getX() * Block.block_width);
@@ -103,11 +102,11 @@ public class World implements Serializable {
         
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
-                if (map.getMap().get(i).get(j) != null) {
-                    if (map.getMap().get(i).get(j) == BlockType.WATER) {
-                        blocks.add(new LiquidBlock((i - (int) WIDTH/2) * Block.block_width, j * Block.block_height, map.getMap().get(i).get(j)));
+                if (worldMap.getMap().get(i).get(j) != null) {
+                    if (worldMap.getMap().get(i).get(j) == BlockType.WATER) {
+                        blocks.add(new LiquidBlock((i - (int) WIDTH/2) * Block.block_width, j * Block.block_height, worldMap.getMap().get(i).get(j)));
                     } else {
-                        blocks.add(new SolidBlock((i - (int) WIDTH/2) * Block.block_width, j * Block.block_height, map.getMap().get(i).get(j)));
+                        blocks.add(new SolidBlock((i - (int) WIDTH/2) * Block.block_width, j * Block.block_height, worldMap.getMap().get(i).get(j)));
                     }
                 }
             }
@@ -182,11 +181,11 @@ public class World implements Serializable {
     }
     
     /**
-     * @return instance of the map
+     * @return instance of WorldMap
      * @since 1.0
      */
-    public Map getMap() {
-        return map;
+    public WorldMap getWorldMap() {
+        return worldMap;
     }
     
     /**

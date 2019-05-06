@@ -3,6 +3,12 @@
         []
     ],
 
+    "structures": {
+        "house": [
+            []
+        ]
+    },
+
     "playerX": 0,
     "playerY": 0,
 

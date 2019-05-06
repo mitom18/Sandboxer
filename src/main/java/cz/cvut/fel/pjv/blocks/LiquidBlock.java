@@ -69,7 +69,7 @@ public class LiquidBlock extends Block {
                     break;
                 }
             }
-            if ((!blockUnder) && (y < world.getMap().getHEIGHT() * Block.block_height)) { newLiquid.add(new LiquidBlock(getX(), getY()+getHeight()*i, BlockType.WATER)); }
+            if ((!blockUnder) && (y < world.getWorldMap().getHEIGHT() * Block.block_height)) { newLiquid.add(new LiquidBlock(getX(), getY()+getHeight()*i, BlockType.WATER)); }
             y += getHeight();
         }
         
