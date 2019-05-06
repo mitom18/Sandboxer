@@ -99,7 +99,7 @@ public class EventHandlers {
                         case C:     draw.zoom(game); break;
                         case ESCAPE: {
                             timer.stop();
-                            draw.drawPauseMenu(gc);
+                            draw.drawPauseMenu(gc, game);
                             UIControls.showSaveButton();
                             break;
                         }
