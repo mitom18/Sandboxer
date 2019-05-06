@@ -44,6 +44,7 @@ import java.util.List;
 
 /**
  * Contains all entities in the world.
+ * Takes the world worldMap (2D ArrayList) as argument.
  * 
  * @author Zdenek
  * @version 1.0
@@ -73,6 +74,8 @@ public class World implements Serializable {
      */
     private final WorldMap worldMap;
     
+    private double playerSpawnX;
+    
     /**
      * Create new world.
      *
@@ -84,6 +87,7 @@ public class World implements Serializable {
         WIDTH = worldMap.getWIDTH();
         HEIGHT = worldMap.getHEIGHT();
         createWorld();
+        playerSpawnX = worldMap.getPlayerX();
     }
     
     private void spawnNPCs() {
@@ -98,6 +102,7 @@ public class World implements Serializable {
             System.out.println("x: " + cave.getSpawner().getX() * Block.block_width);
             System.out.println("y: " + cave.getSpawner().getY() * Block.block_height);
         }
+        
         npcs.add(new Friend(32, 0, CreatureType.MONK));
     }
     
@@ -159,6 +164,23 @@ public class World implements Serializable {
             blocks.add(newBlock);
         }
     }
+    
+    public double getHighestBlockY(double x) {
+        double yRet = 0;
+        for (Block block : getBlockColumn(x)) {
+            if (block.getY() < yRet) { yRet = block.getY(); }
+        }
+        return yRet;
+    }
+    
+    private List<Block> getBlockColumn(double x) {
+        List<Block> blockColumn = new ArrayList<>();
+        for (Block block : blocks) {
+            if ((int) block.getX() != (int) x) { continue; }
+            blockColumn.add(block);
+        }
+        return blockColumn;
+    }
 
     /**
      * @return list of all blocks in the world
@@ -185,7 +207,7 @@ public class World implements Serializable {
     }
     
     /**
-     * @return instance of WorldMap
+     * @return instance of the worldMap
      * @since 1.0
      */
     public WorldMap getWorldMap() {
@@ -198,6 +220,14 @@ public class World implements Serializable {
      */
     public int getWIDTH() {
         return WIDTH;
+    }
+
+    public double getPlayerSpawnX() {
+        return playerSpawnX;
+    }
+
+    public void setPlayerSpawnX(double playerSpawnX) {
+        this.playerSpawnX = playerSpawnX;
     }
     
 }

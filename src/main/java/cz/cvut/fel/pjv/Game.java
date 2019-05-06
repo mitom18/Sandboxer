@@ -85,8 +85,9 @@ public class Game implements Serializable {
      * @since 1.1
      */
     public void respawnPlayer() {
+        player.setX(world.getPlayerSpawnX());
+        player.setY(world.getHighestBlockY(world.getPlayerSpawnX()));
         player.revive();
-        //TODO respawn on spawn point
     }
     
 }

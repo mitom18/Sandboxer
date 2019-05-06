@@ -51,7 +51,6 @@ public class WorldMap implements Serializable {
     
     private List<Integer> completeSkyline;
     private List<Cave> caves;
-    private List<Structure> structures;
     
     private final int playerX;
     private final int playerY;
@@ -150,10 +149,6 @@ public class WorldMap implements Serializable {
 
     public List<Cave> getCaves() {
         return caves;
-    }
-
-    public List<Structure> getStructures() {
-        return structures;
     }
     
     private void customMap() {

@@ -83,6 +83,7 @@ public class Draw {
         
         if (player.getX() < 90 && player.movingLeft()) {
             player.setX(player.getX() + playerVelocityX);
+            world.setPlayerSpawnX(world.getPlayerSpawnX() + playerVelocityX);
             for (NPC npc : world.getNpcs()) {
                 if (npc.isKilled()) { continue; }
                 npc.setX(npc.getX() + playerVelocityX);
@@ -114,6 +115,7 @@ public class Draw {
         
         if (player.getX() > WIDTH-90-player.getWidth() && player.movingRight()) {
             player.setX(player.getX() - playerVelocityX);
+            world.setPlayerSpawnX(world.getPlayerSpawnX() - playerVelocityX);
             for (NPC npc : world.getNpcs()) {
                 if (npc.isKilled()) { continue; }
                 npc.setX(npc.getX() - playerVelocityX);
@@ -225,6 +227,7 @@ public class Draw {
             cameraOffsetY -= offsetY;
             if (cameraOffsetX > Block.block_width) { cameraOffsetX %= Block.block_width; }
             if (cameraOffsetY > Block.block_height) { cameraOffsetY %= Block.block_height; }
+            world.setPlayerSpawnX(world.getPlayerSpawnX()*zoomScale - offsetX);
         }
         oldZoomScale = this.zoomScale; //store zoom for zoom reset
     }
@@ -321,12 +324,13 @@ public class Draw {
     }
     
     /**
-     * Draw background of the pause menu. Paused game is still visible a bit.
+     * Draw background of the pause menu and some texts. Paused game is still visible a bit.
      *
      * @param g a canvas 2D rendering context
+     * @param game instance of the game
      * @since 1.1
      */
-    public void drawPauseMenu(GraphicsContext g) {
+    public void drawPauseMenu(GraphicsContext g, Game game) {
         g.setGlobalAlpha(0.75);
         g.setFill(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
@@ -334,6 +338,8 @@ public class Draw {
         g.setFill(Color.WHITE);
         g.setFont(Font.font("Arial", FontWeight.BOLD, 38));
         g.fillText("Press ESC to resume the game.", WIDTH/2-265, HEIGHT/2);
+        g.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        g.fillText("Seed: "+game.getWorld().getWorldMap().getSeed(), WIDTH-300, HEIGHT-30);
         g.setFont(Font.getDefault());
     }
 
