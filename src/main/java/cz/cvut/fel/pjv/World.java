@@ -92,15 +92,11 @@ public class World implements Serializable {
     
     private void spawnNPCs() {
         npcs = new ArrayList<>();
-        int i = 0;
+        
         for (Cave cave : worldMap.getCaves()) {
             double enemyX = (cave.getSpawner().getX() - (worldMap.getWIDTH() / 2)) * Block.block_width;
-            double enemyY = (worldMap.getHEIGHT() - cave.getSpawner().getY() + 1) * Block.block_height;
+            double enemyY = (cave.getSpawner().getY() - 1) * Block.block_height;
             npcs.add(new Enemy(enemyX, enemyY, CreatureType.SKELETON));
-            i++;
-            System.out.println("NPC num: " + i);
-            System.out.println("x: " + cave.getSpawner().getX() * Block.block_width);
-            System.out.println("y: " + cave.getSpawner().getY() * Block.block_height);
         }
         
         npcs.add(new Friend(32, 0, CreatureType.MONK));
