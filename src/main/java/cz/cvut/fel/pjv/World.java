@@ -207,7 +207,7 @@ public class World implements Serializable {
     }
     
     /**
-     * @return instance of the worldMap
+     * @return instance of the world map
      * @since 1.0
      */
     public WorldMap getWorldMap() {

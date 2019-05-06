@@ -3,15 +3,12 @@
         []
     ],
 
-<<<<<<< HEAD
     "structureBlueprints": {
         "house": [
             []
         ]
     },
 
-=======
->>>>>>> 09f0f3911595beef08c3dc6ab1627910ce143dd1
     "playerX": 0,
     "playerY": 0,
 
