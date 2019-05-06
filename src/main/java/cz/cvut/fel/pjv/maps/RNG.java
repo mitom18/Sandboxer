@@ -36,7 +36,7 @@ public abstract class RNG {
     private static Random r = new Random();
 
     public static void setNewSeed() {
-        inputSeed = WorldMap.mapConfig.seed;
+        inputSeed = Map.mapConfig.seed;
         // These are nice seeds: 7451260251423394044L -7780041021634934149L
         
         if (inputSeed.equals("")) {

@@ -57,8 +57,8 @@ public class Game implements Serializable {
         // Create a new world.
         world = new World();
         
-        int playerX = world.getWorldMap().getPlayerX();
-        int playerY = (int) (world.getWorldMap().getPlayerY() * Block.block_height);
+        int playerX = world.getMap().getPlayerX();
+        int playerY = (int) (world.getMap().getPlayerY() * Block.block_height);
         // Create a new player at the given pixel coordinates.
         player = new Player(playerX, playerY);
     }

@@ -26,7 +26,6 @@ package cz.cvut.fel.pjv.maps;
 import cz.cvut.fel.pjv.blocks.BlockType;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Object representation of the JSON configuration file.
@@ -35,8 +34,6 @@ import java.util.Map;
 public class MapConfig implements Serializable {
     
     public List<List<BlockType>> completeMap;
-    
-    public Map<String, List<Vector>> structureBlueprints;
     
     public int playerX;
     public int playerY;

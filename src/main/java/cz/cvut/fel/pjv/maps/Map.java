@@ -32,14 +32,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class WorldMap generates a map. The map defines how a game world is going to look.
+ * Class Map generates a map. The map defines how a game world is going to look.
  * The constructor takes 2 integer arguments (width and height of the map) or
  * if no arguments are given width and height are set to default values.
  *
  * @author Zdenek
  * @version 1.1
  */
-public class WorldMap implements Serializable {
+public class Map implements Serializable {
     
     public static MapConfig mapConfig;
     
@@ -51,7 +51,6 @@ public class WorldMap implements Serializable {
     
     private List<Integer> completeSkyline;
     private List<Cave> caves;
-    private List<Structure> structures;
     
     private final int playerX;
     private final int playerY;
@@ -62,7 +61,7 @@ public class WorldMap implements Serializable {
      * @throws java.io.IOException
      * @since 1.0
      */
-    public WorldMap() throws IOException {
+    public Map() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         
         mapConfig = objectMapper.readValue(
@@ -93,7 +92,7 @@ public class WorldMap implements Serializable {
     }
     
     /**
-     * @return randomly generated seed for this instance of WorldMap
+     * @return randomly generated seed for this instance of Map
      * @since 1.1
      */
     public long getSeed() {
@@ -150,10 +149,6 @@ public class WorldMap implements Serializable {
 
     public List<Cave> getCaves() {
         return caves;
-    }
-
-    public List<Structure> getStructures() {
-        return structures;
     }
     
     private void customMap() {
