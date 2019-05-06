@@ -33,7 +33,6 @@ import cz.cvut.fel.pjv.items.Tool;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -54,6 +53,17 @@ public class EventHandlers {
     private final Game game;
     private final Player player;
 
+    /**
+     * Create new instance that is able to initialize all event handlers.
+     *
+     * @param gameScreen game screen
+     * @param timer main game loop timer
+     * @param draw instance of draw class
+     * @param gc a canvas 2D rendering context
+     * @param game instance of game
+     * @param player instance of player
+     * @since 1.0
+     */
     public EventHandlers(Scene gameScreen, GameAnimationTimer timer, Draw draw, GraphicsContext gc, Game game, Player player) {
         this.gameScreen = gameScreen;
         this.timer = timer;
@@ -63,6 +73,11 @@ public class EventHandlers {
         this.player = player;
     }
     
+    /**
+     * Initialize key event handlers and mouse event handlers.
+     *
+     * @since 1.0
+     */
     public void create() {
         createKeyHandler();
         createMouseHandler();

@@ -23,6 +23,9 @@
  */
 package cz.cvut.fel.pjv.creatures;
 
+import cz.cvut.fel.pjv.Collision;
+import cz.cvut.fel.pjv.World;
+
 /**
  * NPC that is not attacking player.
  *
@@ -31,8 +34,40 @@ package cz.cvut.fel.pjv.creatures;
  */
 public class Friend extends NPC {
 
+    private int movementCounter = 0;
+    private boolean wantGoLeft = true;
+    private boolean wantGoRight = false;
+    /**
+     * Create new friendly NPC.
+     *
+     * @param x creature's X position in pixels
+     * @param y creature's Y position in pixels
+     * @param type type of the creature from enumeration
+     * @since 1.0
+     */
     public Friend(double x, double y, CreatureType type) {
         super(x, y, type);
+    }
+
+    @Override
+    public void update(World world, Player player) {
+        Collision.creatureIsInLiquid(this, world);
+        calculateMovement(world);
+        move();
+        Collision.preventCollision(this, world);
+    }
+    
+    private void calculateMovement(World world) {
+        movementCounter++;
+        setUp(false);
+        if (movementCounter == 100) {
+            wantGoLeft = !wantGoLeft;
+            wantGoRight = !wantGoRight;
+            movementCounter = 0;
+        }
+        setLeft(wantGoLeft);
+        setRight(wantGoRight);
+        if (Collision.creatureHasBlockInFront(this, world)) { setUp(true); }
     }
     
 }

@@ -33,7 +33,7 @@ import cz.cvut.fel.pjv.items.Item;
  * Collision management.
  * 
  * @author Michal-jr
- * @version 1.0
+ * @version 1.1
  */
 public abstract class Collision {
     
@@ -75,6 +75,30 @@ public abstract class Collision {
     
     private static boolean collides(Creature creature, Block block) {
         return creature.getX() < block.getX2() && creature.getX2() > block.getX() && creature.getY() < block.getY2() && creature.getY2() > block.getY();
+    }
+    
+    /**
+     * Check if creature has block in front of itself.
+     *
+     * @param creature instance of creature
+     * @param world instance of world
+     * @return true if creature has block in front of itself, false otherwise
+     * @since 1.1
+     */
+    public static boolean creatureHasBlockInFront(Creature creature, World world) {
+        for (Block block : world.getBlocks()) {
+            if (block.isDestroyed() || block instanceof LiquidBlock) { continue; }
+            if (!(block.getX() > creature.getX()-block.getWidth()*4 && block.getX2() < creature.getX2()+block.getWidth()*4)) {
+                continue;
+            }
+            if (creature.movingLeft() && collides(creature.getX()-creature.getWidth()/2, creature.getY()+creature.getHeight()/2, block)) {
+                return true;
+            }
+            if (creature.movingRight() && collides(creature.getX2()+creature.getWidth()/2, creature.getY()+creature.getHeight()/2, block)) {
+                
+            }
+        }
+        return false;
     }
     
     /**

@@ -44,6 +44,15 @@ public class GameAnimationTimer extends AnimationTimer {
     private final Player player;
     private final World world;
 
+    /**
+     * Create new animation timer used as game loop.
+     *
+     * @param stage instance of javafx stage (window)
+     * @param draw instance of draw class
+     * @param gc a canvas 2D rendering context
+     * @param game instance of game
+     * @since 1.0
+     */
     public GameAnimationTimer(Stage stage, Draw draw, GraphicsContext gc, Game game) {
         this.stage = stage;
         this.draw = draw;
@@ -81,6 +90,10 @@ public class GameAnimationTimer extends AnimationTimer {
         running = false;
     }
 
+    /**
+     * @return true if timer thread is running, false otherwise
+     * @since 1.0
+     */
     public boolean isRunning() {
         return running;
     }

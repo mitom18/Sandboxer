@@ -37,7 +37,7 @@ import javafx.stage.Stage;
  * Main class, starts the game.
  * 
  * @author Michal-jr
- * @version 1.0
+ * @version 1.1
  */
 public class Main extends Application {
     
@@ -109,6 +109,12 @@ public class Main extends Application {
         timer.start();
     }
     
+    /**
+     * Save the game temporarily. This is not saving game to file.
+     *
+     * @param gameToSave instance of game to be temporarily saved
+     * @since 1.1
+     */
     public static void saveGame(Game gameToSave) {
         savedGame = gameToSave;
     }
