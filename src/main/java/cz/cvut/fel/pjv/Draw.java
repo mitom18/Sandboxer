@@ -278,12 +278,6 @@ public class Draw {
             g.drawImage(HEARTH, x, 10, 15, 15);
             x += 15;
         }
-        final Image MEAT = new Image("meat.png");
-        x = WIDTH - 160;
-        for (int i = 0; i < player.getSaturation(); i++) {
-            g.drawImage(MEAT, x, 30, 15, 15);
-            x += 15;
-        }
     }
 
     /**

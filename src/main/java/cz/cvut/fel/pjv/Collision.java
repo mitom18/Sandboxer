@@ -59,7 +59,10 @@ public abstract class Collision {
 
                 if(topCollision < bottomCollision && topCollision < leftCollision && topCollision < rightCollision) {
                     creature.setY(block.getY()-creature.getHeight()); //top collision
-                    // TODO fall damage: creature.setHp(creature.getHp()-(int)creature.getVelocityY()/2);
+                    if (creature.getVelocityY() > 6){
+                        creature.setHp(creature.getHp()-(int)(creature.getVelocityY()-6)/2);
+                        if (creature.getHp() < 0) { creature.die(); }
+                    }
                     creature.setVelocityY(0.0); //set creature's velocity to 0
                     creature.setOnGround(true); //creature is standing on the ground
                 }

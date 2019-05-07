@@ -31,12 +31,13 @@ import cz.cvut.fel.pjv.World;
  * Character that is controlled by player.
  * 
  * @author Michal-jr
- * @version 1.1
+ * @version 1.2
  */
 public class Player extends Creature {
     
     private final Inventory inventory = new Inventory();
-    private int saturation = 10;
+    private final int REGENERATION_RATE = 500;
+    private int regenerationCounter = 0;
 
     /**
      * Create player on given coordinates.
@@ -56,6 +57,11 @@ public class Player extends Creature {
      * @since 1.0
      */
     public void update(World world) {
+        regenerationCounter++;
+        if (regenerationCounter > REGENERATION_RATE) {
+            if (getHp() < 10) { setHp(getHp() + 1); }
+            regenerationCounter = 0;
+        }
         Collision.creatureIsInLiquid(this, world);
         move();
         Collision.preventCollision(this, world);
@@ -109,14 +115,6 @@ public class Player extends Creature {
      */
     public Inventory getInventory() {
         return inventory;
-    }
-
-    /**
-     * @return player's saturation points
-     * @since 1.0
-     */
-    public int getSaturation() {
-        return saturation;
     }
     
 }

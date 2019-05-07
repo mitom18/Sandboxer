@@ -67,7 +67,7 @@ public class Friend extends NPC {
         }
         setLeft(wantGoLeft);
         setRight(wantGoRight);
-        if (Collision.creatureHasBlockInFront(this, world)) { setUp(true); }
+        if (Collision.creatureHasBlockInFront(this, world) || swimming()) { setUp(true); }
     }
     
 }
