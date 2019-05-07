@@ -35,10 +35,11 @@ import javax.imageio.ImageIO;
  * Item class. Item lays in the world or is in the player's inventory.
  *
  * @author Michal-jr
- * @version 1.0
+ * @version 1.1
  */
 public abstract class Item implements Serializable {
     private double x, y;
+    private double velocityY = 5;
     private double width = 24;
     private double height = 24;
     private boolean picked;
@@ -73,6 +74,14 @@ public abstract class Item implements Serializable {
     public double getX() {
         return x;
     }
+    
+    /**
+     * @return item's X2 position in pixels
+     * @since 1.0
+     */
+    public double getX2() {
+        return x+width;
+    }
 
     /**
      * @return item's Y position in pixels
@@ -80,6 +89,14 @@ public abstract class Item implements Serializable {
      */
     public double getY() {
         return y;
+    }
+    
+    /**
+     * @return item's Y2 position in pixels
+     * @since 1.0
+     */
+    public double getY2() {
+        return y+height;
     }
 
     /**
@@ -124,6 +141,14 @@ public abstract class Item implements Serializable {
      */
     public void setY(double y) {
         this.y = y;
+    }
+
+    /**
+     * @return item's Y velocity
+     * @since 1.1
+     */
+    public double getVelocityY() {
+        return velocityY;
     }
 
     /**

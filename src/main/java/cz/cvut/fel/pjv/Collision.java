@@ -33,7 +33,7 @@ import cz.cvut.fel.pjv.items.Item;
  * Collision management.
  * 
  * @author Michal-jr
- * @version 1.1
+ * @version 1.2
  */
 public abstract class Collision {
     
@@ -81,6 +81,43 @@ public abstract class Collision {
     }
     
     /**
+     * Check if item is colliding with other entity.
+     * If it is colliding than edit item's coordinates.
+     *
+     * @param item instance of the item
+     * @param world instance of the world where item exists
+     * @since 1.2
+     */
+    public static void preventItemCollision(Item item, World world) {
+        for (Block block : world.getBlocks()) {
+            if (block.isDestroyed()) { continue; }
+            if (!(block.getX() > item.getX()-block.getWidth()*4 && block.getX2() < item.getX2()+block.getWidth()*4)) {
+                continue;
+            }
+            if (collides(item, block)) {
+                double bottomCollision = block.getY2() - item.getY();
+                double topCollision = item.getY2() - block.getY();
+                double leftCollision = item.getX2() - block.getX();
+                double rightCollision = block.getX2() - item.getX();
+
+                if(topCollision < bottomCollision && topCollision < leftCollision && topCollision < rightCollision) {
+                    item.setY(block.getY()-item.getHeight()); //top collision
+                }
+                if(bottomCollision < topCollision && bottomCollision < leftCollision && bottomCollision < rightCollision)
+                    item.setY(block.getY2()); //bottom collision
+                if(leftCollision < rightCollision && leftCollision < topCollision && leftCollision < bottomCollision)
+                    item.setX(block.getX()-item.getWidth()); //left collision
+                if(rightCollision < leftCollision && rightCollision < topCollision && rightCollision < bottomCollision)
+                    item.setX(block.getX2()); //right collision
+            }
+        }
+    }
+    
+    private static boolean collides(Item item, Block block) {
+        return item.getX() < block.getX2() && item.getX2() > block.getX() && item.getY() < block.getY2() && item.getY2() > block.getY();
+    }
+    
+    /**
      * Check if creature has block in front of itself.
      *
      * @param creature instance of creature
@@ -98,7 +135,7 @@ public abstract class Collision {
                 return true;
             }
             if (creature.movingRight() && collides(creature.getX2()+creature.getWidth()/2, creature.getY()+creature.getHeight()/2, block)) {
-                
+                return true;
             }
         }
         return false;

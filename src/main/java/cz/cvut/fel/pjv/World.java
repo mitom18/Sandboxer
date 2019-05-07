@@ -47,7 +47,7 @@ import java.util.List;
  * Takes the world worldMap (2D ArrayList) as argument.
  * 
  * @author Zdenek
- * @version 1.0
+ * @version 1.1
  */
 public class World implements Serializable {
     
@@ -96,10 +96,11 @@ public class World implements Serializable {
         for (Cave cave : worldMap.getCaves()) {
             double enemyX = (cave.getSpawner().getX() - (worldMap.getWIDTH() / 2)) * Block.block_width;
             double enemyY = (cave.getSpawner().getY() - 1) * Block.block_height;
-            npcs.add(new Enemy(enemyX, enemyY, CreatureType.SKELETON));
+            npcs.add(new Enemy(enemyX, enemyY, CreatureType.SKELETON, this));
         }
         
         npcs.add(new Friend(32, 0, CreatureType.MONK));
+        npcs.add(new Enemy(32, 0, CreatureType.BOSS, this));
     }
     
     private void createWorld() {
@@ -121,6 +122,29 @@ public class World implements Serializable {
         items.add(new StoredBlock(0,650, ItemType.DIAMOND_ORE));
         
         spawnNPCs();
+    }
+    
+    /**
+     * Add item to the world.
+     *
+     * @param itemToAdd instance of item to add into the world
+     * @since 1.1
+     */
+    public void addItem(Item itemToAdd) {
+        items.add(itemToAdd);
+    }
+    
+    /**
+     * Update all items that are laying in the world (they are not picked by any creature).
+     *
+     * @since 1.1
+     */
+    public void updateLayingItems() {
+        for (Item item : items) {
+            if (item.isPicked()) { continue; }
+            item.setY(item.getY() + item.getVelocityY());
+            Collision.preventItemCollision(item, this);
+        }
     }
     
     /**
@@ -161,6 +185,11 @@ public class World implements Serializable {
         }
     }
     
+    /**
+     * @param x pixel X coordinate of the blocks column
+     * @return pixel Y coordinate of the highest block in the given column of blocks
+     * @since 1.1
+     */
     public double getHighestBlockY(double x) {
         double yRet = 0;
         for (Block block : getBlockColumn(x)) {
@@ -218,10 +247,20 @@ public class World implements Serializable {
         return WIDTH;
     }
 
+    /**
+     * @return X coordinate of the player's spawn point in pixels
+     * @since 1.1
+     */
     public double getPlayerSpawnX() {
         return playerSpawnX;
     }
 
+    /**
+     * Set X coordinate of the player's spawn point.
+     *
+     * @param playerSpawnX pixel X coordinate of the player's spawn point
+     * @since 1.1
+     */
     public void setPlayerSpawnX(double playerSpawnX) {
         this.playerSpawnX = playerSpawnX;
     }

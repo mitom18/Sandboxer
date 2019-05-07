@@ -26,6 +26,8 @@ package cz.cvut.fel.pjv.creatures;
 import cz.cvut.fel.pjv.Collision;
 import cz.cvut.fel.pjv.World;
 import cz.cvut.fel.pjv.blocks.Block;
+import cz.cvut.fel.pjv.items.EnemyDrop;
+import cz.cvut.fel.pjv.items.Item;
 
 /**
  * NPC that is attacking player.
@@ -38,6 +40,10 @@ public class Enemy extends NPC {
     private final int attackRate = 20;
     private int attackCounter = 0;
     private final int attackPower = 1;
+    private int movementCounter = 0;
+    private boolean wantGoLeft = true;
+    private boolean wantGoRight = false;
+    private final Item dropItem;
 
     /**
      * Create new enemy NPC that is attacking the player.
@@ -45,29 +51,28 @@ public class Enemy extends NPC {
      * @param x creature's X position in pixels
      * @param y creature's Y position in pixels
      * @param type type of the creature from enumeration
+     * @param world instance of the world
      * @since 1.0
      */
-    public Enemy(double x, double y, CreatureType type) {
+    public Enemy(double x, double y, CreatureType type, World world) {
         super(x, y, type);
+        if (type.getDropItemType() != null) {
+            dropItem = new EnemyDrop(x, y, type.getDropItemType());
+            world.addItem(dropItem);
+        } else {
+            dropItem = null;
+        }
     }
     
     @Override
     public void update(World world, Player player) {
         Collision.creatureIsInLiquid(this, world);
-        if (player.getX2() < getX()) {
-            setRight(false);
-            setLeft(true);
-        }
-        else if (player.getX() > getX2()) {
-            setLeft(false);
-            setRight(true);
-        }
-        else {
-            setLeft(false);
-            setRight(false);
-        }
-        setUp(true);
+        calculateMovement(world, player);
         move();
+        if (dropItem != null) {
+            dropItem.setX(getX());
+            dropItem.setY(getY());
+        }
         Collision.preventCollision(this, world);
         if (attackCounter == attackRate) {
             attack(player);
@@ -75,6 +80,33 @@ public class Enemy extends NPC {
         }
         attackCounter++;
         if (isAttacking()) { animateAttack(); }
+    }
+    
+    private void calculateMovement(World world, Player player) {
+        if (
+            player.getX2() > getX()-10*Block.block_width && 
+            player.getX() < getX2()+10*Block.block_width
+        ) {
+            if (player.getX2() < getX()) {
+                setRight(false);
+                setLeft(true);
+            }
+            else if (player.getX() > getX2()) {
+                setLeft(false);
+                setRight(true);
+            }
+        } else {
+            movementCounter++;
+            setUp(false);
+            if (movementCounter == 200) {
+                wantGoLeft = !wantGoLeft;
+                wantGoRight = !wantGoRight;
+                movementCounter = 0;
+            }
+            setLeft(wantGoLeft);
+            setRight(wantGoRight);
+        }
+        if (Collision.creatureHasBlockInFront(this, world) || swimming()) { setUp(true); }
     }
     
     /**
@@ -103,6 +135,12 @@ public class Enemy extends NPC {
                 if (player.getHp() <= 0) { player.die(); }
             }
         }
+    }
+
+    @Override
+    public void die() {
+        super.die();
+        if (dropItem != null) { dropItem.setPicked(false); }
     }
     
 }

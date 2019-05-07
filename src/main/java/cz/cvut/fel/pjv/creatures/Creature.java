@@ -506,6 +506,7 @@ public abstract class Creature implements Serializable {
      */
     public void die() {
         killed = true;
+        left = false; right = false; up = false; down = false;
     }
     
     //classes for serialization of image
