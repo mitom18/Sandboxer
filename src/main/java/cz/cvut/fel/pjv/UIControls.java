@@ -48,6 +48,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -164,6 +165,10 @@ public class UIControls {
     public Group createGameScreen() {
         Group rootGameScreen = new Group();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
+        Text text = new Text(WIDTH/2-265, HEIGHT/2, "Press ESC to resume the game.");
+        text.setFill(Color.WHITE);
+        text.setFont(Font.font("Arial", FontWeight.BOLD, 38));
+        text.setVisible(false);
         Button saveButton = new Button("Save game");
         saveButton.setLayoutX(WIDTH/2-30);
         saveButton.setLayoutY(HEIGHT-250);
@@ -174,8 +179,8 @@ public class UIControls {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        Main.gameScreen.getRoot().getChildrenUnmodifiable().get(1).setDisable(true);
-                        Main.gameScreen.getRoot().getChildrenUnmodifiable().get(2).setVisible(true);
+                        Main.gameScreen.getRoot().getChildrenUnmodifiable().get(2).setDisable(true);
+                        Main.gameScreen.getRoot().getChildrenUnmodifiable().get(3).setVisible(true);
                     }
                 });
                 new Thread(new Runnable() {
@@ -190,8 +195,8 @@ public class UIControls {
                             @Override
                             public void run() {
                                 GameSaver.saveGame(Main.savedGame);
-                                Main.gameScreen.getRoot().getChildrenUnmodifiable().get(1).setDisable(false);
-                                Main.gameScreen.getRoot().getChildrenUnmodifiable().get(2).setVisible(false);
+                                Main.gameScreen.getRoot().getChildrenUnmodifiable().get(2).setDisable(false);
+                                Main.gameScreen.getRoot().getChildrenUnmodifiable().get(3).setVisible(false);
                             }
                         });
                     }
@@ -204,7 +209,7 @@ public class UIControls {
         savingLabel.setLayoutX(WIDTH/2-35);
         savingLabel.setLayoutY(HEIGHT-200);
         savingLabel.setVisible(false);
-        rootGameScreen.getChildren().addAll(canvas, saveButton, savingLabel);
+        rootGameScreen.getChildren().addAll(canvas, text, saveButton, savingLabel);
         
         return rootGameScreen;
     }
@@ -327,8 +332,9 @@ public class UIControls {
      *
      * @since 1.0
      */
-    public static void showSaveButton() {
+    public static void showPauseMenu() {
         Main.gameScreen.getRoot().getChildrenUnmodifiable().get(1).setVisible(true);
+        Main.gameScreen.getRoot().getChildrenUnmodifiable().get(2).setVisible(true);
     }
     
     /**
@@ -336,7 +342,8 @@ public class UIControls {
      *
      * @since 1.0
      */
-    public static void hideSaveButton() {
+    public static void hidePauseMenu() {
         Main.gameScreen.getRoot().getChildrenUnmodifiable().get(1).setVisible(false);
+        Main.gameScreen.getRoot().getChildrenUnmodifiable().get(2).setVisible(false);
     }
 }

@@ -123,7 +123,7 @@ public class GameSaver {
             public int compare (File f1, File f2) {
                 long l1 = getFileCreationEpoch(f1);
                 long l2 = getFileCreationEpoch(f2);
-                return Long.valueOf(l1).compareTo(l2);
+                return Long.valueOf(l2).compareTo(l1);
             }
         });
     }

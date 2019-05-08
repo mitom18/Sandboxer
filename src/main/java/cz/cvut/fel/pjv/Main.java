@@ -94,7 +94,7 @@ public class Main extends Application {
         final World world = game.getWorld();
         final Player player = game.getPlayer();
         
-        final Draw draw = new Draw(WIDTH, HEIGHT, world.getWIDTH());
+        final Draw draw = new Draw(WIDTH, HEIGHT, world.getWIDTH(), game.getZoomScale(), game.getSavedCameraOffsetX(), game.getSavedCameraOffsetY());
         Canvas gameCanvas = (Canvas) gameScreen.getRoot().getChildrenUnmodifiable().get(0);
         final GraphicsContext gc = gameCanvas.getGraphicsContext2D();
 
