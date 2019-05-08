@@ -40,32 +40,39 @@ import javafx.scene.text.FontWeight;
  * Class for drawing and transforming the world.
  *
  * @author Michal-jr
- * @version 1.1
+ * @version 1.2
  */
 public class Draw {
     
     private final double WIDTH;
     private final double HEIGHT;
     private final int MAP_WIDTH;
-    private double zoomScale = 1;
-    private double oldZoomScale = 1;
-    private final double MIN_ZOOM_SCALE = 0.038;
+    private double zoomScale;
+    private double oldZoomScale;
+    private final double MIN_ZOOM_SCALE = 0.5;
     private final double MAX_ZOOM_SCALE = 2;
-    private double cameraOffsetX = 0;
-    private double cameraOffsetY = 0;
+    private double cameraOffsetX;
+    private double cameraOffsetY;
 
     /**
-     * Set width and height parameters for drawing.
+     * Set width, height and camera offset parameters for drawing.
      *
      * @param WIDTH width of the canvas in pixels
      * @param HEIGHT height of the canvas in pixels
      * @param MAP_WIDTH width of the world in blocks
-     * @since 1.0
+     * @param zoomScale starting zoom scale
+     * @param cameraOffsetX starting offset of camera in X axis
+     * @param cameraOffsetY starting offset of camera in Y axis
+     * @since 1.2
      */
-    public Draw(double WIDTH, double HEIGHT, int MAP_WIDTH) {
+    public Draw(double WIDTH, double HEIGHT, int MAP_WIDTH, double zoomScale, double cameraOffsetX, double cameraOffsetY) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
         this.MAP_WIDTH = MAP_WIDTH;
+        this.zoomScale = zoomScale;
+        this.oldZoomScale = zoomScale;
+        this.cameraOffsetX = cameraOffsetX;
+        this.cameraOffsetY = cameraOffsetY;
     }
     
     /**
@@ -167,6 +174,8 @@ public class Draw {
             }
             if (cameraOffsetY > Block.block_height) { cameraOffsetY %= Block.block_height; }
         }
+        game.setSavedCameraOffsetX(cameraOffsetX);
+        game.setSavedCameraOffsetY(cameraOffsetY);
     }
     
     /**
@@ -230,6 +239,9 @@ public class Draw {
             world.setPlayerSpawnX(world.getPlayerSpawnX()*zoomScale - offsetX);
         }
         oldZoomScale = this.zoomScale; //store zoom for zoom reset
+        game.setZoomScale(this.zoomScale);
+        game.setSavedCameraOffsetX(cameraOffsetX);
+        game.setSavedCameraOffsetY(cameraOffsetY);
     }
     
     private void drawInventory(GraphicsContext g, Inventory inv) {
@@ -318,7 +330,7 @@ public class Draw {
     }
     
     /**
-     * Draw background of the pause menu and some texts. Paused game is still visible a bit.
+     * Draw background of the pause menu and text with seed. Paused game is still visible a bit.
      *
      * @param g a canvas 2D rendering context
      * @param game instance of the game
@@ -330,8 +342,6 @@ public class Draw {
         g.fillRect(0, 0, WIDTH, HEIGHT);
         g.setGlobalAlpha(1);
         g.setFill(Color.WHITE);
-        g.setFont(Font.font("Arial", FontWeight.BOLD, 38));
-        g.fillText("Press ESC to resume the game.", WIDTH/2-265, HEIGHT/2);
         g.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         g.fillText("Seed: "+game.getWorld().getWorldMap().getSeed(), WIDTH-300, HEIGHT-30);
         g.setFont(Font.getDefault());

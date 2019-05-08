@@ -32,19 +32,15 @@ import java.io.Serializable;
  * Contains all entities in the game.
  *
  * @author Zdenek
- * @version 1.1
+ * @version 1.2
  */
 public class Game implements Serializable {
     
-    /**
-     * Instance of Player.
-     */
     private final Player player;
-    
-    /*
-     * Instance of World.
-     */
     private final World world;
+    private double zoomScale = 1;
+    private double savedCameraOffsetX = 0;
+    private double savedCameraOffsetY = 0;
 
     /**
      * Create new game.
@@ -88,6 +84,30 @@ public class Game implements Serializable {
         player.setX(world.getPlayerSpawnX());
         player.setY(world.getHighestBlockY(world.getPlayerSpawnX()));
         player.revive();
+    }
+
+    public double getSavedCameraOffsetX() {
+        return savedCameraOffsetX;
+    }
+
+    public void setSavedCameraOffsetX(double savedCameraOffsetX) {
+        this.savedCameraOffsetX = savedCameraOffsetX;
+    }
+
+    public double getSavedCameraOffsetY() {
+        return savedCameraOffsetY;
+    }
+
+    public void setSavedCameraOffsetY(double savedCameraOffsetY) {
+        this.savedCameraOffsetY = savedCameraOffsetY;
+    }
+
+    public double getZoomScale() {
+        return zoomScale;
+    }
+
+    public void setZoomScale(double zoomScale) {
+        this.zoomScale = zoomScale;
     }
     
 }

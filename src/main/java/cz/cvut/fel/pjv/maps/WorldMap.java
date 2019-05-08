@@ -45,6 +45,8 @@ public class WorldMap implements Serializable {
     
     private final int WIDTH;
     private final int HEIGHT;
+    
+    private final long SEED;
 
     private List<List<Integer>> terrain;
     private List<List<BlockType>> map;
@@ -70,6 +72,7 @@ public class WorldMap implements Serializable {
         );
         
         RNG.setNewSeed();
+        SEED = RNG.getSeed();
         
         if (mapConfig.completeMap.get(0).isEmpty()) {
             WIDTH = mapConfig.width;
@@ -97,7 +100,7 @@ public class WorldMap implements Serializable {
      * @since 1.1
      */
     public long getSeed() {
-        return RNG.getSeed();
+        return SEED;
     }
     
     /**

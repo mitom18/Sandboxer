@@ -322,6 +322,14 @@ public abstract class Creature implements Serializable {
     public double getVelocityY() {
         return velocityY;
     }
+    
+    /**
+     * @return creature's velocity multiplier
+     * @since 1.0
+     */
+    public double getVelocityMultiplier() {
+        return velocityMultiplier;
+    }
 
     /**
      * @return creature's health point

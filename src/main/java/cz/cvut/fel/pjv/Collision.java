@@ -59,8 +59,8 @@ public abstract class Collision {
 
                 if(topCollision < bottomCollision && topCollision < leftCollision && topCollision < rightCollision) {
                     creature.setY(block.getY()-creature.getHeight()); //top collision
-                    if (creature.getVelocityY() > 6){
-                        creature.setHp(creature.getHp()-(int)(creature.getVelocityY()-6)/2);
+                    if (creature.getVelocityY()/creature.getVelocityMultiplier() > 10) {
+                        creature.setHp(creature.getHp()-(int)(creature.getVelocityY()/creature.getVelocityMultiplier())/6);
                         if (creature.getHp() < 0) { creature.die(); }
                     }
                     creature.setVelocityY(0.0); //set creature's velocity to 0
