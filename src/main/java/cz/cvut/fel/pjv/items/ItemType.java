@@ -32,7 +32,7 @@ package cz.cvut.fel.pjv.items;
 public enum ItemType {
     
     /**
-     * Type of pickaxe.
+     * Type of basic pickaxe.
      */
     PICKAXE(0, 0, 1170),
      
@@ -50,6 +50,11 @@ public enum ItemType {
      * Type of stored stone block.
      */
     STONE(2, 260, 650),
+    
+    /**
+     * Type of stored stone bricks block.
+     */
+    STONE_BRICKS(7, 0, 0),
 
     /**
      * Type of stored diamond ore block.
@@ -57,9 +62,9 @@ public enum ItemType {
     DIAMOND_ORE(4, 260, 0),
     
     /**
-     * Type of key crystal needed to end and win the game.
+     * Type of golden pickaxe that can destroy stone bricks.
      */
-    KEY_CRYSTAL(7, 0, 1430);
+    GOLDEN_PICKAXE(6, 0, 910);
 
     private final int id;
     private final double spritesheetX;

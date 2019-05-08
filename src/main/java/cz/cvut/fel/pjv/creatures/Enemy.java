@@ -26,7 +26,7 @@ package cz.cvut.fel.pjv.creatures;
 import cz.cvut.fel.pjv.Collision;
 import cz.cvut.fel.pjv.World;
 import cz.cvut.fel.pjv.blocks.Block;
-import cz.cvut.fel.pjv.items.EnemyDrop;
+import cz.cvut.fel.pjv.items.Tool;
 import cz.cvut.fel.pjv.items.Item;
 
 /**
@@ -57,7 +57,7 @@ public class Enemy extends NPC {
     public Enemy(double x, double y, CreatureType type, World world) {
         super(x, y, type);
         if (type.getDropItemType() != null) {
-            dropItem = new EnemyDrop(x, y, type.getDropItemType());
+            dropItem = new Tool(x, y, type.getDropItemType());
             world.addItem(dropItem);
         } else {
             dropItem = null;
@@ -83,6 +83,10 @@ public class Enemy extends NPC {
     }
     
     private void calculateMovement(World world, Player player) {
+        if ( //enemy is not moving if he is more than 150 blocks far from the player
+            player.getX() > getX2()+150*Block.block_width ||
+            player.getX2() < getX()-150*Block.block_width
+        ) { return; }
         if (
             player.getX2() > getX()-10*Block.block_width && 
             player.getX() < getX2()+10*Block.block_width

@@ -52,7 +52,7 @@ public enum CreatureType {
     /**
      * Type of enemy boss.
      */
-    BOSS(3, new Image("spritesheet_boss.png"), 30, ItemType.KEY_CRYSTAL);
+    BOSS(3, new Image("spritesheet_boss.png"), 30, ItemType.GOLDEN_PICKAXE);
 
     private final int id;
     private final Image spritesheet;
@@ -84,7 +84,8 @@ public enum CreatureType {
     }
 
     /**
-     * @return item type of the item that the enemy drops when he dies
+     * @return item type of the item that the enemy drops when he dies, 
+     * enemies drop only tools
      * @since 1.1
      */
     public ItemType getDropItemType() {

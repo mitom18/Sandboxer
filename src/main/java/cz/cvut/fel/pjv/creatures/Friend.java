@@ -25,6 +25,7 @@ package cz.cvut.fel.pjv.creatures;
 
 import cz.cvut.fel.pjv.Collision;
 import cz.cvut.fel.pjv.World;
+import cz.cvut.fel.pjv.blocks.Block;
 
 /**
  * NPC that is not attacking player.
@@ -52,12 +53,16 @@ public class Friend extends NPC {
     @Override
     public void update(World world, Player player) {
         Collision.creatureIsInLiquid(this, world);
-        calculateMovement(world);
+        calculateMovement(world, player);
         move();
         Collision.preventCollision(this, world);
     }
     
-    private void calculateMovement(World world) {
+    private void calculateMovement(World world, Player player) {
+        if ( //friendly NPC is not moving if he is more than 150 blocks far from the player
+            player.getX() > getX2()+150*Block.block_width ||
+            player.getX2() < getX()-150*Block.block_width
+        ) { return; }
         movementCounter++;
         setUp(false);
         if (movementCounter == 100) {

@@ -171,8 +171,13 @@ public class EventHandlers {
                     for (Block block : world.getBlocks()) {
                         if (block.isDestroyed()) { continue; }
                         if (Collision.collides(clickX, clickY, block)) {
-                            // Bedrock is indestructible.
-                            if (block.getBlockType() != BlockType.BEDROCK && block.getBlockType() != BlockType.WATER) {
+                            if (
+                                // Bedrock is indestructible. Water cannot be digged.
+                                block.getBlockType() != BlockType.BEDROCK && block.getBlockType() != BlockType.WATER &&
+                                // Stone bricks can be digged only with golden pickaxe.
+                                (block.getBlockType() != BlockType.STONE_BRICKS || 
+                                    (block.getBlockType() == BlockType.STONE_BRICKS && tool.isGoldenPickaxe()))
+                            ) {
                                 block.destroy();
                                 ItemType blockType = ItemType.valueOf(block.getBlockType().name());
                                 player.getInventory().add(new StoredBlock(0, 0, blockType));

@@ -30,7 +30,7 @@ import javafx.scene.image.Image;
  * Class for tools, extends item class.
  *
  * @author Michal-jr
- * @version 1.0
+ * @version 1.1
  */
 public class Tool extends Item {
     
@@ -55,7 +55,15 @@ public class Tool extends Item {
      * @since 1.0
      */
     public boolean isPickaxe() {
-        return toolType.equals(ItemType.PICKAXE);
+        return toolType == ItemType.PICKAXE || toolType == ItemType.GOLDEN_PICKAXE;
+    }
+    
+    /**
+     * @return true if item is golden pickaxe, false otherwise
+     * @since 1.1
+     */
+    public boolean isGoldenPickaxe() {
+        return toolType == ItemType.GOLDEN_PICKAXE;
     }
 
     @Override

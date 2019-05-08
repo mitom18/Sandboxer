@@ -49,7 +49,7 @@ public class Draw {
     private final int MAP_WIDTH;
     private double zoomScale;
     private double oldZoomScale;
-    private final double MIN_ZOOM_SCALE = 0.5;
+    private final double MIN_ZOOM_SCALE = 0.038;
     private final double MAX_ZOOM_SCALE = 2;
     private double cameraOffsetX;
     private double cameraOffsetY;
