@@ -51,6 +51,7 @@ public class WorldMap implements Serializable {
     
     private List<Integer> completeSkyline;
     private List<Cave> caves;
+    private List<Structure> structures;
     
     private final int playerX;
     private final int playerY;
@@ -86,8 +87,8 @@ public class WorldMap implements Serializable {
             HEIGHT = mapConfig.completeMap.size();
             customMap();
             
-            playerX = mapConfig.playerX;
-            playerY = mapConfig.playerY;
+            playerX = mapConfig.playerStartingX;
+            playerY = mapConfig.playerStartingY;
         }
     }
     
@@ -322,6 +323,6 @@ public class WorldMap implements Serializable {
     }
     
     private void generateStructures() {
-        
+        structures = new ArrayList<>();
     }
 }

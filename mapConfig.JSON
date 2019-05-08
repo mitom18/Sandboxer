@@ -4,13 +4,32 @@
     ],
 
     "structureBlueprints": {
-        "house": [
-            []
+        "stronghold1": [
+            ["STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS"],
+            ["STONE_BRICKS", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "STONE_BRICKS"],
+            ["STONE_BRICKS", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "STONE_BRICKS"],
+            ["STONE_BRICKS", "AIR", "AIR", "AIR", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "AIR", "AIR", "AIR", "STONE_BRICKS"],
+            ["STONE_BRICKS", "AIR", "AIR", "AIR", "STONE_BRICKS", "AIR", "AIR", "AIR", "STONE_BRICKS", "AIR", "AIR", "AIR", "STONE_BRICKS"],
+            ["STONE_BRICKS", "AIR", "AIR", "AIR", "STONE_BRICKS", "AIR", "AIR", "AIR", "STONE_BRICKS", "AIR", "AIR", "AIR", "STONE_BRICKS"],
+            ["STONE_BRICKS", "AIR", "AIR", "AIR", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "AIR", "AIR", "AIR", "STONE_BRICKS"],
+            ["STONE_BRICKS", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "STONE_BRICKS"],
+            ["STONE_BRICKS", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "STONE_BRICKS"],
+            ["STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS"]
+        ],
+
+        "stronghold2": [
+            ["STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS"],
+            ["STONE_BRICKS", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "STONE_BRICKS"],
+            ["STONE_BRICKS", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "STONE_BRICKS"],
+            ["STONE_BRICKS", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "STONE_BRICKS"],
+            ["STONE_BRICKS", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "STONE_BRICKS"],
+            ["STONE_BRICKS", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "STONE_BRICKS"],
+            ["STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS"]
         ]
     },
 
-    "playerX": 0,
-    "playerY": 0,
+    "playerStartingX": 0,
+    "playerStartingY": 0,
 
     "width": 1024,
     "height": 128,

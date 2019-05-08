@@ -32,6 +32,11 @@ package cz.cvut.fel.pjv.blocks;
 public enum BlockType {
     
     /**
+     * Helper BlockType for defining structures. Is never used in the world (null is used for air instead).
+     */
+    AIR(0, -1, -1),
+    
+    /**
      * Type of dirt block.
      */
     DIRT(1, 650, 130),
@@ -59,7 +64,12 @@ public enum BlockType {
     /**
      * Type of dirt block with grass on top.
      */
-    DIRT_WITH_GRASS(6, 650, 0);
+    DIRT_WITH_GRASS(6, 650, 0),
+    
+    /**
+     * Type of stone bricks block.
+     */
+    STONE_BRICKS(7, 0, 0);
 
     private final int id;
     private final double spritesheetX;

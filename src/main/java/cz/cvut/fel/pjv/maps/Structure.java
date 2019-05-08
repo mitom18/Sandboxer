@@ -24,6 +24,7 @@
 package cz.cvut.fel.pjv.maps;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ import java.util.List;
 public class Structure implements Serializable {
     
     private final String structureName;
-    private final List<List<Object>> blueprint;
+    private List<Vector> blueprintVectors;
     
     private final int x;
     private final int y;
@@ -43,8 +44,10 @@ public class Structure implements Serializable {
         this.x = x;
         this.y = y;
         
-        blueprint = WorldMap.mapConfig.structureBlueprints.get(structureName);
+        createBlueprintVectors();
     }
     
-    
+    private void createBlueprintVectors() {
+        blueprintVectors = new ArrayList<>();
+    }
 }
