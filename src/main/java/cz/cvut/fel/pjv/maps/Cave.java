@@ -84,7 +84,9 @@ public class Cave implements Serializable {
             for (int j = ellipseHeight - 1; j >= 0; j--) {
                 
                 if (ellipseInnerArea(i, j, a, b)) {
-                    ellipse.add(new Vector(i + m - (int) (Math.round(a)), j + n - (int) (Math.round(b)), null));
+                    // The BlockType.AIR parameter in a Vector of a Cave serves merely an informational purpose.
+                    // Null is always used instead of BlockType.AIR in the actual worldMap.
+                    ellipse.add(new Vector(i + m - (int) (Math.round(a)), j + n - (int) (Math.round(b)), BlockType.AIR));
                 }
             }
         }
@@ -145,7 +147,7 @@ public class Cave implements Serializable {
         spawner = min;
         
         // create space for the head of the spawned NPC
-        Vector spaceForHead = new Vector(spawner.getX(), spawner.getY() + 1, null);
+        Vector spaceForHead = new Vector(spawner.getX(), spawner.getY() + 1, BlockType.AIR);
         
         if (!caveVectors.contains(spaceForHead)) {
             caveVectors.add(spaceForHead);

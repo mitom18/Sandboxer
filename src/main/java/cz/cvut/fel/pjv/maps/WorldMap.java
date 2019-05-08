@@ -37,11 +37,11 @@ import java.util.List;
  * if no arguments are given width and height are set to default values.
  *
  * @author Zdenek
- * @version 1.1
+ * @version 1.2
  */
 public class WorldMap implements Serializable {
     
-    public static MapConfig mapConfig;
+    private static MapConfig mapConfig;
     
     private final int WIDTH;
     private final int HEIGHT;
@@ -150,6 +150,14 @@ public class WorldMap implements Serializable {
 
     public List<Cave> getCaves() {
         return caves;
+    }
+
+    public List<Structure> getStructures() {
+        return structures;
+    }
+    
+    public static MapConfig getMapConfig() {
+        return mapConfig;
     }
     
     private void customMap() {
@@ -315,7 +323,7 @@ public class WorldMap implements Serializable {
                     caves.add(new Cave(i, j, map));
                     
                     for (Vector vector : caves.get(caves.size() - 1).getCaveVectors()) {
-                        map.get(vector.getX()).set(vector.getY(), vector.getBlockType());
+                        map.get(vector.getX()).set(vector.getY(), null);
                     }
                 }
             }
@@ -324,5 +332,20 @@ public class WorldMap implements Serializable {
     
     private void generateStructures() {
         structures = new ArrayList<>();
+        
+        String structureName = "stronghold2";
+        int structureX = RNG.randomIntInRange(0, WIDTH - mapConfig.structureBlueprints.get(structureName).get(0).size());
+        int structureY = RNG.randomIntInRange(0, HEIGHT - mapConfig.structureBlueprints.get(structureName).size() - 1);
+        
+        structures.add(new Structure(structureName, structureX, structureY));
+        
+        for (Vector vector : structures.get(structures.size() - 1).getStructureVectors()) {
+            
+            if ((vector.getBlockType() == BlockType.AIR) || (vector.getBlockType() == BlockType.SPAWNER)) {
+                map.get(vector.getX()).set(vector.getY(), null);
+            } else {
+                map.get(vector.getX()).set(vector.getY(), vector.getBlockType());
+            }
+        }
     }
 }

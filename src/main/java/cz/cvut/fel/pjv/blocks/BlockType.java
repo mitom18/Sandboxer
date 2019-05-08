@@ -69,7 +69,12 @@ public enum BlockType {
     /**
      * Type of stone bricks block.
      */
-    STONE_BRICKS(7, 0, 0);
+    STONE_BRICKS(7, 0, 0),
+    
+    /**
+     * Helper BlockType for defining a spawner in structures. Is never used in the world.
+     */
+    SPAWNER(8, -1, -1);
 
     private final int id;
     private final double spritesheetX;

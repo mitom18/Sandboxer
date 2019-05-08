@@ -36,6 +36,7 @@ import cz.cvut.fel.pjv.items.Item;
 import cz.cvut.fel.pjv.items.StoredBlock;
 import cz.cvut.fel.pjv.items.ItemType;
 import cz.cvut.fel.pjv.maps.Cave;
+import cz.cvut.fel.pjv.maps.Structure;
 import cz.cvut.fel.pjv.maps.WorldMap;
 import java.io.IOException;
 import java.io.Serializable;
@@ -99,7 +100,12 @@ public class World implements Serializable {
             npcs.add(new Enemy(enemyX, enemyY, CreatureType.SKELETON, this));
         }
         
-        npcs.add(new Friend(32, 0, CreatureType.MONK));
+        for (Structure structure : worldMap.getStructures()) {
+            double friendX = (structure.getSpawner().getX() - (worldMap.getWIDTH() / 2)) * Block.block_width;
+            double friendY = (structure.getSpawner().getY() - 1) * Block.block_height;
+            npcs.add(new Friend(friendX, friendY, CreatureType.MONK));
+        }
+        
         npcs.add(new Enemy(32, 0, CreatureType.BOSS, this));
     }
     

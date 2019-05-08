@@ -23,7 +23,7 @@
             ["STONE_BRICKS", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "STONE_BRICKS"],
             ["STONE_BRICKS", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "STONE_BRICKS"],
             ["STONE_BRICKS", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "STONE_BRICKS"],
-            ["STONE_BRICKS", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "AIR", "STONE_BRICKS"],
+            ["STONE_BRICKS", "AIR", "AIR", "AIR", "AIR", "AIR", "SPAWNER", "AIR", "AIR", "AIR", "AIR", "AIR", "STONE_BRICKS"],
             ["STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS"]
         ]
     },
