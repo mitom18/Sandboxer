@@ -29,12 +29,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Class WorldMap generates a map. The map defines how a game world is going to look.
- * The constructor takes 2 integer arguments (width and height of the map) or
- * if no arguments are given width and height are set to default values.
+ * The main output of class WorldMap is a map for a newly created world. 
+ * The map defines types of blocks and their position in the world.
  *
  * @author Zdenek
  * @version 1.2
@@ -49,17 +50,21 @@ public class WorldMap implements Serializable {
     private final long SEED;
 
     private List<List<Integer>> terrain;
+    
+    /**
+     * The map is the main output of this class.
+     */
     private List<List<BlockType>> map;
     
     private List<Integer> completeSkyline;
     private List<Cave> caves;
-    private List<Structure> structures;
+    private Map<String, Structure> structures;
     
     private final int playerX;
     private final int playerY;
 
     /**
-     * Create a new map with default parameters.
+     * If no custom map is given in the JSON configuration file (mapConfig.JSON), create a new random map
      * 
      * @throws java.io.IOException
      * @since 1.0
@@ -143,10 +148,18 @@ public class WorldMap implements Serializable {
         return completeSkyline;
     }
     
+    /**
+     * @return player's starting x coordinate
+     * @since 1.2
+     */
     public int getPlayerX() {
         return playerX;
     }
     
+    /**
+     * @return player's starting y coordinate
+     * @since 1.2
+     */
     public int getPlayerY() {
         return playerY;
     }
@@ -155,7 +168,7 @@ public class WorldMap implements Serializable {
         return caves;
     }
 
-    public List<Structure> getStructures() {
+    public Map<String, Structure> getStructures() {
         return structures;
     }
     
@@ -315,6 +328,10 @@ public class WorldMap implements Serializable {
         generateStructures();
     }
     
+    /**
+     * Finds random coordinates to create caves and inserts them into the map.
+     * @since 1.1
+     */
     private void generateCaves() {
         caves = new ArrayList<>();
         
@@ -333,21 +350,30 @@ public class WorldMap implements Serializable {
         }
     }
     
+    /**
+     * Finds random coordinates to create structures from blueprints 
+     * that have been defined in mapConfig.JSON and inserts them into the map.
+     * @since 1.2
+     */
     private void generateStructures() {
-        structures = new ArrayList<>();
+        structures = new HashMap<>(mapConfig.structureBlueprints.size());
         
-        String structureName = "stronghold2";
-        int structureX = RNG.randomIntInRange(0, WIDTH - mapConfig.structureBlueprints.get(structureName).get(0).size());
-        int structureY = RNG.randomIntInRange(0, HEIGHT - mapConfig.structureBlueprints.get(structureName).size() - 1);
-        
-        structures.add(new Structure(structureName, structureX, structureY));
-        
-        for (Vector vector : structures.get(structures.size() - 1).getStructureVectors()) {
+        for (Map.Entry<String, List<List<BlockType>>> structureBlueprint : mapConfig.structureBlueprints.entrySet()) {
+            String structureName = structureBlueprint.getKey();
+            List<List<BlockType>> structureData = structureBlueprint.getValue();
             
-            if ((vector.getBlockType() == BlockType.AIR) || (vector.getBlockType() == BlockType.SPAWNER)) {
-                map.get(vector.getX()).set(vector.getY(), null);
-            } else {
-                map.get(vector.getX()).set(vector.getY(), vector.getBlockType());
+            int structureX = RNG.randomIntInRange(0, WIDTH - structureData.get(0).size());
+            int structureY = RNG.randomIntInRange(0, HEIGHT - structureData.size() - 1);
+
+            structures.put(structureName, new Structure(structureData, structureX, structureY));
+
+            for (Vector vector : structures.get(structureName).getStructureVectors()) {
+
+                if ((vector.getBlockType() == BlockType.AIR) || (vector.getBlockType() == BlockType.SPAWNER)) {
+                    map.get(vector.getX()).set(vector.getY(), null);
+                } else {
+                    map.get(vector.getX()).set(vector.getY(), vector.getBlockType());
+                }
             }
         }
     }

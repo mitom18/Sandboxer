@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Contains all entities in the world.
@@ -100,10 +101,13 @@ public class World implements Serializable {
             npcs.add(new Enemy(enemyX, enemyY, CreatureType.SKELETON, this));
         }
         
-        for (Structure structure : worldMap.getStructures()) {
-            double friendX = (structure.getSpawner().getX() - (worldMap.getWIDTH() / 2)) * Block.block_width;
-            double friendY = (structure.getSpawner().getY() - 1) * Block.block_height;
-            npcs.add(new Friend(friendX, friendY, CreatureType.MONK));
+        for (Map.Entry<String, Structure> structure : worldMap.getStructures().entrySet()) {
+            
+            if (structure.getValue().getSpawner() != null) {
+                double friendX = (structure.getValue().getSpawner().getX() - (worldMap.getWIDTH() / 2)) * Block.block_width;
+                double friendY = (structure.getValue().getSpawner().getY() - 1) * Block.block_height;
+                npcs.add(new Friend(friendX, friendY, CreatureType.MONK));
+            }
         }
         
         npcs.add(new Enemy(32, 0, CreatureType.BOSS, this));

@@ -34,7 +34,7 @@ import java.util.List;
  */
 public class Structure implements Serializable {
     
-    private final String structureName;
+    private final List<List<BlockType>> structureBlueprint;
     private List<Vector> structureVectors;
     
     private final int x;
@@ -45,12 +45,12 @@ public class Structure implements Serializable {
     /**
      * The constructor of Structure.
      * 
-     * @param structureName the name of the structure as it was given in the mapConfig.JSON file
+     * @param structureBlueprint
      * @param x
      * @param y
      */
-    public Structure(String structureName, int x, int y) {
-        this.structureName = structureName;
+    public Structure(List<List<BlockType>> structureBlueprint, int x, int y) {
+        this.structureBlueprint = structureBlueprint;
         this.x = x;
         this.y = y;
         
@@ -69,12 +69,12 @@ public class Structure implements Serializable {
     private void createBlueprintVectors() {
         structureVectors = new ArrayList<>();
         
-        for (int i = 0; i < WorldMap.getMapConfig().structureBlueprints.get(structureName).get(0).size(); i++) {
+        for (int i = 0; i < structureBlueprint.get(0).size(); i++) {
             
-            for (int j = 0; j < WorldMap.getMapConfig().structureBlueprints.get(structureName).size(); j++) {
+            for (int j = 0; j < structureBlueprint.size(); j++) {
                 
-                if (WorldMap.getMapConfig().structureBlueprints.get(structureName).get(j).get(i) != null) {
-                    structureVectors.add(new Vector(i + x, j + y, WorldMap.getMapConfig().structureBlueprints.get(structureName).get(j).get(i)));
+                if (structureBlueprint.get(j).get(i) != null) {
+                    structureVectors.add(new Vector(i + x, j + y, structureBlueprint.get(j).get(i)));
                 }
             }
         }
@@ -86,15 +86,16 @@ public class Structure implements Serializable {
             
             if (vector.getBlockType() == BlockType.SPAWNER) {
                 spawner = vector;
+                
+                // create space for the head of the spawned NPC
+                Vector spaceForHead = new Vector(spawner.getX(), spawner.getY() + 1, BlockType.AIR);
+
+                if (!structureVectors.contains(spaceForHead)) {
+                    structureVectors.add(spaceForHead);
+                }
+                
                 break;
             }
-        }
-        
-        // create space for the head of the spawned NPC
-        Vector spaceForHead = new Vector(spawner.getX(), spawner.getY() + 1, BlockType.AIR);
-        
-        if (!structureVectors.contains(spaceForHead)) {
-            structureVectors.add(spaceForHead);
         }
     }
 }
