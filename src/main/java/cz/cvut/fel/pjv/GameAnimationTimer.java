@@ -67,6 +67,7 @@ public class GameAnimationTimer extends AnimationTimer {
         if (now - lastUpdate >= 17_000_000) { //update each 17 miliseconds
             player.update(world);
             world.updateNPCs(player);
+            world.updateLayingItems();
             draw.shiftCamera(game);
             draw.render(gc, game);
             lastUpdate = now;

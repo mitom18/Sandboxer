@@ -23,40 +23,48 @@
  */
 package cz.cvut.fel.pjv.creatures;
 
+import cz.cvut.fel.pjv.items.ItemType;
 import javafx.scene.image.Image;
 
 /**
  * Enumeration class representing all types of creatures that can appear in the world.
  *
  * @author Michal-jr
- * @version 1.0
+ * @version 1.1
  */
 public enum CreatureType {
     
     /**
      * Type of player.
      */
-    PLAYER(0, new Image("spritesheet_hero.png"), 10),
+    PLAYER(0, new Image("spritesheet_hero.png"), 10, null),
     
     /**
      * Type of monk.
      */
-    MONK(0, new Image("spritesheet_monk.png"), 15),
+    MONK(1, new Image("spritesheet_monk.png"), 15, null),
     
     /**
      * Type of skeleton.
      */
-    SKELETON(1, new Image("spritesheet_skeleton.png"), 5);
+    SKELETON(2, new Image("spritesheet_skeleton.png"), 5, null),
+    
+    /**
+     * Type of enemy boss.
+     */
+    BOSS(3, new Image("spritesheet_boss.png"), 30, ItemType.KEY_CRYSTAL);
 
     private final int id;
     private final Image spritesheet;
-    private int hp;
+    private final int hp;
+    private final ItemType dropItemType;
 
 
-    private CreatureType(int id, Image spritesheet, int hp) {
+    private CreatureType(int id, Image spritesheet, int hp, ItemType dropItemType) {
         this.id = id;
         this.spritesheet = spritesheet;
         this.hp = hp;
+        this.dropItemType = dropItemType;
     }
 
     /**
@@ -73,6 +81,14 @@ public enum CreatureType {
      */
     public int getHp() {
         return hp;
+    }
+
+    /**
+     * @return item type of the item that the enemy drops when he dies
+     * @since 1.1
+     */
+    public ItemType getDropItemType() {
+        return dropItemType;
     }
     
 }

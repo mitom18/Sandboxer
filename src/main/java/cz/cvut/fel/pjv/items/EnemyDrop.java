@@ -23,69 +23,54 @@
  */
 package cz.cvut.fel.pjv.items;
 
+import java.util.Objects;
+import javafx.scene.image.Image;
+
 /**
- * Enumeration class representing all types of items that can appear in the game.
- * 
+ * Class for items that are dropped from dead enemies.
+ *
  * @author Michal-jr
  * @version 1.0
  */
-public enum ItemType {
+public class EnemyDrop extends Item {
     
-    /**
-     * Type of pickaxe.
-     */
-    PICKAXE(0, 0, 1170),
-     
-    /**
-     * Type of stored dirt block.
-     */
-    DIRT(1, 650, 130),
-    
-    /**
-     * Type of stored dirt block with grass on top.
-     */
-    DIRT_WITH_GRASS(6, 650, 0),
+    private static final Image IMAGE = new Image( "spritesheet_items.png" );
+    private final ItemType dropType;
 
     /**
-     * Type of stored stone block.
-     */
-    STONE(2, 260, 650),
-
-    /**
-     * Type of stored diamond ore block.
-     */
-    DIAMOND_ORE(4, 260, 0),
-    
-    /**
-     * Type of key crystal needed to end and win the game.
-     */
-    KEY_CRYSTAL(7, 0, 1430);
-
-    private final int id;
-    private final double spritesheetX;
-    private final double spritesheetY;
-
-
-    private ItemType(int id, double spritesheetX, double spritesheetY) {
-        this.id = id;
-        this.spritesheetX = spritesheetX;
-        this.spritesheetY = spritesheetY;
-    }
-
-    /**
-     * @return X position of item sprite in the spritesheet in pixels
+     * Create new item on given coordinates (enemy drop is created as 'picked by enemy').
+     *
+     * @param x
+     * @param y
+     * @param type
      * @since 1.0
      */
-    public double getSpritesheetX() {
-        return spritesheetX;
+    public EnemyDrop(double x, double y, ItemType type) {
+        super(x, y, type, IMAGE);
+        dropType = type;
+        setPicked(true);
     }
 
-    /**
-     * @return Y position of item sprite in the spritesheet in pixels
-     * @since 1.0
-     */
-    public double getSpritesheetY() {
-        return spritesheetY;
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.dropType);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final EnemyDrop other = (EnemyDrop) obj;
+        if (this.dropType != other.dropType) {
+            return false;
+        }
+        return true;
     }
     
 }
