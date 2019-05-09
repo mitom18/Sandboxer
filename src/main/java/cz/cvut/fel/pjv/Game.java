@@ -86,26 +86,56 @@ public class Game implements Serializable {
         player.revive();
     }
 
+    /**
+     * @return saved camera offset in X axis
+     * @since 1.2
+     */
     public double getSavedCameraOffsetX() {
         return savedCameraOffsetX;
     }
 
+    /**
+     * Save new camera offset in X axis.
+     *
+     * @param savedCameraOffsetX
+     * @since 1.2
+     */
     public void setSavedCameraOffsetX(double savedCameraOffsetX) {
         this.savedCameraOffsetX = savedCameraOffsetX;
     }
 
+    /**
+     * @return saved camera offset in Y axis
+     * @since 1.2
+     */
     public double getSavedCameraOffsetY() {
         return savedCameraOffsetY;
     }
 
+    /**
+     * Save new camera offset in Y axis.
+     *
+     * @param savedCameraOffsetY
+     * @since 1.2
+     */
     public void setSavedCameraOffsetY(double savedCameraOffsetY) {
         this.savedCameraOffsetY = savedCameraOffsetY;
     }
 
+    /**
+     * @return saved zoom scale
+     * @since 1.2
+     */
     public double getZoomScale() {
         return zoomScale;
     }
 
+    /**
+     * Save new zoom scale.
+     *
+     * @param zoomScale
+     * @since 1.2
+     */
     public void setZoomScale(double zoomScale) {
         this.zoomScale = zoomScale;
     }

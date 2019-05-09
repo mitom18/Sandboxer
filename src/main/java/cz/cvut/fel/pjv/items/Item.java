@@ -39,7 +39,7 @@ import javax.imageio.ImageIO;
  */
 public abstract class Item implements Serializable {
     private double x, y;
-    private double velocityY = 5;
+    private final double velocityY = 5;
     private double width = 24;
     private double height = 24;
     private boolean picked;
