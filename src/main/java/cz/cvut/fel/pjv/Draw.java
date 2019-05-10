@@ -27,6 +27,7 @@ import cz.cvut.fel.pjv.creatures.Inventory;
 import cz.cvut.fel.pjv.creatures.Player;
 import cz.cvut.fel.pjv.blocks.LiquidBlock;
 import cz.cvut.fel.pjv.blocks.Block;
+import cz.cvut.fel.pjv.creatures.Friend;
 import cz.cvut.fel.pjv.creatures.NPC;
 import cz.cvut.fel.pjv.items.Item;
 import cz.cvut.fel.pjv.items.StoredBlock;
@@ -35,6 +36,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 
 /**
  * Class for drawing and transforming the world.
@@ -53,6 +55,7 @@ public class Draw {
     private final double MAX_ZOOM_SCALE = 2;
     private double cameraOffsetX;
     private double cameraOffsetY;
+    private int textShowCounter = 0;
 
     /**
      * Set width, height and camera offset parameters for drawing.
@@ -291,6 +294,26 @@ public class Draw {
             x += 15;
         }
     }
+    
+    private void drawText(GraphicsContext g, Friend npc) {
+        if (npc != null) {
+            textShowCounter++;
+            if (textShowCounter < 500) {
+                g.setGlobalAlpha(0.75);
+                g.setFill(Color.BLACK);
+                g.fillRect(0, HEIGHT*3/4, WIDTH, HEIGHT/4);
+                g.setGlobalAlpha(1);
+                g.setFill(Color.WHITE);
+                g.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+                g.setTextAlign(TextAlignment.CENTER);
+                g.fillText(npc.getSomethingToSay(), WIDTH/2, HEIGHT-HEIGHT/8);
+                g.setFont(Font.getDefault());
+            } else {
+                textShowCounter = 0;
+                npc.setSomethingToSay(null);
+            }
+        }
+    }
 
     /**
      * Draw the world and entities in it.
@@ -305,10 +328,16 @@ public class Draw {
         //draw
         World world = game.getWorld();
         Player player = game.getPlayer();
+        Friend talkingNPC = null;
         g.drawImage(player.getImage(), player.getSpriteX(), player.getSpriteY(), player.getIMAGE_WIDTH(), player.getIMAGE_HEIGHT(), 
                 player.getX(), player.getY(), player.getWidth(), player.getHeight());
         for (NPC npc : world.getNpcs()) {
             if (npc.isKilled()) { continue; }
+            if (npc instanceof Friend) {
+                if (((Friend) npc).getSomethingToSay() != null) {
+                    talkingNPC = (Friend) npc;
+                }
+            }
             g.drawImage(npc.getImage(), npc.getSpriteX(), npc.getSpriteY(), npc.getIMAGE_WIDTH(), npc.getIMAGE_HEIGHT(), 
                 npc.getX(), npc.getY(), npc.getWidth(), npc.getHeight());
         }
@@ -327,6 +356,7 @@ public class Draw {
         }
         drawInventory(g, player.getInventory());
         drawBars(g, player);
+        drawText(g, talkingNPC);
     }
     
     /**

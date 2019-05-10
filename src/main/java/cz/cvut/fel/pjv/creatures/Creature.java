@@ -35,7 +35,7 @@ import javax.imageio.ImageIO;
  * Creature is a living entity which can move around the world and interact with it.
  *
  * @author Michal-jr
- * @version 1.1
+ * @version 1.2
  */
 public abstract class Creature implements Serializable {
     private double x, y;
@@ -515,6 +515,14 @@ public abstract class Creature implements Serializable {
     public void die() {
         killed = true;
         left = false; right = false; up = false; down = false;
+    }
+
+    /**
+     * @return enumeration type of the creature
+     * @since 1.2
+     */
+    public CreatureType getType() {
+        return type;
     }
     
     //classes for serialization of image

@@ -39,6 +39,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.control.Alert.AlertType;
 
 /**
@@ -68,6 +70,7 @@ public class GameSaver {
                 UIControls.createAlert(AlertType.INFORMATION, "Success", null, "The game was saved successfully!");
             } catch (IOException ex) {
                 UIControls.createErrorAlert("An error occured during file saving.");
+                Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "An error occured during file saving.", ex);
             }
         }
     }
@@ -88,8 +91,10 @@ public class GameSaver {
                 return game;
             } catch (ClassNotFoundException ex) {
                 UIControls.createErrorAlert("Game could not be loaded. Loaded file doesn't contain game object.");
+                Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Game could not be loaded. Loaded file doesn't contain game object.", ex);
             } catch (IOException ex) {
                 UIControls.createErrorAlert("An error occured during file loading.");
+                Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "An error occured during file loading.", ex);
             }
         }
         return null;
@@ -142,6 +147,7 @@ public class GameSaver {
             return attr.creationTime()
                        .toInstant().toEpochMilli();
         } catch (IOException e) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, null, e);
             throw new RuntimeException(file.getAbsolutePath(), e);
         }
     }

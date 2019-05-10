@@ -53,6 +53,12 @@ public class CollisionTest {
     private static Thread javaFXBGThread;
     private static World testWorld;
     
+    /**
+     * Start test JavaFX application needed for internal graphics initialization.
+     * Create the world instance that will be used in tests.
+     *
+     * @throws IOException
+     */
     @BeforeClass
     public static void setUpClass() throws IOException {
         javaFXBGThread = new Thread() {
@@ -74,6 +80,9 @@ public class CollisionTest {
         testWorld.getItems().add(new StoredBlock(0, 0, ItemType.DIRT));
     }
     
+    /**
+     * Delete the world instance and shut down the JavaFX application.
+     */
     @AfterClass
     public static void tearDownClass() {
         testWorld = null;

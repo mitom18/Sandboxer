@@ -23,8 +23,11 @@
  */
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.fileio.FileLogger;
 import cz.cvut.fel.pjv.creatures.Player;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.scene.*;
 import javafx.scene.canvas.Canvas;
@@ -50,6 +53,11 @@ public class Main extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        try {
+            FileLogger.setup();
+        } catch (IOException ex) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Logger could not be initialized.", ex);
+        }
         launch(args);
     }
     
@@ -63,7 +71,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         final Stage stage = primaryStage;
-        stage.setTitle("Basic Game");
+        stage.setTitle("Sandboxer");
         
         UIControls ui = new UIControls(WIDTH, HEIGHT, stage);
         gameMenu = new Scene(ui.createStartMenu(), WIDTH, HEIGHT, Color.BLACK);

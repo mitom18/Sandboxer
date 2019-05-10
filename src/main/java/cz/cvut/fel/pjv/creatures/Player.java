@@ -31,13 +31,14 @@ import cz.cvut.fel.pjv.World;
  * Character that is controlled by player.
  * 
  * @author Michal-jr
- * @version 1.2
+ * @version 1.3
  */
 public class Player extends Creature {
     
     private final Inventory inventory = new Inventory();
     private final int REGENERATION_RATE = 500;
     private int regenerationCounter = 0;
+    private boolean hasWon = false;
 
     /**
      * Create player on given coordinates.
@@ -115,6 +116,24 @@ public class Player extends Creature {
      */
     public Inventory getInventory() {
         return inventory;
+    }
+
+    /**
+     * @return true if player has won the game, false otherwise
+     * @since 1.3
+     */
+    public boolean isWinner() {
+        return hasWon;
+    }
+
+    /**
+     * Set if player has won the game.
+     *
+     * @param hasWon
+     * @since 1.3
+     */
+    public void setHasWon(boolean hasWon) {
+        this.hasWon = hasWon;
     }
     
 }

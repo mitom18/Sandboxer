@@ -58,6 +58,7 @@ public class Enemy extends NPC {
         super(x, y, type);
         if (type.getDropItemType() != null) {
             dropItem = new Tool(x, y, type.getDropItemType());
+            dropItem.setPicked(true);
             world.addItem(dropItem);
         } else {
             dropItem = null;

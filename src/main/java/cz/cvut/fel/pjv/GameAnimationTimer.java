@@ -24,6 +24,8 @@
 package cz.cvut.fel.pjv;
 
 import cz.cvut.fel.pjv.creatures.Player;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
@@ -81,14 +83,16 @@ public class GameAnimationTimer extends AnimationTimer {
     
     @Override
     public void start() {
-         super.start();
-         running = true;
+        super.start();
+        running = true;
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Game started.");
     }
 
     @Override
     public void stop() {
         super.stop();
         running = false;
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Game paused.");
     }
 
     /**

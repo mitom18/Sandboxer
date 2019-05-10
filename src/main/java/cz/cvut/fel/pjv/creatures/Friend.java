@@ -31,13 +31,15 @@ import cz.cvut.fel.pjv.blocks.Block;
  * NPC that is not attacking player.
  *
  * @author Michal-jr
- * @version 1.0
+ * @version 1.1
  */
 public class Friend extends NPC {
 
     private int movementCounter = 0;
     private boolean wantGoLeft = true;
     private boolean wantGoRight = false;
+    private String somethingToSay;
+    
     /**
      * Create new friendly NPC.
      *
@@ -56,6 +58,7 @@ public class Friend extends NPC {
         calculateMovement(world, player);
         move();
         Collision.preventCollision(this, world);
+        tellPlayerHeWon(player);
     }
     
     private void calculateMovement(World world, Player player) {
@@ -73,6 +76,32 @@ public class Friend extends NPC {
         setLeft(wantGoLeft);
         setRight(wantGoRight);
         if (Collision.creatureHasBlockInFront(this, world) || swimming()) { setUp(true); }
+    }
+    
+    private void tellPlayerHeWon(Player player) {
+        if (getType() != CreatureType.MONK) { return; }
+        if (!player.isWinner() && getY() == player.getY() && player.getX() < getX2()+Block.block_width && player.getX2() > getX()-Block.block_width) {
+            somethingToSay = "Greetings young one. Welcome to the chamber of winners. You are now one of them, for you have just won the whole game.";
+            player.setHasWon(true);
+        }
+    }
+
+    /**
+     * @return string that should appear on the game screen
+     * @since 1.1
+     */
+    public String getSomethingToSay() {
+        return somethingToSay;
+    }
+
+    /**
+     * Set what friend is supposed to say.
+     *
+     * @param somethingToSay
+     * @since 1.1
+     */
+    public void setSomethingToSay(String somethingToSay) {
+        this.somethingToSay = somethingToSay;
     }
     
 }

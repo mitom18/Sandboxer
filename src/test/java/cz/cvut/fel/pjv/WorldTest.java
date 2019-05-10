@@ -52,6 +52,12 @@ public class WorldTest {
     private static Thread javaFXBGThread;
     private static World testWorld;
     
+    /**
+     * Start test JavaFX application needed for internal graphics initialization.
+     * Create the world instance that will be used in tests.
+     *
+     * @throws IOException
+     */
     @BeforeClass
     public static void setUpClass() throws IOException {
         javaFXBGThread = new Thread() {
@@ -71,6 +77,9 @@ public class WorldTest {
         testWorld.getBlocks().add(new SolidBlock(9*Block.block_width, -Block.block_height, BlockType.DIRT));
     }
     
+    /**
+     * Delete the world instance and shut down the JavaFX application.
+     */
     @AfterClass
     public static void tearDownClass() {
         testWorld = null;
