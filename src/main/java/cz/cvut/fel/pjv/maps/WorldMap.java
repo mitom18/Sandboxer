@@ -25,6 +25,7 @@ package cz.cvut.fel.pjv.maps;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.cvut.fel.pjv.blocks.BlockType;
+import cz.cvut.fel.pjv.items.ItemType;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -50,11 +51,8 @@ public class WorldMap implements Serializable {
     private final long SEED;
 
     private List<List<Integer>> terrain;
-    
-    /**
-     * The map is the main output of this class.
-     */
     private List<List<BlockType>> map;
+    private Map<List<Integer>, ItemType> itemMap;
     
     private List<Integer> completeSkyline;
     private List<Cave> caves;
@@ -64,7 +62,8 @@ public class WorldMap implements Serializable {
     private final int playerY;
 
     /**
-     * If no custom map is given in the JSON configuration file (mapConfig.JSON), create a new random map
+     * If no custom map is given in the JSON configuration file (mapConfig.JSON), create a new random map,
+     * else create a new map from the given 2D array (completeMap).
      * 
      * @throws java.io.IOException
      * @since 1.0
@@ -85,6 +84,7 @@ public class WorldMap implements Serializable {
             
             generateTerrain();
             generateMap();
+            generateItemMap();
             
             // Spawn in the middle of the map.
             playerX = 0;
@@ -101,7 +101,7 @@ public class WorldMap implements Serializable {
     }
     
     /**
-     * @return randomly generated seed for this instance of WorldMap
+     * @return seed used for the random generator
      * @since 1.1
      */
     public long getSeed() {
@@ -164,16 +164,36 @@ public class WorldMap implements Serializable {
         return playerY;
     }
 
+    /**
+     * @return list of caves
+     * @since 1.1
+     */
     public List<Cave> getCaves() {
         return caves;
     }
 
+    /**
+     * @return map of structures
+     * @since 1.2
+     */
     public Map<String, Structure> getStructures() {
         return structures;
     }
     
+    /**
+     * @return instance of MapConfig, contains all configuration data for the map
+     * @since 1.1
+     */
     public static MapConfig getMapConfig() {
         return mapConfig;
+    }
+
+    /**
+     * @return map of items generated with the map
+     * @since 1.2
+     */
+    public Map<List<Integer>, ItemType> getItemMap() {
+        return itemMap;
     }
     
     private void customMap() {
@@ -196,6 +216,7 @@ public class WorldMap implements Serializable {
      * @since 1.0
      */
     private double calculateSkyline(double x, double amplitudeCoefficient, double periodCoefficient, double previousY) {
+        // Mathematical function in the form of: y = a * sin(b * x) + c
         double y = amplitudeCoefficient * Math.sin((periodCoefficient) * x) + previousY;
         return y;
     }
@@ -342,6 +363,7 @@ public class WorldMap implements Serializable {
                 if ((map.get(i).get(j) == BlockType.STONE) && RNG.calculateProbability(mapConfig.caveProbability)) {
                     caves.add(new Cave(i, j, map));
                     
+                    // Insert the cave into the map
                     for (Vector vector : caves.get(caves.size() - 1).getCaveVectors()) {
                         map.get(vector.getX()).set(vector.getY(), null);
                     }
@@ -366,13 +388,36 @@ public class WorldMap implements Serializable {
             int structureY = RNG.randomIntInRange(0, HEIGHT - structureData.size() - 1);
 
             structures.put(structureName, new Structure(structureData, structureX, structureY));
-
+            
+            // Insert the structure into the map
             for (Vector vector : structures.get(structureName).getStructureVectors()) {
 
                 if ((vector.getBlockType() == BlockType.AIR) || (vector.getBlockType() == BlockType.SPAWNER)) {
                     map.get(vector.getX()).set(vector.getY(), null);
                 } else {
                     map.get(vector.getX()).set(vector.getY(), vector.getBlockType());
+                }
+            }
+        }
+    }
+    
+    private void generateItemMap() {
+        itemMap = new HashMap<>();
+        
+        for (int i = 0; i < 10; i++) {
+            int itemX = RNG.randomIntInRange(0, WIDTH - 1);
+            
+            for (int j = HEIGHT - 1; j >= 0; j--) {
+                
+                if (map.get(i).get(j) == null) {
+                    int itemY = j;
+                    
+                    List<Integer> coords = new ArrayList<>(2);
+                    coords.add(itemX);
+                    coords.add(itemY);
+                    itemMap.put(coords, ItemType.STONE);
+                    
+                    break;
                 }
             }
         }

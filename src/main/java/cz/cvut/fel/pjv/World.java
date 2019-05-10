@@ -113,6 +113,18 @@ public class World implements Serializable {
         npcs.add(new Enemy(32, 0, CreatureType.BOSS, this));
     }
     
+    private void createItems() {
+        
+        for (Map.Entry<List<Integer>, ItemType> newItem : worldMap.getItemMap().entrySet()) {
+            List<Integer> coords = newItem.getKey();
+            
+            double itemX = (coords.get(0) - (worldMap.getWIDTH() / 2)) * Block.block_width;
+            double itemY = coords.get(1) * Block.block_height;
+            
+            addItem(new StoredBlock(itemX, itemY, newItem.getValue()));
+        }
+    }
+    
     private void createWorld() {
         blocks = new ArrayList<>();
         
@@ -132,6 +144,7 @@ public class World implements Serializable {
         items.add(new StoredBlock(0,650, ItemType.DIAMOND_ORE));
         
         spawnNPCs();
+        createItems();
     }
     
     /**

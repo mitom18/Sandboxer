@@ -27,7 +27,9 @@ import cz.cvut.fel.pjv.blocks.BlockType;
 import java.io.Serializable;
 
 /**
- *
+ * A vector in the map has 2 coordinates (x and y) and carries the information 
+ * about the type of block that will be on these coordinates.
+ * 
  * @author Zdenek
  */
 public class Vector implements Serializable {
@@ -36,24 +38,41 @@ public class Vector implements Serializable {
     private int y;
     private BlockType blockType;
 
+    /**
+     * @param x
+     * @param y
+     * @param blockType
+     */
     public Vector(int x, int y, BlockType blockType) {
         this.x = x;
         this.y = y;
         this.blockType = blockType;
     }
 
+    /**
+     * @return x coordinate of the vector
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * @return y coordinate of the vector
+     */
     public int getY() {
         return y;
     }
     
+    /**
+     * @param x
+     */
     public void setX(int x) {
         this.x = x;
     }
     
+    /**
+     * @return type of block of this vector
+     */
     public BlockType getBlockType() {
         return blockType;
     }
