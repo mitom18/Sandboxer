@@ -44,8 +44,10 @@ import org.mockito.ArgumentCaptor;
 import static org.mockito.Mockito.*;
 
 /**
+ * World unit tests.
  *
  * @author Michal-jr
+ * @version 1.0
  */
 public class WorldTest {
     

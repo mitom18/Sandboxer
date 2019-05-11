@@ -43,6 +43,12 @@ public class FileLogger {
     static private FileHandler fileTxt;
     static private SimpleFormatter formatterTxt;
 
+    /**
+     * Setup the global logger.
+     *
+     * @throws IOException
+     * @since 1.0
+     */
     static public void setup() throws IOException {
 
         // get the global logger to configure it
