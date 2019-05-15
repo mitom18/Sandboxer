@@ -29,8 +29,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Takes the structure blueprint from mapConfig and creates a coresponding List of Vectors,
+ * which can later be inserted into the map.
+ * 
  * @author Zdenek
+ * @version 1.0
  */
 public class Structure implements Serializable {
     
@@ -48,6 +51,7 @@ public class Structure implements Serializable {
      * @param structureBlueprint
      * @param x
      * @param y
+     * @since 1.0
      */
     public Structure(List<List<BlockType>> structureBlueprint, int x, int y) {
         this.structureBlueprint = structureBlueprint;
@@ -58,10 +62,18 @@ public class Structure implements Serializable {
         createSpawner();
     }
 
+    /**
+     * @return A List of all Vectors that make up the structure
+     * @since 1.0
+     */
     public List<Vector> getStructureVectors() {
         return structureVectors;
     }
 
+    /**
+     * @return A Vector that contains coordinates for the spawn of a new NPC.
+     * @since 1.0
+     */
     public Vector getSpawner() {
         return spawner;
     }

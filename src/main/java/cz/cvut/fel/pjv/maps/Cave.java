@@ -29,8 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Cave represents an empty area under the surface of the world. It is defined a List of Vectors. 
+ * An enemy NPC spawns in each cave at the start of the game.
+ * A special vector called "spawner" defines the exact starting position of this enemy.
+ * 
  * @author Zdenek
+ * @version 1.1
  */
 public class Cave implements Serializable {
     
@@ -49,6 +53,14 @@ public class Cave implements Serializable {
     
     private Vector spawner;
 
+    /**
+     * Initializes a new Cave.
+     * 
+     * @param x x coordinate of the cave
+     * @param y y coordinate of the cave
+     * @param map the current state of the map is used to decide about specific vectors of the cave
+     * @since 1.0
+     */
     public Cave(int x, int y, List<List<BlockType>> map) {
         this.x = x;
         this.y = y;
@@ -58,10 +70,18 @@ public class Cave implements Serializable {
         createSpawner();
     }
 
+    /**
+     * @return A List of all Vectors that make up the cave.
+     * @since 1.0
+     */
     public List<Vector> getCaveVectors() {
         return caveVectors;
     }
 
+    /**
+     * @return A Vector that contains coordinates for the spawn of a new NPC.
+     * @since 1.1
+     */
     public Vector getSpawner() {
         return spawner;
     }

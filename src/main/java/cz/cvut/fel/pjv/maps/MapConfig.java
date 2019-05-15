@@ -30,7 +30,9 @@ import java.util.Map;
 
 /**
  * Object representation of the JSON configuration file.
+ * 
  * @author Zdenek
+ * @version 1.0
  */
 public class MapConfig implements Serializable {
     

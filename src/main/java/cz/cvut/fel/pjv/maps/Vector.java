@@ -31,6 +31,7 @@ import java.io.Serializable;
  * about the type of block that will be on these coordinates.
  * 
  * @author Zdenek
+ * @version 1.0
  */
 public class Vector implements Serializable {
     
@@ -42,6 +43,7 @@ public class Vector implements Serializable {
      * @param x
      * @param y
      * @param blockType
+     * @since 1.0
      */
     public Vector(int x, int y, BlockType blockType) {
         this.x = x;
@@ -51,6 +53,7 @@ public class Vector implements Serializable {
 
     /**
      * @return x coordinate of the vector
+     * @since 1.0
      */
     public int getX() {
         return x;
@@ -58,6 +61,7 @@ public class Vector implements Serializable {
 
     /**
      * @return y coordinate of the vector
+     * @since 1.0
      */
     public int getY() {
         return y;
@@ -65,6 +69,7 @@ public class Vector implements Serializable {
     
     /**
      * @param x
+     * @since 1.0
      */
     public void setX(int x) {
         this.x = x;
@@ -72,6 +77,7 @@ public class Vector implements Serializable {
     
     /**
      * @return type of block of this vector
+     * @since 1.0
      */
     public BlockType getBlockType() {
         return blockType;

@@ -26,8 +26,10 @@ package cz.cvut.fel.pjv.maps;
 import java.util.Random;
 
 /**
- *
+ * RNG is a random number generator for the entire game.
+ * 
  * @author Zdenek
+ * @version 1.1
  */
 public abstract class RNG {
     
@@ -35,6 +37,10 @@ public abstract class RNG {
     private static long seed;
     private static final Random r = new Random();
 
+    /**
+     * Sets a new seed to the instance of Random.
+     * @since 1.0
+     */
     public static void setNewSeed() {
         inputSeed = WorldMap.getMapConfig().seed;
         // These are nice seeds: 7451260251423394044L -7780041021634934149L
@@ -48,12 +54,12 @@ public abstract class RNG {
         r.setSeed(seed);
     }
     
+    /**
+     * @return the seed that the instance of Random is currently using
+     * @since 1.0
+     */
     public static long getSeed() {
         return seed;
-    }
-
-    public static Random getR() {
-        return r;
     }
     
     /**
@@ -62,7 +68,7 @@ public abstract class RNG {
      * @param min smallest possible generated number
      * @param max largest possible generated number
      * @return random double in the given range
-     * @since 1.1
+     * @since 1.0
      */
     public static double randomDoubleInRange(double min, double max) {
         return min + (max - min) * r.nextDouble();
@@ -74,12 +80,17 @@ public abstract class RNG {
      * @param min smallest possible generated number
      * @param max largest possible generated number
      * @return random int in the given range
-     * @since 1.1
+     * @since 1.0
      */
     public static int randomIntInRange(int min, int max) {
         return min + r.nextInt((max - min) + 1);
     }
     
+    /**
+     * @param probability in percent (can take fractions)
+     * @return true or false, chosen randomly but with the given probability
+     * @since 1.1
+     */
     public static boolean calculateProbability(double probability) {
         
         if (probability <= 0) {
