@@ -208,13 +208,6 @@ public class WorldMap implements Serializable {
         }
     }
     
-    /**
-     * Contains a periodical mathematical function.
-     * 
-     * @param x the variable x
-     * @return the functional value
-     * @since 1.0
-     */
     private double calculateSkyline(double x, double amplitudeCoefficient, double periodCoefficient, double previousY) {
         // Mathematical function in the form of: y = a * sin(b * x) + c
         double y = amplitudeCoefficient * Math.sin((periodCoefficient) * x) + previousY;
@@ -290,9 +283,7 @@ public class WorldMap implements Serializable {
     private void generateMap() {
         map = new ArrayList<>(WIDTH);
         
-        /**
-         * Used to define the border between STONE and DIRT.
-         */
+        //Used to define the border between STONE and DIRT.
         int skylineModifier = 0;
         
         int dirtStoneBorder;
