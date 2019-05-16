@@ -154,7 +154,6 @@ public class World implements Serializable {
         }
         
         items = new ArrayList<>();
-        items.add(new StoredBlock(0,650, ItemType.DIAMOND_ORE));
         
         spawnNPCs();
         createItems();
