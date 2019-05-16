@@ -99,11 +99,11 @@ public class UIControls {
                 try {
                     Main.startGame(stage, null);
                 } catch (FileNotFoundException ex) {
-                    createErrorAlert("Game could not start. Game config file is missing.");
                     Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Game could not start. Game config file is missing.", ex);
+                    createErrorAlert("Game could not start. Game config file is missing.");
                 } catch (IOException ex) {
-                    createErrorAlert("Game could not start. Game config file is corrupted.");
                     Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Game could not start. Game config file is corrupted.", ex);
+                    createErrorAlert("Game could not start. Game config file is corrupted.");
                 }
             }
         });
@@ -131,8 +131,8 @@ public class UIControls {
                             try {
                                 Thread.sleep(100);
                             } catch (InterruptedException ex) {
-                                System.err.println("Game could not be loaded. Loading process was interrupted.");
                                 Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Game could not be loaded. Loading process was interrupted.", ex);
+                                createErrorAlert("Game could not be loaded. Loading process was interrupted.");
                             }
                             Platform.runLater(new Runnable() {
                                 @Override
@@ -141,11 +141,11 @@ public class UIControls {
                                     try {
                                         Main.startGame(stage, Main.savedGame);
                                     } catch (FileNotFoundException ex) {
-                                        createErrorAlert("Game could not start. Game config file is missing.");
                                         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Game could not start. Game config file is missing.", ex);
+                                        createErrorAlert("Game could not start. Game config file is missing.");
                                     } catch (IOException ex) {
-                                        createErrorAlert("Game could not start. Game config file is corrupted.");
                                         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Game could not start. Game config file is corrupted.", ex);
+                                        createErrorAlert("Game could not start. Game config file is corrupted.");
                                     }
                                 }
                             });
@@ -196,8 +196,8 @@ public class UIControls {
                         try {
                             Thread.sleep(100);
                         } catch (InterruptedException ex) {
-                            createErrorAlert("Game could not be saved. Saving process was interrupted.");
                             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Game could not be saved. Saving process was interrupted.", ex);
+                            createErrorAlert("Game could not be saved. Saving process was interrupted.");
                         }
                         Platform.runLater(new Runnable() {
                             @Override
@@ -251,11 +251,11 @@ public class UIControls {
                     try {
                         Main.startGame(stage, Main.savedGame);
                     } catch (FileNotFoundException ex) {
-                        createErrorAlert("Game could not start. Game config file is missing.");
                         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Game could not start. Game config file is missing.", ex);
+                        createErrorAlert("Game could not start. Game config file is missing.");
                     } catch (IOException ex) {
-                        createErrorAlert("Game could not start. Game config file is corrupted.");
                         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Game could not start. Game config file is corrupted.", ex);
+                        createErrorAlert("Game could not start. Game config file is corrupted.");
                     } 
                 }
             }
