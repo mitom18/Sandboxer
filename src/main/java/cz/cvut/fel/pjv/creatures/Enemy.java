@@ -84,10 +84,10 @@ public class Enemy extends NPC {
     }
     
     private void calculateMovement(World world, Player player) {
-        if ( //enemy is not moving if he is more than 150 blocks far from the player
-            player.getX() > getX2()+150*Block.block_width ||
-            player.getX2() < getX()-150*Block.block_width
-        ) { return; }
+        if ( //enemy is not moving if he is more than 50 blocks far from the player
+            player.getX() > getX2()+50*Block.block_width ||
+            player.getX2() < getX()-50*Block.block_width
+        ) { setUp(false); setDown(false); setLeft(false); setRight(false); return; }
         if (
             player.getX2() > getX()-10*Block.block_width && 
             player.getX() < getX2()+10*Block.block_width
