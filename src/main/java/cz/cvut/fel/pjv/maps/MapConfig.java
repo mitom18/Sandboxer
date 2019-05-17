@@ -54,10 +54,6 @@ public class MapConfig implements Serializable {
     public double perMin;
     public double perMax;
     
-    /**
-     * Represents the probability in percent.
-     * Allowed values: 0.0 - 100.0
-     */
     public double flatLandProbability;
     public double diamondProbability;
     public double caveProbability;

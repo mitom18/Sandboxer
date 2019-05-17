@@ -3,6 +3,9 @@
         []
     ],
 
+    "playerStartingX": 0,
+    "playerStartingY": 0,
+
     "structureBlueprints": {
         "stronghold1": [
             ["STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS"],
@@ -27,9 +30,6 @@
             ["STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS", "STONE_BRICKS"]
         ]
     },
-
-    "playerStartingX": 0,
-    "playerStartingY": 0,
 
     "width": 1024,
     "height": 128,
