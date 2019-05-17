@@ -342,6 +342,7 @@ public class WorldMap implements Serializable {
     
     /**
      * Finds random coordinates to create caves and inserts them into the map.
+     * 
      * @since 1.1
      */
     private void generateCaves() {
@@ -366,6 +367,7 @@ public class WorldMap implements Serializable {
     /**
      * Finds random coordinates to create structures from blueprints 
      * that have been defined in mapConfig.JSON and inserts them into the map.
+     * 
      * @since 1.2
      */
     private void generateStructures() {
@@ -392,6 +394,11 @@ public class WorldMap implements Serializable {
         }
     }
     
+    /**
+     * Create a map for spawning collectible items, that has coordinates as key and ItemType as value.
+     * 
+     * @since 1.2
+     */
     private void generateItemMap() {
         itemMap = new HashMap<>();
         

@@ -38,6 +38,7 @@ import cz.cvut.fel.pjv.items.ItemType;
 import cz.cvut.fel.pjv.maps.Cave;
 import cz.cvut.fel.pjv.maps.RNG;
 import cz.cvut.fel.pjv.maps.Structure;
+import cz.cvut.fel.pjv.maps.Vector;
 import cz.cvut.fel.pjv.maps.WorldMap;
 import java.io.IOException;
 import java.io.Serializable;
@@ -93,6 +94,44 @@ public class World implements Serializable {
         playerSpawnX = worldMap.getPlayerX();
     }
     
+    private void spawnBoss() {
+        double bossX = RNG.randomIntInRange(0, WIDTH - 1);
+        double bossY = 0;
+        
+        boolean bossCoordsInStructure = true;
+        
+        for (int i = HEIGHT - 1; i >= 0; i--) {
+            
+            if (worldMap.getMap().get((int) (bossX)).get(i) == null) {
+                bossY = i;
+                
+                //Make sure boss is not spawned inside a structure.
+                for (Structure structure : worldMap.getStructures().values()) {
+                    
+                    for (Vector vector : structure.getStructureVectors()) {
+                        
+                        //If he is not inside a structure the coordinates are ok.
+                        if ((bossX != vector.getX()) || (bossY != vector.getY())) {
+                            bossCoordsInStructure = false;
+                            bossX -= worldMap.getWIDTH() / 2;
+                            break;
+                        }
+                    }
+                    
+                    if (!bossCoordsInStructure) {
+                        break;
+                    }
+                }
+            }
+            
+            if (!bossCoordsInStructure) {
+                break;
+            }
+        }
+        
+        npcs.add(new Enemy(bossX * Block.block_width, bossY * Block.block_height, CreatureType.BOSS, this));
+    }
+    
     private void spawnNPCs() {
         npcs = new ArrayList<>();
         
@@ -110,20 +149,6 @@ public class World implements Serializable {
                 npcs.add(new Friend(friendX, friendY, CreatureType.MONK));
             }
         }
-        
-        double bossX = RNG.randomIntInRange(0, WIDTH - 1);
-        double bossY = 0;
-        
-        for (int i = HEIGHT - 1; i >= 0; i--) {
-            
-            if (worldMap.getMap().get((int) (bossX)).get(i) == null) {
-                bossY = i;
-                bossX -= worldMap.getWIDTH() / 2;
-                break;
-            }
-        }
-        
-        npcs.add(new Enemy(bossX * Block.block_width, bossY * Block.block_height, CreatureType.BOSS, this));
     }
     
     private void createItems() {
@@ -156,6 +181,7 @@ public class World implements Serializable {
         items = new ArrayList<>();
         
         spawnNPCs();
+        spawnBoss();
         createItems();
     }
     
