@@ -64,9 +64,12 @@ public class WorldTest {
     public static void setUpClass() throws IOException {
         javaFXBGThread = new Thread() {
             @Override
-            public void run() { Application.launch(testJavaFXApp.class, new String[1]); }
+            public void run() {
+                try {
+                    Application.launch(testJavaFXApp.class, new String[1]);
+                } catch (IllegalStateException e) {}
+            }
         };
-        javaFXBGThread.setDaemon(true);
         javaFXBGThread.start();
         
         testWorld = new World();

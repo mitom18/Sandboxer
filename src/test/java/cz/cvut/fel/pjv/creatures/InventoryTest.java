@@ -57,9 +57,12 @@ public class InventoryTest {
     public static void setUpClass() throws InterruptedException {
         javaFXBGThread = new Thread() {
             @Override
-            public void run() { Application.launch(testJavaFXApp.class, new String[1]); }
+            public void run() {
+                try {
+                    Application.launch(testJavaFXApp.class, new String[1]);
+                } catch (IllegalStateException e) {}
+            }
         };
-        javaFXBGThread.setDaemon(true);
         javaFXBGThread.start();
         sleep(1000); //wait 1 second for JavaFX Toolkit to properly initialize
     }
