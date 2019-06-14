@@ -32,6 +32,7 @@ import cz.cvut.fel.pjv.items.Item;
 import cz.cvut.fel.pjv.items.ItemType;
 import cz.cvut.fel.pjv.items.StoredBlock;
 import java.io.IOException;
+import static java.lang.Thread.sleep;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
@@ -59,9 +60,10 @@ public class WorldTest {
      * Create the world instance that will be used in tests.
      *
      * @throws IOException
+     * @throws java.lang.InterruptedException
      */
     @BeforeClass
-    public static void setUpClass() throws IOException {
+    public static void setUpClass() throws IOException, InterruptedException {
         javaFXBGThread = new Thread() {
             @Override
             public void run() {
@@ -71,6 +73,7 @@ public class WorldTest {
             }
         };
         javaFXBGThread.start();
+        sleep(1000); //wait 1 second for JavaFX Toolkit to properly initialize
         
         testWorld = new World();
         testWorld.getBlocks().removeAll(testWorld.getBlocks());
